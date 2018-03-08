@@ -7,17 +7,48 @@ Fantastical Things - open-source приложение для Time-managment'а,
 расписание, создавать список задач и управлять им, а так же 
 отслеживать выполнение тех или иных задач в проектах.
 
-## Статус работ
+####Содержание:
+* [Статус проекта](#Статус-проекта)
+* [Аналоги](#Статус-проекта)
+* [Планируемые возможности](#Планируемые-возможности)
+* [Архитектура](#Архитектура)
+* [Этапы разработки](#Этапы-разработки)
+* [Сроки](#Сроки)
+* [Сценарии использования](#Сценарии-использования)
+#
+
+###Статус проекта
 Текущий статус разработки проекта находится в файле 
 [STATUS.md](https://bitbucket.org/ImmortalLamp/fantastical-things/STATUS.md)
 и постоянно обновляется.
 
-## Аналоги
+
+### Аналоги
 В качестве аналогов были взяты следующие iOS приложения:
-+ [Things 3](https://itunes.apple.com/us/app/things-3/id904237743?mt=8)
-+ [Fantastical 2](https://itunes.apple.com/us/app/fantastical-2-for-iphone/id718043190?mt=8)
-+ [Google Keep](https://itunes.apple.com/us/app/google-keep/id1029207872?mt=8)
-+ [Google Calendar](https://itunes.apple.com/us/app/google-calendar/id909319292?mt=8)
-+ [Swipes](https://itunes.apple.com/us/app/swipes-to-do-task-list-plan-achieve-goals/id657882159?mt=8)
-+ [Habitty](https://itunes.apple.com/by/app/habitty-habit-tracker/id1228128916?mt=8)
-+ [Summit: Daily Planner](https://itunes.apple.com/us/app/summit-daily-planner/id1266410931?mt=8)
+* [Things 3](https://itunes.apple.com/us/app/things-3/id904237743?mt=8) - 
+Система заметок на основе тегов.
+* [Fantastical 2](https://itunes.apple.com/us/app/fantastical-2-for-iphone/id718043190?mt=8) - 
+Гибко настраиваемый календарь.
+* [Jira Software](https://www.atlassian.com/software/jira) - Issue-tracker 
+от Atlassian, создателя BitBucket. 
+* [Freshdesk](https://freshdesk.com/) - Тоже Issue-tracker 
+
+
+### Планируемые возможности
+> "Оптимистичный" и "Пессимистичный" списки планируемых
+возможностей
+
+### Архитектура
+> Картинка с описание взаимодействия всех областей системы
+
+### Этапы разработки
+> Будут представлены как:
+- [x] This is a complete item
+- [ ] This is an incomplete item
+
+### Сроки
+> Расписати предполагаемые сроки выполнения отдельных 
+областей проекта
+
+### Сценарии использования
+> Примеры взаимодействия с сервисом
