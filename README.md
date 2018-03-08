@@ -19,7 +19,7 @@ Fantastical Things - open-source приложение для Time-managment'а,
 
 ###Статус проекта
 Текущий статус разработки проекта находится в файле 
-[STATUS.md](https://bitbucket.org/ImmortalLamp/fantastical-things/STATUS.md)
+[STATUS.md](/STATUS.md)
 и постоянно обновляется.
 
 
