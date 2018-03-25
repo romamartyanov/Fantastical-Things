@@ -68,9 +68,18 @@ In Progress и Done с возможностью добавление, измен
 
 
 ### Архитектура
-> Картинка с описание взаимодействия всех областей системы
 
-
++ ScrumBan Board:
+    - User
+    - Team (User)
+    - Task
+    - Remind
+    - Card (Task, Remind)
+    - CardList (Card)
+    - Board (CardList, Team)
+    - Calendar (Remind, Team)
+    - Tasks (Task, Team)
++ Command Listener
 
 ## Разработка
 
@@ -102,10 +111,6 @@ In Progress и Done с возможностью добавление, измен
 * 28.04.2018 - закончить разработку Front-end'а.
 * 2.05.2018 - закончить привязку Front-end'a к Back-end'у.
 * 10.05.2018 - закончить развертывание.
-
-
-## Сценарии использования
-> Примеры взаимодействия с сервисом
 
 
 ## Развертывание
