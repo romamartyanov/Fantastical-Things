@@ -69,16 +69,118 @@ In Progress и Done с возможностью добавление, измен
 
 ### Архитектура
 
-+ ScrumBan Board:
-    - User
-    - Team (User)
-    - Task
-    - Remind
-    - Card (Task, Remind)
-    - CardList (Card)
-    - Board (CardList, Team)
-    - Calendar (Remind, Team)
-    - Tasks (Task, Team)
++ **ScrumBan Board**:
+    - **User**
+        + *Fields*:
+            + name
+            + surname
+            + nickname
+            + email
+            + calendar
+            + tasks
+            + teams_list
+            +
+        + *Methods*:
+            +            
+    
+    - **Remind**:
+        + *Fields*:
+            + title
+            + description
+            + time
+            +
+        + *Methods*:
+            + edit_remind
+            +
+    
+    - **UserCalendar** (User, Remind):
+        + *Fields*:
+            + reminds_list
+        + Methods:
+            + add_remind
+            + delete_remind
+            + 
+               
+    - **Task**:
+        + *Fields*:
+            + title
+            + description
+            + subtasks_list
+            +
+        + *Methods*:
+            + edit_task
+            + add_subtask
+            + delete_subtask
+            +
+    
+    - **Subtask**:
+        + *Fields*:
+            + title
+            + description
+        + *Methods*:
+            + edit_subtask
+    
+    - **Tasks** (User, Task):
+        + *Fields*:
+            + tasks_list
+        + *Methods*:
+            + add_task
+            + delete_task
+    
+    - **Card** (Task, Remind):
+        + *Fields*:
+            + title
+            + description
+            + subtasks_list
+            +
+        + *Methods*:
+            + edit_card
+            + add_subtask
+            + delete_subtask
+            +
+    
+    - **CardList** (Card):
+        + *Fields*:
+            + name
+            + cards
+            +
+        + *Methods*:
+            + add_card
+            + delete_card
+            + edit_card
+            +
+    
+    - **Board** (User, CardList, Team):
+        + *Fields*:
+            + users
+            + cardlists
+            + tasks
+            + calendar
+        + *Methods*:
+            + add_cardlist
+            + delete_cardlist
+    
+    - **TeamCalendar** (Team, Remind):
+        + *Fields*:
+            + reminds_list
+        + Methods:
+            + add_remind
+            + delete_remind
+            + 
+    
+    - **Team** (User):
+        + *Fields*:
+            + name
+            + description
+            + boards
+            +
+        + *Methods*:
+            + add_user
+            + delete_user
+            + add_board
+            + delete_board
+            +
+        
 + Command Listener
 
 ## Разработка
