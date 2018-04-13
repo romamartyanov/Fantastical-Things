@@ -88,7 +88,7 @@ In Progress и Done с возможностью добавление, измен
             + id
             + title
             + description
-            + time
+            + when_remind       
             +
         + *Methods*:
             +
