@@ -3,21 +3,29 @@ import datetime
 
 
 class Remind:
-    def __init__(self, title=None, description=None, when_remind=None):
+    def __init__(self, title=None, description=None, when_remind=None, repeating_remind_timedelta=None):
         self.title = title
         self.description = description
-        self.when_remind = list()
+        self.when_remind = when_remind
+        self.repeating_remind_timedelta = repeating_remind_timedelta
 
         if when_remind is not None:
-            if isinstance(when_remind, datetime.timedelta):
-                list.append(self.when_remind, when_remind)
+            if isinstance(when_remind, datetime.datetime):
+                self.when_remind = when_remind
 
             elif isinstance(when_remind, str):
                 pass
 
+        if repeating_remind_timedelta is not None:
+            if isinstance(repeating_remind_timedelta, datetime.timedelta):
+                self.repeating_remind_timedelta = repeating_remind_timedelta
+
+            elif isinstance(repeating_remind_timedelta, str):
+                pass
+
         self.id = sha1((title + description + str(datetime.datetime.now())).encode('utf-8'))
 
-    def update_remind(self, title=None, description=None, when_remind=None):
+    def update_remind(self, title=None, description=None, when_remind=None, repeating_remind_timedelta=None):
         if title is not None:
             self.title = title
 
@@ -25,8 +33,15 @@ class Remind:
             self.description = description
 
         if when_remind is not None:
-            if isinstance(when_remind, datetime.timedelta):
-                list.append(self.when_remind, when_remind)
+            if isinstance(when_remind, datetime.datetime):
+                self.when_remind = when_remind
 
             elif isinstance(when_remind, str):
+                pass
+
+        if repeating_remind_timedelta is not None:
+            if isinstance(repeating_remind_timedelta, datetime.timedelta):
+                self.repeating_remind_timedelta = repeating_remind_timedelta
+
+            elif isinstance(repeating_remind_timedelta, str):
                 pass
