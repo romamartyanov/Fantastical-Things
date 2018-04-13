@@ -74,6 +74,7 @@ In Progress и Done с возможностью добавление, измен
             + name
             + surname
             + nickname
+            + id
             + email
             + calendar
             + tasks
@@ -84,12 +85,12 @@ In Progress и Done с возможностью добавление, измен
     
     - **Remind**:
         + *Fields*:
+            + id
             + title
             + description
             + time
             +
         + *Methods*:
-            + edit_remind
             +
     
     - **UserCalendar** (User, Remind):
@@ -102,18 +103,19 @@ In Progress и Done с возможностью добавление, измен
                
     - **Task**:
         + *Fields*:
+            + id
             + title
             + description
             + subtasks_list
             +
         + *Methods*:
-            + edit_task
             + add_subtask
             + delete_subtask
             +
     
     - **Subtask**:
         + *Fields*:
+            + id
             + title
             + description
         + *Methods*:
@@ -128,29 +130,30 @@ In Progress и Done с возможностью добавление, измен
     
     - **Card** (Task, Remind):
         + *Fields*:
+            + id
             + title
             + description
             + subtasks_list
             +
         + *Methods*:
-            + edit_card
             + add_subtask
             + delete_subtask
             +
     
     - **CardList** (Card):
         + *Fields*:
+            + id
             + name
             + cards
             +
         + *Methods*:
             + add_card
             + delete_card
-            + edit_card
             +
     
     - **Board** (User, CardList, Team):
         + *Fields*:
+            + id
             + users
             + cardlists
             + tasks
@@ -169,6 +172,7 @@ In Progress и Done с возможностью добавление, измен
     
     - **Team** (User):
         + *Fields*:
+            + id
             + name
             + description
             + boards
