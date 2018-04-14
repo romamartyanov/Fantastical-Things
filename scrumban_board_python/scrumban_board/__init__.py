@@ -3,5 +3,7 @@ from scrumban_board_python.scrumban_board.remind import Remind
 from scrumban_board_python.scrumban_board.user_calendar import UserCalendar
 from scrumban_board_python.scrumban_board.task import Task
 from scrumban_board_python.scrumban_board.subtask import Subtask
+from scrumban_board_python.scrumban_board.card import Card
+from scrumban_board_python.scrumban_board.cardlist import CardList
 
 
