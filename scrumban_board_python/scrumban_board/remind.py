@@ -4,8 +4,15 @@ import datetime
 
 class Remind:
     def __init__(self, title=None, description=None, when_remind=None, repeating_remind_timedelta=None):
-        self.title = title
-        self.description = description
+        if title is not None:
+            self.title = title
+        else:
+            self.title = "Remind at " + str(datetime.datetime.now())
+
+        if description is not None:
+            self.description = description
+        else:
+            self.description = "Remind at " + str(datetime.datetime.now())
 
         self.is_repeatable = False
 
@@ -15,6 +22,7 @@ class Remind:
 
             elif isinstance(when_remind, str):
                 pass
+
         else:
             self.when_remind = datetime.datetime.now()
 
@@ -30,7 +38,10 @@ class Remind:
         else:
             self.repeating_remind_timedelta = repeating_remind_timedelta
 
-        self.id = sha1((title + description + str(datetime.datetime.now())).encode('utf-8'))
+        self.id = sha1(("Remind: " + " " +
+                        self.title + " " +
+                        self.description + " " +
+                        str(datetime.datetime.now())).encode('utf-8'))
 
     def update_remind(self, title=None, description=None, when_remind=None, repeating_remind_timedelta=None):
         if title is not None:
