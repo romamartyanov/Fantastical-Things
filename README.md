@@ -79,6 +79,7 @@ In Progress и Done с возможностью добавление, измен
             + calendar
             + tasks
             + teams_list
+            + boards
             +
         + *Methods*:
             +            
@@ -119,25 +120,18 @@ In Progress и Done с возможностью добавление, измен
             + title
             + description
         + *Methods*:
-            + edit_subtask
-    
-    - **Tasks** (User, Task):
-        + *Fields*:
-            + tasks_list
-        + *Methods*:
-            + add_task
-            + delete_task
-    
+            +
+        
     - **Card** (Task, Remind):
         + *Fields*:
             + id
             + title
             + description
-            + subtasks_list
+            + task
+            + remind
             +
         + *Methods*:
-            + add_subtask
-            + delete_subtask
+            + edit_task
             +
     
     - **CardList** (Card):
