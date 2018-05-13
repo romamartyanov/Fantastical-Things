@@ -63,14 +63,19 @@ class Card:
 
         if users is not None:
             if isinstance(users, User):
+                self.users.clear()
                 self.users.append(users)
 
             elif isinstance(users, list):
+                self.users.clear()
+
                 for user in users:
                     if isinstance(user, User):
                         self.users.append(users)
 
         if reminds_list is not None:
+            self.reminds_list.clear()
+
             for remind in reminds_list:
                 if isinstance(remind, Remind):
                     self.reminds_list.append(remind)
