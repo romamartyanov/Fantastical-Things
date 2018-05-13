@@ -5,6 +5,7 @@ class User:
         self.name = name
         self.surname = surname
         self.nickname = nickname
+        self.id = ""
         self.email = email
 
         self.calendar = None

@@ -27,15 +27,20 @@ class CardList:
             return next(card for card in self.cards if card.title == title)
 
     def add_card(self, new_card: Card):
-        duplicate_card = next(card for card in self.cards if card.id == new_card.id)
+        duplicate_card = self.find_card(card_id=new_card.id)
 
         if duplicate_card is None:
             self.cards.append(new_card)
 
     def remove_card(self, card: Card = None, card_id=None):
         if card is not None:
-            self.cards.remove(card)
+            remove_card = self.find_card(card_id=card.id)
+
+            if remove_card is not None:
+                self.cards.remove(card)
 
         elif card_id is not None:
-            card = self.find_card(card_id=card_id)
-            self.cards.remove(card)
+            remove_card = self.find_card(card_id=card_id)
+
+            if remove_card is not None:
+                self.cards.remove(remove_card)
