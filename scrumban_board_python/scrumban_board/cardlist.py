@@ -19,12 +19,29 @@ class CardList:
                         self.description + " " +
                         str(datetime.datetime.now())).encode('utf-8'))
 
+    def update_cardlist(self, title: str =None, cards: list = None, description: str = None):
+        if title is not None:
+            self.title = title
+
+        if cards is not None:
+            self.cards.clear()
+
+            for card in cards:
+                if isinstance(card, Card):
+                    cards.append(card)
+
+        if description is not None:
+            self.description = description
+
     def find_card(self, card_id=None, title=None):
         if card_id is not None:
             return next(card for card in self.cards if card.id == card_id)
 
         elif title is not None:
             return next(card for card in self.cards if card.title == title)
+
+        else:
+            return None
 
     def add_card(self, new_card: Card):
         duplicate_card = self.find_card(card_id=new_card.id)
