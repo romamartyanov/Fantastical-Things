@@ -1,11 +1,21 @@
+from collections import deque
 
 
 class UserCalendar:
     def __init__(self, user_id=None):
-        self.reminds_list = list()
         self.user_id = user_id
-        self.past_reminds = None
-        self.future_reminds = None
+
+        self.past_reminds = deque()
+        self.future_reminds = deque()
+
+    def update_queues(self):
+        pass
+
+    def add_to_queues(self):
+        pass
+
+    def remove_from_queues(self):
+        pass
 
     # def add_remind(self, remind):
     #     self.reminds_list.append(remind)
