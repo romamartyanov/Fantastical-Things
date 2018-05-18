@@ -1,4 +1,5 @@
 from hashlib import sha1
+from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.cardlist import CardList
@@ -6,19 +7,19 @@ from scrumban_board_python.scrumban_board.user import User
 
 
 class Board:
-    def __init__(self, title: str, users: list, description: str = None, cardlists: list = None):
+    def __init__(self, title: str, users: deque, description: str = None, cardlists: deque = None):
         self.title = title
         self.description = self.title
 
         if description is not None:
             self.description = description
 
-        self.cardlists = list()
+        self.cardlists = deque()
         for cardlist in cardlists:
             if isinstance(cardlist, CardList):
                 self.cardlists.append(cardlist)
 
-        self.users = list()
+        self.users = deque()
         for user in users:
             if isinstance(user, User):
                 self.cardlists.append(user)
@@ -28,7 +29,7 @@ class Board:
                         self.description + " " +
                         str(datetime.datetime.now())).encode('utf-8'))
 
-    def update_board(self, title: str = None, users: list = None, description: str = None, cardlists: list = None):
+    def update_board(self, title: str = None, users: deque = None, description: str = None, cardlists: deque = None):
         if title is not None:
             self.title = title
 
@@ -77,3 +78,22 @@ class Board:
 
             if duplicate_cardlist is not None:
                 self.cardlists.remove(duplicate_cardlist)
+
+    def change_cardlist_position(self, position: int, cardlist: CardList = None, cardlist_id: str = None):
+        if cardlist is not None:
+            duplicate_cardlist = self.find_cardlist(cardlist.id)
+
+            if duplicate_cardlist is not None:
+                self.cardlists.remove(duplicate_cardlist)
+
+                real_position = position - 1
+                self.cardlists.insert(real_position, duplicate_cardlist)
+
+        elif cardlist_id is not None:
+            duplicate_cardlist = self.find_cardlist(cardlist_id)
+
+            if duplicate_cardlist is not None:
+                self.cardlists.remove(duplicate_cardlist)
+
+                real_position = position - 1
+                self.cardlists.insert(real_position, duplicate_cardlist)
