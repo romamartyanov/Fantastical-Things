@@ -1,15 +1,16 @@
 from hashlib import sha1
+from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.card import Card
 
 
 class CardList:
-    def __init__(self, title: str, cards: list, description: str = None):
+    def __init__(self, title: str, cards: deque, description: str = None):
         self.title = title
         self.description = description
 
-        self.cards = list()
+        self.cards = deque()
         for card in cards:
             if isinstance(card, Card):
                 cards.append(card)
@@ -19,7 +20,7 @@ class CardList:
                         self.description + " " +
                         str(datetime.datetime.now())).encode('utf-8'))
 
-    def update_cardlist(self, title: str =None, cards: list = None, description: str = None):
+    def update_cardlist(self, title: str =None, cards: deque = None, description: str = None):
         if title is not None:
             self.title = title
 
@@ -51,13 +52,32 @@ class CardList:
 
     def remove_card(self, card: Card = None, card_id=None):
         if card is not None:
-            remove_card = self.find_card(card_id=card.id)
+            duplicate_card = self.find_card(card_id=card.id)
 
-            if remove_card is not None:
+            if duplicate_card is not None:
                 self.cards.remove(card)
 
         elif card_id is not None:
-            remove_card = self.find_card(card_id=card_id)
+            duplicate_card = self.find_card(card_id=card_id)
 
-            if remove_card is not None:
-                self.cards.remove(remove_card)
+            if duplicate_card is not None:
+                self.cards.remove(duplicate_card)
+
+    def change_card_position(self, position: int, card: Card = None, card_id=None):
+        if card is not None:
+            duplicate_card = self.find_card(card_id=card.id)
+
+            if duplicate_card is not None:
+                self.cards.remove(duplicate_card)
+
+                real_position = position - 1
+                self.cards.insert(real_position, duplicate_card)
+
+        elif card_id is not None:
+            duplicate_card = self.find_card(card_id=card_id)
+
+            if duplicate_card is not None:
+                self.cards.remove(duplicate_card)
+
+                real_position = position - 1
+                self.cards.insert(real_position, duplicate_card)

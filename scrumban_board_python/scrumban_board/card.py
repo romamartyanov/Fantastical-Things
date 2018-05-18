@@ -1,4 +1,5 @@
 from hashlib import sha1
+from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.task import Task
@@ -8,8 +9,8 @@ from scrumban_board_python.scrumban_board.user import User
 
 class Card:
     def __init__(self, task,
-                 users: list,
-                 reminds_list: list = None,
+                 users: deque,
+                 reminds_list: deque = None,
                  deadline: datetime.datetime = None,
                  repeatable_remind: datetime.timedelta = None):
 
@@ -20,17 +21,17 @@ class Card:
             elif isinstance(task, str):
                 self.task = Task(title=task)
 
-        self.users = list()
+        self.users = deque()
         if users is not None:
             if isinstance(users, User):
                 self.users.append(users)
 
-            elif isinstance(users, list):
+            elif isinstance(users, deque):
                 for user in users:
                     if isinstance(user, User):
                         self.users.append(users)
 
-        self.reminds_list = list()
+        self.reminds_list = deque()
         if reminds_list is not None:
             for remind in reminds_list:
                 if isinstance(remind, Remind):
@@ -50,8 +51,8 @@ class Card:
                         str(datetime.datetime.now())).encode('utf-8'))
 
     def update_card(self, task=None,
-                    users: list = None,
-                    reminds_list: list = None,
+                    users: deque = None,
+                    reminds_list: deque = None,
                     deadline: datetime.datetime = None,
                     repeatable_remind: datetime.timedelta = None):
 
@@ -66,7 +67,7 @@ class Card:
                 self.users.clear()
                 self.users.append(users)
 
-            elif isinstance(users, list):
+            elif isinstance(users, deque):
                 self.users.clear()
 
                 for user in users:
@@ -103,16 +104,16 @@ class Card:
             return None
 
     def add_user_to_card(self, user: User):
-        new_user = self.find_user_on_card(user_nickname=user.nickname)
+        duplicate_user = self.find_user_on_card(user_nickname=user.id)
 
-        if new_user is None:
+        if duplicate_user is None:
             self.users.append(user)
 
     def remove_user_from_card(self, user: User):
-        remove_user = self.find_user_on_card(user_nickname=user.nickname)
+        duplicate_user = self.find_user_on_card(user_nickname=user.id)
 
-        if remove_user is not None:
-            self.users.remove(remove_user)
+        if duplicate_user is not None:
+            self.users.remove(duplicate_user)
 
     def find_remind(self, title: str = None, remind_id: str = None):
         if title is not None:
@@ -125,13 +126,13 @@ class Card:
             return None
 
     def add_remind(self, remind: Remind):
-        new_remind = self.find_remind(remind_id=remind.id)
+        duplicate_remind = self.find_remind(remind_id=remind.id)
 
-        if new_remind is None:
+        if duplicate_remind is None:
             self.reminds_list.append(remind)
 
     def remove_remind(self, remind: Remind):
-        remove_remind = self.find_remind(remind_id=remind.id)
+        duplicate_remind = self.find_remind(remind_id=remind.id)
 
-        if remove_remind is not None:
-            self.reminds_list.remove(remove_remind)
+        if duplicate_remind is not None:
+            self.reminds_list.remove(duplicate_remind)

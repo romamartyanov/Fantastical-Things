@@ -1,6 +1,6 @@
 from scrumban_board_python.scrumban_board.user import User
 from scrumban_board_python.scrumban_board.remind import Remind
-from scrumban_board_python.scrumban_board.user_calendar import UserCalendar
+from scrumban_board_python.scrumban_board.calendar import Calendar
 from scrumban_board_python.scrumban_board.task import Task
 from scrumban_board_python.scrumban_board.subtask import Subtask
 from scrumban_board_python.scrumban_board.card import Card

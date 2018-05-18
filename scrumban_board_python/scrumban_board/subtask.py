@@ -17,7 +17,7 @@ class Subtask:
                         self.description + " " +
                         str(datetime.datetime.now())).encode('utf-8'))
 
-    def update_subtask(self, title: str = None, description: str = None, completed:bool = None):
+    def update_subtask(self, title: str = None, description: str = None, completed: bool = None):
         if title is not None:
             self.title = title
 

@@ -1,11 +1,12 @@
 from hashlib import sha1
+from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.subtask import Subtask
 
 
 class Task:
-    def __init__(self, title: str, description: str = None, subtasks_list: list = None):
+    def __init__(self, title: str, description: str = None, subtasks_list: deque = None):
 
         self.title = title
         self.description = title
@@ -13,7 +14,7 @@ class Task:
         if description is not None:
             self.description = description
 
-        self.subtasks_list = list()
+        self.subtasks_list = deque()
         if subtasks_list is not None:
             for subtask in subtasks_list:
                 if isinstance(subtask, Subtask):
@@ -27,7 +28,7 @@ class Task:
                         str(datetime.datetime.now())).encode('utf-8'))
 
     def update_task(self, title: str = None, description: str = None,
-                    subtasks_list: list = None, completed:bool = None):
+                    subtasks_list: deque = None, completed: bool = None):
 
         if title is not None:
             self.title = title
@@ -57,28 +58,46 @@ class Task:
 
     def add_subtask(self, subtask):
         if isinstance(subtask, Subtask):
-            new_subtask = self.find_subtask(title=subtask.title)
+            duplicate_subtask = self.find_subtask(title=subtask.title)
 
-            if new_subtask is None:
+            if duplicate_subtask is None:
                 self.subtasks_list.append(subtask)
 
         elif isinstance(subtask, str):
-            new_subtask = self.find_subtask(subtask)
-            if new_subtask is None:
+            duplicate_subtask = self.find_subtask(subtask)
+            if duplicate_subtask is None:
 
-                new_subtask = Subtask(title=subtask)
-                self.subtasks_list.append(new_subtask)
+                duplicate_subtask = Subtask(title=subtask)
+                self.subtasks_list.append(duplicate_subtask)
 
     def remove_subtask(self, subtask: Subtask = None, subtask_id: str = None):
         if subtask is not None:
-            subtask = self.find_subtask(title=subtask.title)
+            duplicate_subtask = self.find_subtask(subtask_id=subtask_id)
 
-            if subtask is not None:
-                self.subtasks_list.remove(subtask)
+            if duplicate_subtask is not None:
+                self.subtasks_list.remove(duplicate_subtask)
 
         elif subtask_id is not None:
-            subtask = self.find_subtask(subtask_id=subtask_id)
+            duplicate_subtask = self.find_subtask(subtask_id=subtask_id)
 
-            if subtask is not None:
-                self.subtasks_list.remove(subtask)
+            if duplicate_subtask is not None:
+                self.subtasks_list.remove(duplicate_subtask)
 
+    def change_subtask_position(self, position: int, subtask: Subtask = None, subtask_id: str = None):
+        if subtask is not None:
+            duplicate_subtask = self.find_subtask(subtask_id=subtask_id)
+
+            if duplicate_subtask is not None:
+                self.subtasks_list.remove(duplicate_subtask)
+
+                real_position = position - 1
+                self.subtasks_list.insert(real_position, duplicate_subtask)
+
+        elif subtask_id is not None:
+            duplicate_subtask = self.find_subtask(subtask_id=subtask_id)
+
+            if duplicate_subtask is not None:
+                self.subtasks_list.remove(duplicate_subtask)
+
+                real_position = position - 1
+                self.subtasks_list.insert(real_position, duplicate_subtask)
