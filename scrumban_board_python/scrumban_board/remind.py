@@ -6,6 +6,8 @@ class Remind:
     def __init__(self, title: str,
                  when_remind: datetime.datetime,
                  description: str = None,
+                 deadline: bool = None,
+                 card_id: str = None,
                  repeating_remind_timedelta: datetime.timedelta = None):
 
         self.title = title
@@ -14,6 +16,16 @@ class Remind:
             self.description = description
         else:
             self.description = self.title
+
+        if deadline is not None:
+            self.deadline = deadline
+        else:
+            self.deadline = False
+
+        if card_id is not None:
+            self.card_id = card_id
+        else:
+            self.card_id = None
 
         self.when_remind = when_remind
 

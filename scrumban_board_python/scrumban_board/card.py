@@ -11,7 +11,7 @@ class Card:
     def __init__(self, task,
                  users: deque,
                  reminds_list: deque = None,
-                 deadline: datetime.datetime = None,
+                 deadline: Remind = None,
                  repeatable_remind: datetime.timedelta = None):
 
         self.task = None
