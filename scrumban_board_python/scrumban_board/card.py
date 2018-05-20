@@ -8,7 +8,7 @@ from scrumban_board_python.scrumban_board.user import User
 
 
 class Card:
-    def __init__(self, task,
+    def __init__(self, task: Task,
                  users: deque,
                  reminds_list: deque = None,
                  deadline: Remind = None,

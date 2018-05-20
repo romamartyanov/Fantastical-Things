@@ -4,6 +4,7 @@ import datetime
 
 from scrumban_board_python.scrumban_board.cardlist import CardList
 from scrumban_board_python.scrumban_board.user import User
+from scrumban_board_python.scrumban_board.calendar import Calendar
 
 
 class Board:
@@ -23,6 +24,8 @@ class Board:
         for user in users:
             if isinstance(user, User):
                 self.cardlists.append(user)
+
+        self.calendar = Calendar(self.users)
 
         self.id = sha1(("Board: " + " " +
                         self.title + " " +

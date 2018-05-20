@@ -1,5 +1,6 @@
-from collections import deque
-import datetime
+# from collections import deque
+# from datetime import *
+# from dateutil.relativedelta import *
 
 from scrumban_board_python import scrumban_board
 
@@ -40,9 +41,15 @@ from scrumban_board_python import scrumban_board
 # for i in a:
 #     print(i)
 
-a = datetime.datetime.now()
-b = datetime.datetime(2017, 9, 5)
+# NOW = datetime.now()
+# b = date(2017, 9, 5)
+#
+# # if NOW > b:
+# #     print(NOW)
+#
+# NOW = NOW+relativedelta(months=+2)
+# print(NOW)
 
-if a > b:
-    print(a)
+u = scrumban_board.User("Roman", "Martyanov", "romamartyanov", "romamartyanov@gmail.com")
 
+print(u)

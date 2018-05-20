@@ -6,14 +6,15 @@ from scrumban_board_python.scrumban_board.card import Card
 
 
 class CardList:
-    def __init__(self, title: str, cards: deque, description: str = None):
+    def __init__(self, title: str, cards: deque = None, description: str = None):
         self.title = title
         self.description = description
 
         self.cards = deque()
-        for card in cards:
-            if isinstance(card, Card):
-                cards.append(card)
+        if cards is not None:
+            for card in cards:
+                if isinstance(card, Card):
+                    cards.append(card)
 
         self.id = sha1(("CardList: " + " " +
                         self.title + " " +
