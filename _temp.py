@@ -64,4 +64,10 @@ r_l = deque()
 r_l.append(r)
 
 c.update_card(reminds_list=r_l)
+print(u)
 print(c)
+
+# print (scrumban_board.BColors.WARNING + "Warning:" + scrumban_board.BColors.HEADER +
+#        "No active" + scrumban_board.BColors.CYAN + "frommets" + scrumban_board.BColors.GREEN +
+#        "remain." + scrumban_board.BColors.FAIL+" Continue?"
+#       + scrumban_board.BColors.ENDC)

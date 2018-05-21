@@ -3,6 +3,7 @@ from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.card import Card
+from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class CardList:
@@ -21,7 +22,7 @@ class CardList:
                         str(datetime.datetime.now())).encode('utf-8'))
 
     def __str__(self):
-        output = """
+        output = Colors.cardlist_green + """
 --- Cardlist ---
 Title: {}
 Description: {}
@@ -29,25 +30,30 @@ ID: {}
 
 Cards: 
 {}
----End Cardlist--""".format(self.title,
-                            self.description,
-                            self.id.hexdigest(),
-                            self.cards)
+
+---End Cardlist--
+""".format(self.title,
+           self.description,
+           self.id.hexdigest(),
+           self.cards) + Colors.ENDC
 
         return output
 
     def __repr__(self):
-        output = """--- Cardlist ---
+        output = Colors.cardlist_green + """
+--- Cardlist ---
 Title: {}
 Description: {}
 ID: {}
 
 Cards: 
 {}
----End Cardlist--""".format(self.title,
-                            self.description,
-                            self.id.hexdigest(),
-                            self.cards)
+
+---End Cardlist--
+""".format(self.title,
+           self.description,
+           self.id.hexdigest(),
+           self.cards) + Colors.ENDC
 
         return output
 

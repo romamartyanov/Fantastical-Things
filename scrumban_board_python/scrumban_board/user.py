@@ -5,6 +5,7 @@ import datetime
 from scrumban_board_python.scrumban_board.board import Board
 from scrumban_board_python.scrumban_board.user_calendar import Calendar
 from scrumban_board_python.scrumban_board.cardlist import CardList
+from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class User:
@@ -48,7 +49,7 @@ class User:
     def __str__(self):
         boards_id = [board_id.id.hexdigest() for board_id in self.boards]
 
-        output = """
+        output = Colors.user_magenta + """
 --- User ---
 Name: {}
 Surname: {}
@@ -57,11 +58,34 @@ ID: {}
 Email: {}
 
 Boards ID: {}
---End User--""".format(self.name,
-                       self.surname,
-                       self.nickname,
-                       self.id.hexdigest(),
-                       self.email,
-                       boards_id)
+--End User--
+""".format(self.name,
+           self.surname,
+           self.nickname,
+           self.id.hexdigest(),
+           self.email,
+           boards_id) + Colors.ENDC
+
+        return output
+
+    def __repr__(self):
+        boards_id = [board_id.id.hexdigest() for board_id in self.boards]
+
+        output = Colors.user_magenta + """
+--- User ---
+Name: {}
+Surname: {}
+Nickname: {}
+ID: {}
+Email: {}
+
+Boards ID: {}
+--End User--
+""".format(self.name,
+           self.surname,
+           self.nickname,
+           self.id.hexdigest(),
+           self.email,
+           boards_id) + BColors.ENDC
 
         return output

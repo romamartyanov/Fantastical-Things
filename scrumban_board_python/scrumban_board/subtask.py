@@ -1,6 +1,8 @@
 from hashlib import sha1
 import datetime
 
+from scrumban_board_python.scrumban_board.terminal_colors import Colors
+
 
 class Subtask:
     def __init__(self, title: str, description: str = None):
@@ -17,28 +19,32 @@ class Subtask:
                         str(datetime.datetime.now())).encode('utf-8'))
 
     def __str__(self):
-        output = """--- SUBTASK ---
+        output = Colors.subtask_lightblue + """
+--- SUBTASK ---
 Title: {}
 Description: {}
 Completed: {}
 ID: {}
---End Subtask--""".format(self.title,
-                          self.description,
-                          self.completed,
-                          self.id.hexdigest())
+--End Subtask--
+""".format(self.title,
+           self.description,
+           self.completed,
+           self.id.hexdigest()) + Colors.ENDC
 
         return output
 
     def __repr__(self):
-        output = """--- SUBTASK ---
+        output = Colors.subtask_lightblue + """
+--- SUBTASK ---
 Title: {}
 Description: {}
 Completed: {}
 ID: {}
---End Subtask--""".format(self.title,
-                          self.description,
-                          self.completed,
-                          self.id.hexdigest())
+--End Subtask--
+""".format(self.title,
+           self.description,
+           self.completed,
+           self.id.hexdigest()) + Colors.ENDC
 
         return output
 

@@ -1,6 +1,8 @@
 from hashlib import sha1
 import datetime
 
+from scrumban_board_python.scrumban_board.terminal_colors import Colors
+
 
 class Remind:
     def __init__(self, title: str,
@@ -43,7 +45,7 @@ class Remind:
                         str(datetime.datetime.now())).encode('utf-8'))
 
     def __str__(self):
-        output = """
+        output = Colors.remind_red + """
 --- Remind ---
 Title: {}
 Description: {}
@@ -51,29 +53,32 @@ ID: {}
 Is Deadline: {}
 Is Repeatable: {}
 Repeating time delta: {}
---End Remind--""".format(self.title,
-                         self.description,
-                         self.id.hexdigest,
-                         self.is_deadline,
-                         self.is_repeatable,
-                         self.repeating_remind_timedelta)
+--End Remind--
+""".format(self.title,
+           self.description,
+           self.id.hexdigest,
+           self.is_deadline,
+           self.is_repeatable,
+           self.repeating_remind_timedelta) + Colors.ENDC
 
         return output
 
     def __repr__(self):
-        output = """--- Remind ---
+        output = Colors.remind_red + """
+--- Remind ---
 Title: {}
 Description: {}
 ID: {}
 Is Deadline: {}
 Is Repeatable: {}
 Repeating time delta: {}
---End Remind--""".format(self.title,
-                         self.description,
-                         self.id.hexdigest(),
-                         self.is_deadline,
-                         self.is_repeatable,
-                         self.repeating_remind_timedelta)
+--End Remind--
+""".format(self.title,
+           self.description,
+           self.id.hexdigest,
+           self.is_deadline,
+           self.is_repeatable,
+           self.repeating_remind_timedelta) + Colors.ENDC
 
         return output
 

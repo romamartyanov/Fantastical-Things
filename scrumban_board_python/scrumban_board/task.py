@@ -3,6 +3,7 @@ from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.subtask import Subtask
+from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Task:
@@ -29,7 +30,8 @@ class Task:
     def __str__(self):
         subtasks_list = [subtask for subtask in self.subtasks_list]
 
-        output = """--- TASK ---
+        output = Colors.task_blue + """
+--- TASK ---
 Title: {}
 Description: {}
 ID: {}
@@ -37,11 +39,13 @@ Completed: {}
 
 Subtasks:
 {}
---End Task--""".format(self.title,
-                       self.description,
-                       self.id.hexdigest(),
-                       self.completed,
-                       subtasks_list)
+
+--End Task--
+""".format(self.title,
+           self.description,
+           self.id.hexdigest(),
+           self.completed,
+           subtasks_list) + Colors.ENDC
 
         return output
 
@@ -90,7 +94,6 @@ Subtasks:
         elif isinstance(subtask, str):
             duplicate_subtask = self.find_subtask(subtask)
             if duplicate_subtask is None:
-
                 duplicate_subtask = Subtask(title=subtask)
                 self.subtasks_list.append(duplicate_subtask)
 

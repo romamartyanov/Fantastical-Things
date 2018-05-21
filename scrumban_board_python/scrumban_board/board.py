@@ -4,6 +4,7 @@ import datetime
 
 from scrumban_board_python.scrumban_board.cardlist import CardList
 from scrumban_board_python.scrumban_board.user_calendar import Calendar
+from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Board:
@@ -32,43 +33,48 @@ class Board:
     def __str__(self):
         users_id = [user_id.hexdigest() for user_id in self.users_id]
 
-        output = """
+        output = Colors.cardlist_green + """
 --- Board ---
 Title: {}
 Description: {}
 ID: {}
+
 Users ID:
 {}
 
 Cardlists:
 {}
 
---End Board--""".format(self.title,
-                        self.description,
-                        self.id.hexdigit(),
-                        users_id,
-                        self.cardlists)
+--End Board--
+""".format(self.title,
+           self.description,
+           self.id.hexdigit(),
+           users_id,
+           self.cardlists) + Colors.ENDC
 
         return output
 
     def __repr__(self):
         users_id = [user_id.hexdigest() for user_id in self.users_id]
 
-        output = """--- Board ---
+        output = Colors.cardlist_green + """
+--- Board ---
 Title: {}
 Description: {}
 ID: {}
+
 Users ID:
 {}
 
 Cardlists:
 {}
 
---End Board--""".format(self.title,
-                        self.description,
-                        self.id.hexdigit(),
-                        users_id,
-                        self.cardlists)
+--End Board--
+""".format(self.title,
+           self.description,
+           self.id.hexdigit(),
+           users_id,
+           self.cardlists) + Colors.ENDC
 
         return output
 

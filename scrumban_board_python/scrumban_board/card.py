@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 
 from scrumban_board_python.scrumban_board.task import Task
 from scrumban_board_python.scrumban_board.remind import Remind
+from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Card:
@@ -44,7 +45,8 @@ class Card:
         users_id = [user_id.hexdigest() for user_id in self.users_id]
         reminds_list = [remind for remind in self.reminds_list]
 
-        output = """--- Card ---
+        output = Colors.card_yellow + """
+--- Card ---
 ID: {}
 Users ID: {}
 Task:
@@ -52,10 +54,11 @@ Task:
 
 Reminds:
 {}
----End Card--""".format(self.id,
-                        users_id,
-                        self.task,
-                        reminds_list)
+---End Card--
+""".format(self.id,
+           users_id,
+           self.task,
+           reminds_list) + Colors.ENDC
 
         return output
 
@@ -63,20 +66,22 @@ Reminds:
         users_id = [user_id.hexdigest() for user_id in self.users_id]
         reminds_list = [remind for remind in self.reminds_list]
 
-        output = """--- Card ---
+        output = Colors.card_yellow + """
+--- Card ---
 ID: {}
 Users ID: {}
+
 Task:
 {}
 
 Reminds:
 {}
----End Card--""".format(self.id,
-                        users_id,
-                        self.task,
-                        reminds_list)
 
-        return output
+---End Card--
+""".format(self.id,
+           users_id,
+           self.task,
+           reminds_list) + Colors.ENDC
 
     def update_card(self, task=None,
                     users: deque = None,
