@@ -1,12 +1,12 @@
 from hashlib import sha1
-import datetime
+from _datetime import *
 
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Remind:
     def __init__(self, title: str,
-                 when_remind: datetime.datetime,
+                 when_remind,
                  description: str = None,
                  deadline: bool = None,
                  card_id: str = None,
@@ -29,7 +29,16 @@ class Remind:
         else:
             self.card_id = None
 
-        self.when_remind = when_remind
+        try:
+            self.when_remind = when_remind
+        except ValueError:
+            try:
+                self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d %H:%M')
+            except ValueError:
+                try:
+                    self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d')
+                except ValueError:
+                    self.when_remind = datetime.now()
 
         self.is_repeatable = False
         if repeating_remind_timedelta is not None:

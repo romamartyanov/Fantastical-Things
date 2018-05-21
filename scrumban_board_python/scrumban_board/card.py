@@ -83,6 +83,8 @@ Reminds:
            self.task,
            reminds_list) + Colors.ENDC
 
+        return output
+
     def update_card(self, task=None,
                     users: deque = None,
                     reminds_list: deque = None,

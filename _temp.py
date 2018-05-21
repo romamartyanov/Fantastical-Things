@@ -49,6 +49,9 @@ from dateutil.relativedelta import *
 # NOW = NOW+relativedelta(months=+2)
 # print(NOW)
 
+dt = datetime.strptime("2019/10/20 12:00", '%Y/%m/%d')
+print(dt)
+
 from scrumban_board_python import scrumban_board
 
 u = scrumban_board.User("Roman", "Martyanov", "romamartyanov", "romamartyanov@gmail.com")
