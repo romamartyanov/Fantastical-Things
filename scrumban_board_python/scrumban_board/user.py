@@ -3,7 +3,7 @@ from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.board import Board
-from scrumban_board_python.scrumban_board.calendar import Calendar
+from scrumban_board_python.scrumban_board.user_calendar import Calendar
 from scrumban_board_python.scrumban_board.cardlist import CardList
 
 
@@ -16,7 +16,7 @@ class User:
         self.email = email
 
         self.id = sha1(("User: " + " " +
-                        self.nickname))
+                        self.nickname).encode('utf-8'))
 
         u = deque()
         u.append(self)
@@ -31,11 +31,13 @@ class User:
             to_do = CardList("To-Do")
             doing = CardList("Doing")
             done = CardList("Done")
+            overdue = CardList("Overdue")
 
             l = deque()
             l.append(to_do)
             l.append(doing)
             l.append(done)
+            l.append(overdue)
 
             board = Board("User Board", u, "default agile board", l)
             self.boards.append(board)
@@ -44,9 +46,10 @@ class User:
         # self.teams_list = None
 
     def __str__(self):
-        boards_id = [board_id.id for board_id in self.boards]
+        boards_id = [board_id.id.hexdigest() for board_id in self.boards]
 
         output = """
+--- User ---
 Name: {}
 Surname: {}
 Nickname: {}
@@ -54,11 +57,11 @@ ID: {}
 Email: {}
 
 Boards ID: {}
-""".format(self.name,
-           self.surname,
-           self.nickname,
-           self.id,
-           self.email,
-           boards_id)
+--End User--""".format(self.name,
+                       self.surname,
+                       self.nickname,
+                       self.id.hexdigest(),
+                       self.email,
+                       boards_id)
 
         return output

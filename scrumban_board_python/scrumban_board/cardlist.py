@@ -18,10 +18,40 @@ class CardList:
 
         self.id = sha1(("CardList: " + " " +
                         self.title + " " +
-                        self.description + " " +
                         str(datetime.datetime.now())).encode('utf-8'))
 
-    def update_cardlist(self, title: str =None, cards: deque = None, description: str = None):
+    def __str__(self):
+        output = """
+--- Cardlist ---
+Title: {}
+Description: {}
+ID: {}
+
+Cards: 
+{}
+---End Cardlist--""".format(self.title,
+                            self.description,
+                            self.id.hexdigest(),
+                            self.cards)
+
+        return output
+
+    def __repr__(self):
+        output = """--- Cardlist ---
+Title: {}
+Description: {}
+ID: {}
+
+Cards: 
+{}
+---End Cardlist--""".format(self.title,
+                            self.description,
+                            self.id.hexdigest(),
+                            self.cards)
+
+        return output
+
+    def update_cardlist(self, title: str = None, cards: deque = None, description: str = None):
         if title is not None:
             self.title = title
 
@@ -37,10 +67,16 @@ class CardList:
 
     def find_card(self, card_id=None, title=None):
         if card_id is not None:
-            return next(card for card in self.cards if card.id == card_id)
+            try:
+                return next(card for card in self.cards if card.id == card_id)
+            except StopIteration:
+                return None
 
         elif title is not None:
-            return next(card for card in self.cards if card.title == title)
+            try:
+                return next(card for card in self.cards if card.title == title)
+            except StopIteration:
+                return None
 
         else:
             return None

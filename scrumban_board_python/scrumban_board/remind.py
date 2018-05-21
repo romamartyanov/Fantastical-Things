@@ -18,9 +18,9 @@ class Remind:
             self.description = self.title
 
         if deadline is not None:
-            self.deadline = deadline
+            self.is_deadline = deadline
         else:
-            self.deadline = False
+            self.is_deadline = False
 
         if card_id is not None:
             self.card_id = card_id
@@ -39,9 +39,43 @@ class Remind:
 
         self.id = sha1(("Remind: " + " " +
                         self.title + " " +
-                        self.description + " " +
                         str(self.when_remind) + " " +
                         str(datetime.datetime.now())).encode('utf-8'))
+
+    def __str__(self):
+        output = """
+--- Remind ---
+Title: {}
+Description: {}
+ID: {}
+Is Deadline: {}
+Is Repeatable: {}
+Repeating time delta: {}
+--End Remind--""".format(self.title,
+                         self.description,
+                         self.id.hexdigest,
+                         self.is_deadline,
+                         self.is_repeatable,
+                         self.repeating_remind_timedelta)
+
+        return output
+
+    def __repr__(self):
+        output = """--- Remind ---
+Title: {}
+Description: {}
+ID: {}
+Is Deadline: {}
+Is Repeatable: {}
+Repeating time delta: {}
+--End Remind--""".format(self.title,
+                         self.description,
+                         self.id.hexdigest(),
+                         self.is_deadline,
+                         self.is_repeatable,
+                         self.repeating_remind_timedelta)
+
+        return output
 
     def update_remind(self, title: str = None, description: str = None,
                       when_remind: datetime.datetime = None,

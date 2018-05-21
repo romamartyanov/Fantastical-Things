@@ -1,8 +1,7 @@
-# from collections import deque
-# from datetime import *
-# from dateutil.relativedelta import *
+from collections import deque
+from datetime import *
+from dateutil.relativedelta import *
 
-from scrumban_board_python import scrumban_board
 
 # from hashlib import sha1
 # import datetime
@@ -50,6 +49,19 @@ from scrumban_board_python import scrumban_board
 # NOW = NOW+relativedelta(months=+2)
 # print(NOW)
 
+from scrumban_board_python import scrumban_board
+
 u = scrumban_board.User("Roman", "Martyanov", "romamartyanov", "romamartyanov@gmail.com")
 
-print(u)
+t = scrumban_board.Task("title", "description")
+t.add_subtask(scrumban_board.Subtask("subtask1"))
+t.add_subtask(scrumban_board.Subtask("subtask2"))
+
+r = scrumban_board.Remind("Remind", datetime.now())
+c = scrumban_board.Card(t, u.id)
+
+r_l = deque()
+r_l.append(r)
+
+c.update_card(reminds_list=r_l)
+print(c)

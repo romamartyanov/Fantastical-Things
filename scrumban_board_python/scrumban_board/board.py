@@ -3,12 +3,11 @@ from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.cardlist import CardList
-from scrumban_board_python.scrumban_board.user import User
-from scrumban_board_python.scrumban_board.calendar import Calendar
+from scrumban_board_python.scrumban_board.user_calendar import Calendar
 
 
 class Board:
-    def __init__(self, title: str, users: deque, description: str = None, cardlists: deque = None):
+    def __init__(self, title: str, users_id: deque, description: str = None, cardlists: deque = None):
         self.title = title
         self.description = self.title
 
@@ -20,17 +19,58 @@ class Board:
             if isinstance(cardlist, CardList):
                 self.cardlists.append(cardlist)
 
-        self.users = deque()
-        for user in users:
-            if isinstance(user, User):
-                self.cardlists.append(user)
+        self.users_id = deque()
+        for user in users_id:
+            self.cardlists.append(user)
 
-        self.calendar = Calendar(self.users)
+        self.calendar = Calendar(self.users_id)
 
         self.id = sha1(("Board: " + " " +
                         self.title + " " +
-                        self.description + " " +
                         str(datetime.datetime.now())).encode('utf-8'))
+
+    def __str__(self):
+        users_id = [user_id.hexdigest() for user_id in self.users_id]
+
+        output = """
+--- Board ---
+Title: {}
+Description: {}
+ID: {}
+Users ID:
+{}
+
+Cardlists:
+{}
+
+--End Board--""".format(self.title,
+                        self.description,
+                        self.id.hexdigit(),
+                        users_id,
+                        self.cardlists)
+
+        return output
+
+    def __repr__(self):
+        users_id = [user_id.hexdigest() for user_id in self.users_id]
+
+        output = """--- Board ---
+Title: {}
+Description: {}
+ID: {}
+Users ID:
+{}
+
+Cardlists:
+{}
+
+--End Board--""".format(self.title,
+                        self.description,
+                        self.id.hexdigit(),
+                        users_id,
+                        self.cardlists)
+
+        return output
 
     def update_board(self, title: str = None, users: deque = None, description: str = None, cardlists: deque = None):
         if title is not None:
@@ -47,19 +87,23 @@ class Board:
                     self.cardlists.append(cardlist)
 
         if users is not None:
-            self.users.clear()
+            self.users_id.clear()
 
             for user in users:
-                if isinstance(user, User):
-                    self.users.append(user)
+                self.users_id.append(user)
 
     def find_cardlist(self, cardlist_id=None, title=None):
         if cardlist_id is not None:
-            return next(cardlist for cardlist in self.cardlists if cardlist.id == cardlist_id)
+            try:
+                return next(cardlist for cardlist in self.cardlists if cardlist.id == cardlist_id)
+            except StopIteration:
+                return None
 
         elif title is not None:
-            return next(cardlist for cardlist in self.cardlists if cardlist.title == title)
-
+            try:
+                return next(cardlist for cardlist in self.cardlists if cardlist.title == title)
+            except StopIteration:
+                return None
         else:
             return None
 
