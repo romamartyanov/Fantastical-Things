@@ -3,6 +3,7 @@ from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.subtask import Subtask
+from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Task:
@@ -24,8 +25,29 @@ class Task:
 
         self.id = sha1(("Task: " + " " +
                         self.title + " " +
-                        self.description + " " +
                         str(datetime.datetime.now())).encode('utf-8'))
+
+    def __str__(self):
+        subtasks_list = [subtask for subtask in self.subtasks_list]
+
+        output = Colors.task_blue + """
+--- TASK ---
+Title: {}
+Description: {}
+ID: {}
+Completed: {}
+
+Subtasks:
+{}
+
+--End Task--
+""".format(self.title,
+           self.description,
+           self.id.hexdigest(),
+           self.completed,
+           subtasks_list) + Colors.ENDC
+
+        return output
 
     def update_task(self, title: str = None, description: str = None,
                     subtasks_list: deque = None, completed: bool = None):
@@ -48,15 +70,21 @@ class Task:
 
     def find_subtask(self, title: str = None, subtask_id: str = None):
         if subtask_id is not None:
-            return next(subtask for subtask in self.subtasks_list if subtask.id == subtask_id)
+            try:
+                return next(subtask for subtask in self.subtasks_list if subtask.id == subtask_id)
+            except StopIteration:
+                return None
 
         elif title is not None:
-            return next(subtask for subtask in self.subtasks_list if subtask.title == title)
+            try:
+                return next(subtask for subtask in self.subtasks_list if subtask.title == title)
+            except StopIteration:
+                return None
 
         else:
             return None
 
-    def add_subtask(self, subtask):
+    def add_subtask(self, subtask: Subtask):
         if isinstance(subtask, Subtask):
             duplicate_subtask = self.find_subtask(title=subtask.title)
 
@@ -66,7 +94,6 @@ class Task:
         elif isinstance(subtask, str):
             duplicate_subtask = self.find_subtask(subtask)
             if duplicate_subtask is None:
-
                 duplicate_subtask = Subtask(title=subtask)
                 self.subtasks_list.append(duplicate_subtask)
 

@@ -2,17 +2,13 @@ from hashlib import sha1
 from collections import deque
 import datetime
 
-from scrumban_board_python.scrumban_board.user import User
 from scrumban_board_python.scrumban_board.remind import Remind
 
 
 class Calendar:
     def __init__(self, users: deque, reminds: deque = None):
 
-        self.users = deque()
-        for user in users:
-            if isinstance(user, User):
-                self.users.append(user)
+        self.users = users
 
         self.future_reminds = deque()
 
@@ -57,6 +53,8 @@ class Calendar:
         for deque_remind in self.future_reminds:
             if deque_remind.when_remind < datetime.datetime.now():
                     # do something with remind
+
                     self.future_reminds.popleft()
+
             else:
                 break
