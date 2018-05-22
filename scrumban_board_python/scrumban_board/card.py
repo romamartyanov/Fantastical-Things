@@ -70,7 +70,7 @@ Reminds:
 """.format(self.id,
            users_id,
            self.task,
-           reminds_list) + Colors.ENDC
+           reminds_list) + Colors.end_color
 
         return output
 
@@ -93,7 +93,7 @@ Reminds:
 """.format(self.id,
            users_id,
            self.task,
-           reminds_list) + Colors.ENDC
+           reminds_list) + Colors.end_color
 
         return output
 

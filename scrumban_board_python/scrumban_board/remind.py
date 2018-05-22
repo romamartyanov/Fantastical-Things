@@ -68,7 +68,7 @@ Repeating time delta: {}
            self.id.hexdigest,
            self.is_deadline,
            self.is_repeatable,
-           self.repeating_remind_timedelta) + Colors.ENDC
+           self.repeating_remind_timedelta) + Colors.end_color
 
         return output
 
@@ -87,7 +87,7 @@ Repeating time delta: {}
            self.id.hexdigest,
            self.is_deadline,
            self.is_repeatable,
-           self.repeating_remind_timedelta) + Colors.ENDC
+           self.repeating_remind_timedelta) + Colors.end_color
 
         return output
 

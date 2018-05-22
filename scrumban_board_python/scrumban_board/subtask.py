@@ -29,7 +29,7 @@ ID: {}
 """.format(self.title,
            self.description,
            self.completed,
-           self.id.hexdigest()) + Colors.ENDC
+           self.id.hexdigest()) + Colors.end_color
 
         return output
 
@@ -44,7 +44,7 @@ ID: {}
 """.format(self.title,
            self.description,
            self.completed,
-           self.id.hexdigest()) + Colors.ENDC
+           self.id.hexdigest()) + Colors.end_color
 
         return output
 

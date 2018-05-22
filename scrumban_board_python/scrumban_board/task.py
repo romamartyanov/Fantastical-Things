@@ -50,7 +50,7 @@ Subtasks:
            self.description,
            self.id.hexdigest(),
            self.completed,
-           subtasks_list) + Colors.ENDC
+           subtasks_list) + Colors.end_color
 
         return output
 

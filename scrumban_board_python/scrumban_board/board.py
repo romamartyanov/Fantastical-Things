@@ -27,8 +27,13 @@ class Board:
                         self.cardlists.append(cardlist)
 
         self.users_id = deque()
-        for user in users_id:
-            self.cardlists.append(user)
+        if isinstance(users_id, str):
+            self.users_id.append(users_id)
+
+        elif isinstance(users_id, deque):
+            for user_id in users_id:
+                if isinstance(user_id, str):
+                    self.users_id.append(user_id)
 
         self.calendar = Calendar(self.users_id)
 
@@ -56,7 +61,7 @@ Cardlists:
            self.description,
            self.id.hexdigit(),
            users_id,
-           self.cardlists) + Colors.ENDC
+           self.cardlists) + Colors.end_color
 
         return output
 
@@ -80,7 +85,7 @@ Cardlists:
            self.description,
            self.id.hexdigit(),
            users_id,
-           self.cardlists) + Colors.ENDC
+           self.cardlists) + Colors.end_color
 
         return output
 

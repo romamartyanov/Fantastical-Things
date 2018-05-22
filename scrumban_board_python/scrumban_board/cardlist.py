@@ -39,7 +39,7 @@ Cards:
 """.format(self.title,
            self.description,
            self.id.hexdigest(),
-           self.cards) + Colors.ENDC
+           self.cards) + Colors.end_color
 
         return output
 
@@ -57,7 +57,7 @@ Cards:
 """.format(self.title,
            self.description,
            self.id.hexdigest(),
-           self.cards) + Colors.ENDC
+           self.cards) + Colors.end_color
 
         return output
 

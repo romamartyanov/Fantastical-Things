@@ -69,7 +69,7 @@ Boards ID: {}
            self.nickname,
            self.id.hexdigest(),
            self.email,
-           boards_id) + Colors.ENDC
+           boards_id) + Colors.end_color
 
         return output
 
@@ -91,7 +91,7 @@ Boards ID: {}
            self.nickname,
            self.id.hexdigest(),
            self.email,
-           boards_id) + Colors.ENDC
+           boards_id) + Colors.end_color
 
         return output
 
