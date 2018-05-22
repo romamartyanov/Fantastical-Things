@@ -106,7 +106,7 @@ Cards:
             if duplicate_card is not None:
                 self.cards.remove(duplicate_card)
 
-    def change_card_position(self, position: int, card: Card = None, card_id=None):
+    def change_card_position(self, position: int, card: Card = None, card_id: str = None):
         if card is not None:
             duplicate_card = self.find_card(card_id=card.id)
 
