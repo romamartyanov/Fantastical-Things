@@ -7,6 +7,7 @@ class Colors:
     subtask_lightblue = '\033[94m'
 
     user_magenta = '\033[35m'
+    team_cyan = '\033[36m'
 
-    RESET = '\033[39m'
-    ENDC = '\033[0m'
+    reset = '\033[39m'
+    end_color = '\033[0m'

@@ -5,11 +5,8 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Remind:
-    def __init__(self, title: str,
-                 when_remind,
-                 description: str = None,
-                 deadline: bool = None,
-                 card_id: str = None,
+    def __init__(self, title: str, when_remind,
+                 description: str = None, deadline: bool = None, card_id: str = None,
                  repeating_remind_timedelta: datetime.timedelta = None):
 
         self.title = title
@@ -68,7 +65,7 @@ Repeating time delta: {}
            self.id.hexdigest,
            self.is_deadline,
            self.is_repeatable,
-           self.repeating_remind_timedelta) + Colors.ENDC
+           self.repeating_remind_timedelta) + Colors.end_color
 
         return output
 
@@ -87,12 +84,12 @@ Repeating time delta: {}
            self.id.hexdigest,
            self.is_deadline,
            self.is_repeatable,
-           self.repeating_remind_timedelta) + Colors.ENDC
+           self.repeating_remind_timedelta) + Colors.end_color
 
         return output
 
     def update_remind(self, title: str = None, description: str = None,
-                      when_remind: datetime.datetime = None,
+                      when_remind=None,
                       repeating_remind_timedelta: datetime.timedelta = None):
 
         if title is not None:
@@ -102,7 +99,16 @@ Repeating time delta: {}
             self.description = description
 
         if when_remind is not None:
-            self.when_remind = when_remind
+            try:
+                self.when_remind = when_remind
+            except ValueError:
+                try:
+                    self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d %H:%M')
+                except ValueError:
+                    try:
+                        self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d')
+                    except ValueError:
+                        self.when_remind = datetime.now()
 
         if repeating_remind_timedelta is not None:
             self.repeating_remind_timedelta = repeating_remind_timedelta

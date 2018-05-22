@@ -3,12 +3,14 @@ from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.cardlist import CardList
-from scrumban_board_python.scrumban_board.user_calendar import Calendar
+from scrumban_board_python.scrumban_board.calendar import Calendar
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Board:
-    def __init__(self, title: str, users_id: deque, description: str = None, cardlists: deque = None):
+    def __init__(self, title: str, users_id: deque,
+                 description: str = None, cardlists=None):
+
         self.title = title
         self.description = self.title
 
@@ -16,13 +18,34 @@ class Board:
             self.description = description
 
         self.cardlists = deque()
-        for cardlist in cardlists:
-            if isinstance(cardlist, CardList):
-                self.cardlists.append(cardlist)
+
+        if cardlists is not None:
+            if isinstance(cardlists, CardList):
+                self.cardlists.append(cardlists)
+
+            elif isinstance(cardlists, deque):
+                for cardlist in cardlists:
+                    if isinstance(cardlist, CardList):
+                        self.cardlists.append(cardlist)
+        else:
+            to_do = CardList("To-Do")
+            doing = CardList("Doing")
+            done = CardList("Done")
+            overdue = CardList("Overdue")
+
+            self.cardlists.append(to_do)
+            self.cardlists.append(doing)
+            self.cardlists.append(done)
+            self.cardlists.append(overdue)
 
         self.users_id = deque()
-        for user in users_id:
-            self.cardlists.append(user)
+        if isinstance(users_id, str):
+            self.users_id.append(users_id)
+
+        elif isinstance(users_id, deque):
+            for user_id in users_id:
+                if isinstance(user_id, str):
+                    self.users_id.append(user_id)
 
         self.calendar = Calendar(self.users_id)
 
@@ -50,7 +73,7 @@ Cardlists:
            self.description,
            self.id.hexdigit(),
            users_id,
-           self.cardlists) + Colors.ENDC
+           self.cardlists) + Colors.end_color
 
         return output
 
@@ -74,7 +97,7 @@ Cardlists:
            self.description,
            self.id.hexdigit(),
            users_id,
-           self.cardlists) + Colors.ENDC
+           self.cardlists) + Colors.end_color
 
         return output
 
@@ -88,9 +111,13 @@ Cardlists:
         if cardlists is not None:
             self.cardlists.clear()
 
-            for cardlist in cardlists:
-                if isinstance(cardlist, CardList):
-                    self.cardlists.append(cardlist)
+            if isinstance(cardlists, CardList):
+                self.cardlists.append(cardlists)
+
+            elif isinstance(cardlists, deque):
+                for cardlist in cardlists:
+                    if isinstance(cardlist, CardList):
+                        self.cardlists.append(cardlist)
 
         if users is not None:
             self.users_id.clear()

@@ -7,19 +7,22 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Task:
-    def __init__(self, title: str, description: str = None, subtasks_list: deque = None):
+    def __init__(self, title: str,
+                 description: str = None, subtasks_list: deque = None):
 
         self.title = title
-        self.description = title
-
-        if description is not None:
-            self.description = description
+        self.description = description
 
         self.subtasks_list = deque()
         if subtasks_list is not None:
-            for subtask in subtasks_list:
-                if isinstance(subtask, Subtask):
-                    self.subtasks_list.append(subtask)
+            if isinstance(subtasks_list, str):
+                subtask = Subtask(subtasks_list)
+                self.subtasks_list.append(subtask)
+
+            elif isinstance(subtasks_list, deque):
+                for subtask in subtasks_list:
+                    if isinstance(subtask, Subtask):
+                        self.subtasks_list.append(subtask)
 
         self.completed = False
 
@@ -45,12 +48,12 @@ Subtasks:
            self.description,
            self.id.hexdigest(),
            self.completed,
-           subtasks_list) + Colors.ENDC
+           subtasks_list) + Colors.end_color
 
         return output
 
     def update_task(self, title: str = None, description: str = None,
-                    subtasks_list: deque = None, completed: bool = None):
+                    subtasks_list=None, completed: bool = None):
 
         if title is not None:
             self.title = title
@@ -61,9 +64,14 @@ Subtasks:
         if subtasks_list is not None:
             self.subtasks_list.clear()
 
-            for subtask in subtasks_list:
-                if isinstance(subtask, Subtask):
-                    self.subtasks_list.append(subtask)
+            if isinstance(subtasks_list, str):
+                subtask = Subtask(subtasks_list)
+                self.subtasks_list.append(subtask)
+
+            elif isinstance(subtasks_list, deque):
+                for subtask in subtasks_list:
+                    if isinstance(subtask, Subtask):
+                        self.subtasks_list.append(subtask)
 
         if completed is not None:
             self.completed = completed
@@ -84,7 +92,7 @@ Subtasks:
         else:
             return None
 
-    def add_subtask(self, subtask: Subtask):
+    def add_subtask(self, subtask):
         if isinstance(subtask, Subtask):
             duplicate_subtask = self.find_subtask(title=subtask.title)
 

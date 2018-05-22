@@ -10,23 +10,32 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Card:
-    def __init__(self, task: Task,
-                 users_id: deque,
-                 reminds_list: deque = None,
-                 deadline: Remind = None,
-                 repeatable_remind: relativedelta = None):
+    def __init__(self, task, users_id,
+                 reminds_list=None, deadline: Remind = None, repeatable_remind: relativedelta = None):
 
-        self.task = task
+        if isinstance(task, Task):
+            self.task = task
+
+        elif isinstance(task, str):
+            task = Task(title=task)
+            self.task = task
 
         self.users_id = deque()
-        if users_id is not None:
+        if isinstance(users_id, deque):
+            self.users_id = users_id
+        elif isinstance(users_id, str):
+            self.users_id = deque()
             self.users_id.append(users_id)
 
         self.reminds_list = deque()
         if reminds_list is not None:
-            for remind in reminds_list:
-                if isinstance(remind, Remind):
-                    self.reminds_list.append(remind)
+            if isinstance(reminds_list, Remind):
+                self.reminds_list.append(reminds_list)
+
+            elif isinstance(reminds_list, deque):
+                for remind in reminds_list:
+                    if isinstance(remind, Remind):
+                        self.reminds_list.append(remind)
 
         self.deadline = None
         if deadline is not None:
@@ -58,7 +67,7 @@ Reminds:
 """.format(self.id,
            users_id,
            self.task,
-           reminds_list) + Colors.ENDC
+           reminds_list) + Colors.end_color
 
         return output
 
@@ -81,7 +90,7 @@ Reminds:
 """.format(self.id,
            users_id,
            self.task,
-           reminds_list) + Colors.ENDC
+           reminds_list) + Colors.end_color
 
         return output
 
@@ -104,9 +113,13 @@ Reminds:
         if reminds_list is not None:
             self.reminds_list.clear()
 
-            for remind in reminds_list:
-                if isinstance(remind, Remind):
-                    self.reminds_list.append(remind)
+            if isinstance(reminds_list, Remind):
+                self.reminds_list.append(reminds_list)
+
+            elif isinstance(reminds_list, deque):
+                for remind in reminds_list:
+                    if isinstance(remind, Remind):
+                        self.reminds_list.append(remind)
 
         if deadline is not None:
             self.deadline = deadline
