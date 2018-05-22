@@ -7,15 +7,19 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class CardList:
-    def __init__(self, title: str, cards: deque = None, description: str = None):
+    def __init__(self, title: str, cards=None, description: str = None):
         self.title = title
         self.description = description
 
         self.cards = deque()
         if cards is not None:
-            for card in cards:
-                if isinstance(card, Card):
-                    cards.append(card)
+            if isinstance(cards, Card):
+                self.cards.append(cards)
+
+            elif isinstance(cards, deque):
+                for card in cards:
+                    if isinstance(card, Card):
+                        cards.append(card)
 
         self.id = sha1(("CardList: " + " " +
                         self.title + " " +
@@ -64,9 +68,13 @@ Cards:
         if cards is not None:
             self.cards.clear()
 
-            for card in cards:
-                if isinstance(card, Card):
-                    cards.append(card)
+            if isinstance(cards, Card):
+                self.cards.append(cards)
+
+            elif isinstance(cards, deque):
+                for card in cards:
+                    if isinstance(card, Card):
+                        cards.append(card)
 
         if description is not None:
             self.description = description

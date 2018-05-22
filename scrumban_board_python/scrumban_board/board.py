@@ -8,7 +8,7 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Board:
-    def __init__(self, title: str, users_id: deque, description: str = None, cardlists: deque = None):
+    def __init__(self, title: str, users_id: deque, description: str = None, cardlists=None):
         self.title = title
         self.description = self.title
 
@@ -16,9 +16,15 @@ class Board:
             self.description = description
 
         self.cardlists = deque()
-        for cardlist in cardlists:
-            if isinstance(cardlist, CardList):
-                self.cardlists.append(cardlist)
+
+        if cardlists is not None:
+            if isinstance(cardlists, CardList):
+                self.cardlists.append(cardlists)
+
+            elif isinstance(cardlists, deque):
+                for cardlist in cardlists:
+                    if isinstance(cardlist, CardList):
+                        self.cardlists.append(cardlist)
 
         self.users_id = deque()
         for user in users_id:
@@ -88,9 +94,13 @@ Cardlists:
         if cardlists is not None:
             self.cardlists.clear()
 
-            for cardlist in cardlists:
-                if isinstance(cardlist, CardList):
-                    self.cardlists.append(cardlist)
+            if isinstance(cardlists, CardList):
+                self.cardlists.append(cardlists)
+
+            elif isinstance(cardlists, deque):
+                for cardlist in cardlists:
+                    if isinstance(cardlist, CardList):
+                        self.cardlists.append(cardlist)
 
         if users is not None:
             self.users_id.clear()

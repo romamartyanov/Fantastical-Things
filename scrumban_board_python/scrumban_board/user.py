@@ -9,7 +9,7 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 class User:
     def __init__(self, name: str, surname: str, nickname: str, email: str,
-                 user_boards: deque = None, teams_id: deque = None):
+                 user_boards=None, teams_id=None):
         self.name = name
         self.surname = surname
         self.nickname = nickname
@@ -18,14 +18,15 @@ class User:
         self.id = sha1(("User: " + " " +
                         self.nickname).encode('utf-8'))
 
-        u = deque()
-        u.append(self)
-
         self.user_boards = deque()
         if user_boards is not None:
-            for board in user_boards:
-                if isinstance(board, Board):
-                    self.user_boards.append(board)
+            if isinstance(user_boards, Board):
+                self.user_boards.append(user_boards)
+
+            elif isinstance(user_boards, deque):
+                for board in user_boards:
+                    if isinstance(board, Board):
+                        self.user_boards.append(board)
 
         else:
             to_do = CardList("To-Do")
@@ -39,10 +40,10 @@ class User:
             l.append(done)
             l.append(overdue)
 
-            board = Board("User Board", u, "default agile board", l)
+            board = Board("User Board", self.id, "default agile board", l)
             self.user_boards.append(board)
 
-        self.calendar = Calendar(users=u)
+        self.calendar = Calendar(users_id=self.id)
 
         self.teams_list = deque()
         if teams_id is not None:
@@ -93,6 +94,39 @@ Boards ID: {}
            boards_id) + Colors.ENDC
 
         return output
+
+    def update_user(self, name: str = None, surname: str = None, nickname: str = None, email: str = None,
+                    user_boards=None, teams_id=None):
+
+        if name is not None:
+            self.name = name
+
+        if surname is not None:
+            self.surname = surname
+
+        if nickname is not None:
+            self.nickname = nickname
+
+        if email is not None:
+            self.email = email
+
+        if user_boards is not None:
+            self.user_boards.clear()
+
+            if isinstance(user_boards, Board):
+                self.user_boards.append(user_boards)
+
+            elif isinstance(user_boards, deque):
+                for board in user_boards:
+                    if isinstance(board, Board):
+                        self.user_boards.append(board)
+
+        if teams_id is not None:
+            self.teams_list.clear()
+
+            for team_id in teams_id:
+                if isinstance(team_id, str):
+                    self.teams_list.append(team_id)
 
     def find_board(self, board_id: str = None, board_title: str = None):
         if board_id is not None:
