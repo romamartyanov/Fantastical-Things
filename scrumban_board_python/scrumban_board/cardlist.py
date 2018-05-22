@@ -7,7 +7,8 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class CardList:
-    def __init__(self, title: str, cards=None, description: str = None):
+    def __init__(self, title: str,
+                 cards=None, description: str = None):
         self.title = title
         self.description = description
 

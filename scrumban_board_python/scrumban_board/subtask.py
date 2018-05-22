@@ -5,12 +5,11 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Subtask:
-    def __init__(self, title: str, description: str = None):
-        self.title = title
-        self.description = title
+    def __init__(self, title: str,
+                 description: str = None):
 
-        if description is not None:
-            self.description = description
+        self.title = title
+        self.description = description
 
         self.completed = False
 

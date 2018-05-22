@@ -3,13 +3,13 @@ from collections import deque
 
 from scrumban_board_python.scrumban_board.board import Board
 from scrumban_board_python.scrumban_board.user_calendar import Calendar
-from scrumban_board_python.scrumban_board.cardlist import CardList
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class User:
     def __init__(self, name: str, surname: str, nickname: str, email: str,
                  user_boards=None, teams_id=None):
+
         self.name = name
         self.surname = surname
         self.nickname = nickname
@@ -29,21 +29,10 @@ class User:
                         self.user_boards.append(board)
 
         else:
-            to_do = CardList("To-Do")
-            doing = CardList("Doing")
-            done = CardList("Done")
-            overdue = CardList("Overdue")
-
-            l = deque()
-            l.append(to_do)
-            l.append(doing)
-            l.append(done)
-            l.append(overdue)
-
-            board = Board("User Board", self.id, "default agile board", l)
+            board = Board("User Board", self.id, "default agile board")
             self.user_boards.append(board)
 
-        self.calendar = Calendar(users_id=self.id)
+        self.user_calendar = Calendar(users_id=self.id)
 
         self.teams_list = deque()
         if teams_id is not None:

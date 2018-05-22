@@ -5,11 +5,8 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Remind:
-    def __init__(self, title: str,
-                 when_remind,
-                 description: str = None,
-                 deadline: bool = None,
-                 card_id: str = None,
+    def __init__(self, title: str, when_remind,
+                 description: str = None, deadline: bool = None, card_id: str = None,
                  repeating_remind_timedelta: datetime.timedelta = None):
 
         self.title = title

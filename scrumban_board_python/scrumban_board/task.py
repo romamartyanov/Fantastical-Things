@@ -7,13 +7,11 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Task:
-    def __init__(self, title: str, description: str = None, subtasks_list: deque = None):
+    def __init__(self, title: str,
+                 description: str = None, subtasks_list: deque = None):
 
         self.title = title
-        self.description = title
-
-        if description is not None:
-            self.description = description
+        self.description = description
 
         self.subtasks_list = deque()
         if subtasks_list is not None:

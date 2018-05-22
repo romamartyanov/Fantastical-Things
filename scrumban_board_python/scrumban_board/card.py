@@ -10,11 +10,8 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Card:
-    def __init__(self, task,
-                 users_id,
-                 reminds_list=None,
-                 deadline: Remind = None,
-                 repeatable_remind: relativedelta = None):
+    def __init__(self, task, users_id,
+                 reminds_list=None, deadline: Remind = None, repeatable_remind: relativedelta = None):
 
         if isinstance(task, Task):
             self.task = task

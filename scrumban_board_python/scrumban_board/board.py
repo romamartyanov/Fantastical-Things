@@ -8,7 +8,9 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Board:
-    def __init__(self, title: str, users_id: deque, description: str = None, cardlists=None):
+    def __init__(self, title: str, users_id: deque,
+                 description: str = None, cardlists=None):
+
         self.title = title
         self.description = self.title
 
@@ -25,6 +27,16 @@ class Board:
                 for cardlist in cardlists:
                     if isinstance(cardlist, CardList):
                         self.cardlists.append(cardlist)
+        else:
+            to_do = CardList("To-Do")
+            doing = CardList("Doing")
+            done = CardList("Done")
+            overdue = CardList("Overdue")
+
+            self.cardlists.append(to_do)
+            self.cardlists.append(doing)
+            self.cardlists.append(done)
+            self.cardlists.append(overdue)
 
         self.users_id = deque()
         if isinstance(users_id, str):
