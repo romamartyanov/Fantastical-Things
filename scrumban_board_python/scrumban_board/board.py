@@ -3,7 +3,7 @@ from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.cardlist import CardList
-from scrumban_board_python.scrumban_board.user_calendar import Calendar
+from scrumban_board_python.scrumban_board.calendar import Calendar
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
