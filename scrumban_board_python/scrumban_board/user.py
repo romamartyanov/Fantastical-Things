@@ -29,7 +29,7 @@ class User:
                         self.user_boards.append(board)
 
         else:
-            board = Board("User Board", self.id, "default agile board")
+            board = Board("{}'s Board".format(self.name), self.id, "default agile board")
             self.user_boards.append(board)
 
         self.user_calendar = Calendar(users_id=self.id)

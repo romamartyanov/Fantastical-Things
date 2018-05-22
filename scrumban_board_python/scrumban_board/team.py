@@ -24,15 +24,19 @@ class Team:
                 if isinstance(user_id, str):
                     self.team_members_id.append(user_id)
 
-        self.boards = deque()
+        self.team_boards = deque()
         if boards is not None:
             if isinstance(boards, Board):
-                self.boards.append(boards)
+                self.team_boards.append(boards)
 
             elif isinstance(boards, deque):
                 for board in boards:
                     if isinstance(board, Board):
-                        self.boards.append(board)
+                        self.team_boards.append(board)
+
+        else:
+            board = Board("{}'s Board".format(self.title), self.id, "default agile board")
+            self.team_boards.append(board)
 
         self.id = sha1(("Team: " +
                         self.title + " " +
@@ -40,7 +44,7 @@ class Team:
 
     def __str__(self):
         users_id = [user_id.hexdigest() for user_id in self.team_members_id]
-        boards_id = [board.id.hexdigest() for board in self.boards]
+        boards_id = [board.id.hexdigest() for board in self.team_boards]
 
         output = Colors.team_cyan + """
 --- Team ---
@@ -63,7 +67,7 @@ Boards ID:
 
     def __repr__(self):
         users_id = [user_id.hexdigest() for user_id in self.team_members_id]
-        boards_id = [board.id.hexdigest() for board in self.boards]
+        boards_id = [board.id.hexdigest() for board in self.team_boards]
 
         output = Colors.team_cyan + """
 --- Team ---
@@ -105,15 +109,15 @@ Boards ID:
                         self.team_members_id.append(user_id)
 
         if boards is not None:
-            self.boards.clear()
+            self.team_boards.clear()
 
             if isinstance(boards, Board):
-                self.boards.append(boards)
+                self.team_boards.append(boards)
 
             elif isinstance(boards, deque):
                 for board in boards:
                     if isinstance(board, Board):
-                        self.boards.append(board)
+                        self.team_boards.append(board)
 
     def find_team_member(self, user_id: str):
         try:
@@ -137,14 +141,14 @@ Boards ID:
     def find_team_board(self, board_id: str = None, board_title: str = None):
         if board_id is not None:
             try:
-                return next(board for board in self.boards if board.id == board_id)
+                return next(board for board in self.team_boards if board.id == board_id)
 
             except StopIteration:
                 return None
 
         elif board_title is not None:
             try:
-                return next(board for board in self.boards if board.id == board_title)
+                return next(board for board in self.team_boards if board.id == board_title)
 
             except StopIteration:
                 return None
@@ -155,22 +159,22 @@ Boards ID:
 
             if duplicate_board is None:
                 board = Board(title=board, users_id=self.team_members_id)
-                self.boards.append(board)
+                self.team_boards.append(board)
 
         elif isinstance(board, Board):
             duplicate_board = self.find_team_board(board.id)
 
             if duplicate_board is None:
-                self.boards.append(board)
+                self.team_boards.append(board)
 
     def remove_team_board(self, board):
         if isinstance(board, str):
             duplicate_board = self.find_team_board(board.id)
             if duplicate_board is not None:
-                self.boards.remove(duplicate_board)
+                self.team_boards.remove(duplicate_board)
 
         elif isinstance(board, Board):
             duplicate_board = self.find_team_board(board.id)
 
             if duplicate_board is not None:
-                self.boards.remove(board)
+                self.team_boards.remove(board)
