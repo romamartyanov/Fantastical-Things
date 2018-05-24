@@ -7,10 +7,11 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Team:
-    def __init__(self, title: str, users_id,
+    def __init__(self, title: str, nickname: str, users_id,
                  description: str = None, boards=None):
 
         self.title = title
+        self.login = nickname
 
         if description is not None:
             self.description = description

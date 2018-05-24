@@ -3,8 +3,8 @@ from collections import deque
 import datetime
 
 from scrumban_board_python.scrumban_board.cardlist import CardList
-from scrumban_board_python.scrumban_board.calendar import Calendar
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
+# from scrumban_board_python.scrumban_board.calendar import Calendar
 
 
 class Board:
@@ -47,7 +47,7 @@ class Board:
                 if isinstance(user_id, str):
                     self.users_id.append(user_id)
 
-        self.calendar = Calendar(self.users_id)
+        # self.calendar = Calendar(self.users_id)
 
         self.id = sha1(("Board: " + " " +
                         self.title + " " +

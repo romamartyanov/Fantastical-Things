@@ -2,8 +2,8 @@ from hashlib import sha1
 from collections import deque
 
 from scrumban_board_python.scrumban_board.board import Board
-from scrumban_board_python.scrumban_board.calendar import Calendar
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
+# from scrumban_board_python.scrumban_board.calendar import Calendar
 
 
 class User:
@@ -12,11 +12,11 @@ class User:
 
         self.name = name
         self.surname = surname
-        self.nickname = nickname
+        self.login = nickname
         self.email = email
 
         self.id = sha1(("User: " + " " +
-                        self.nickname).encode('utf-8'))
+                        self.login).encode('utf-8'))
 
         self.user_boards = deque()
         if user_boards is not None:
@@ -32,7 +32,7 @@ class User:
             board = Board("{}'s Board".format(self.name), self.id, "default agile board")
             self.user_boards.append(board)
 
-        self.user_calendar = Calendar(users_id=self.id)
+        # self.user_calendar = Calendar(users_id=self.id)
 
         self.teams_list = deque()
         if teams_id is not None:
@@ -55,7 +55,7 @@ Boards ID: {}
 --End User--
 """.format(self.name,
            self.surname,
-           self.nickname,
+           self.login,
            self.id.hexdigest(),
            self.email,
            boards_id) + Colors.end_color
@@ -77,14 +77,14 @@ Boards ID: {}
 --End User--
 """.format(self.name,
            self.surname,
-           self.nickname,
+           self.login,
            self.id.hexdigest(),
            self.email,
            boards_id) + Colors.end_color
 
         return output
 
-    def update_user(self, name: str = None, surname: str = None, nickname: str = None, email: str = None,
+    def update_user(self, name: str = None, surname: str = None,  email: str = None,
                     user_boards=None, teams_id=None):
 
         if name is not None:
@@ -92,9 +92,6 @@ Boards ID: {}
 
         if surname is not None:
             self.surname = surname
-
-        if nickname is not None:
-            self.nickname = nickname
 
         if email is not None:
             self.email = email

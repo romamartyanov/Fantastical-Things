@@ -1,5 +1,5 @@
 from hashlib import sha1
-from _datetime import *
+from datetime import *
 
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
@@ -7,7 +7,7 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 class Remind:
     def __init__(self, title: str, when_remind,
                  description: str = None, deadline: bool = None, card_id: str = None,
-                 repeating_remind_timedelta: datetime.timedelta = None):
+                 repeating_remind_timedelta: timedelta = None):
 
         self.title = title
 
@@ -48,7 +48,7 @@ class Remind:
         self.id = sha1(("Remind: " + " " +
                         self.title + " " +
                         str(self.when_remind) + " " +
-                        str(datetime.datetime.now())).encode('utf-8'))
+                        str(datetime.now())).encode('utf-8'))
 
     def __str__(self):
         output = Colors.remind_red + """
@@ -90,7 +90,7 @@ Repeating time delta: {}
 
     def update_remind(self, title: str = None, description: str = None,
                       when_remind=None,
-                      repeating_remind_timedelta: datetime.timedelta = None):
+                      repeating_remind_timedelta: timedelta = None):
 
         if title is not None:
             self.title = title
