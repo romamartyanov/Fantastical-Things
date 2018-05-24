@@ -7,10 +7,11 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Team:
-    def __init__(self, title: str, users_id,
+    def __init__(self, title: str, nickname: str, users_id,
                  description: str = None, boards=None):
 
         self.title = title
+        self.login = nickname
 
         if description is not None:
             self.description = description
@@ -158,7 +159,7 @@ Boards ID:
             duplicate_board = self.find_team_board(board)
 
             if duplicate_board is None:
-                board = Board(title=board, users_id=self.team_members_id)
+                board = Board(title=board, users_login=self.team_members_id)
                 self.team_boards.append(board)
 
         elif isinstance(board, Board):
@@ -167,14 +168,18 @@ Boards ID:
             if duplicate_board is None:
                 self.team_boards.append(board)
 
-    def remove_team_board(self, board):
-        if isinstance(board, str):
-            duplicate_board = self.find_team_board(board.id)
+    def remove_team_board(self, board: Board = None, board_id: str = None, board_title: str = None):
+        if isinstance(board, Board):
+            duplicate_board = self.find_team_board(board_id=board.id)
             if duplicate_board is not None:
                 self.team_boards.remove(duplicate_board)
 
-        elif isinstance(board, Board):
-            duplicate_board = self.find_team_board(board.id)
-
+        elif isinstance(board_id, str):
+            duplicate_board = self.find_team_board(board_id=board_id)
             if duplicate_board is not None:
-                self.team_boards.remove(board)
+                self.team_boards.remove(duplicate_board)
+
+        elif isinstance(board_title, str):
+            duplicate_board = self.find_team_board(board_title=board_title)
+            if duplicate_board is not None:
+                self.team_boards.remove(duplicate_board)

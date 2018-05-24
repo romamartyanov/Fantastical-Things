@@ -1,13 +1,14 @@
 from hashlib import sha1
-from _datetime import *
+from datetime import *
+from dateutil.relativedelta import *
 
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Remind:
     def __init__(self, title: str, when_remind,
-                 description: str = None, deadline: bool = None, card_id: str = None,
-                 repeating_remind_timedelta: datetime.timedelta = None):
+                 description: str = None, card_id: str = None,
+                 repeating_remind_relativedelta: relativedelta = None):
 
         self.title = title
 
@@ -15,11 +16,6 @@ class Remind:
             self.description = description
         else:
             self.description = self.title
-
-        if deadline is not None:
-            self.is_deadline = deadline
-        else:
-            self.is_deadline = False
 
         if card_id is not None:
             self.card_id = card_id
@@ -38,17 +34,17 @@ class Remind:
                     self.when_remind = datetime.now()
 
         self.is_repeatable = False
-        if repeating_remind_timedelta is not None:
+        if repeating_remind_relativedelta is not None:
             self.is_repeatable = True
-            self.repeating_remind_timedelta = repeating_remind_timedelta
+            self.repeating_remind_relativedelta = repeating_remind_relativedelta
 
         else:
-            self.repeating_remind_timedelta = None
+            self.repeating_remind_relativedelta = None
 
         self.id = sha1(("Remind: " + " " +
                         self.title + " " +
                         str(self.when_remind) + " " +
-                        str(datetime.datetime.now())).encode('utf-8'))
+                        str(datetime.now())).encode('utf-8'))
 
     def __str__(self):
         output = Colors.remind_red + """
@@ -56,16 +52,17 @@ class Remind:
 Title: {}
 Description: {}
 ID: {}
-Is Deadline: {}
+
+When Remind: {}
 Is Repeatable: {}
 Repeating time delta: {}
 --End Remind--
 """.format(self.title,
            self.description,
-           self.id.hexdigest,
-           self.is_deadline,
+           self.id.hexdigest(),
+           self.when_remind,
            self.is_repeatable,
-           self.repeating_remind_timedelta) + Colors.end_color
+           self.repeating_remind_relativedelta) + Colors.end_color
 
         return output
 
@@ -75,22 +72,23 @@ Repeating time delta: {}
 Title: {}
 Description: {}
 ID: {}
-Is Deadline: {}
+
+When Remind: {}
 Is Repeatable: {}
 Repeating time delta: {}
 --End Remind--
 """.format(self.title,
            self.description,
-           self.id.hexdigest,
-           self.is_deadline,
+           self.id.hexdigest(),
+           self.when_remind,
            self.is_repeatable,
-           self.repeating_remind_timedelta) + Colors.end_color
+           self.repeating_remind_relativedelta) + Colors.end_color
 
         return output
 
     def update_remind(self, title: str = None, description: str = None,
                       when_remind=None,
-                      repeating_remind_timedelta: datetime.timedelta = None):
+                      repeating_remind_relativedelta: relativedelta = None):
 
         if title is not None:
             self.title = title
@@ -110,5 +108,6 @@ Repeating time delta: {}
                     except ValueError:
                         self.when_remind = datetime.now()
 
-        if repeating_remind_timedelta is not None:
-            self.repeating_remind_timedelta = repeating_remind_timedelta
+        if repeating_remind_relativedelta is not None:
+            self.is_repeatable = True
+            self.repeating_remind_relativedelta = repeating_remind_relativedelta

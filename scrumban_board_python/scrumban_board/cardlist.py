@@ -27,6 +27,8 @@ class CardList:
                         str(datetime.datetime.now())).encode('utf-8'))
 
     def __str__(self):
+        cards = [card for card in self.cards]
+
         output = Colors.cardlist_green + """
 --- Cardlist ---
 Title: {}
@@ -40,11 +42,13 @@ Cards:
 """.format(self.title,
            self.description,
            self.id.hexdigest(),
-           self.cards) + Colors.end_color
+           cards) + Colors.end_color
 
         return output
 
     def __repr__(self):
+        cards = [card for card in self.cards]
+
         output = Colors.cardlist_green + """
 --- Cardlist ---
 Title: {}
@@ -58,7 +62,7 @@ Cards:
 """.format(self.title,
            self.description,
            self.id.hexdigest(),
-           self.cards) + Colors.end_color
+           cards) + Colors.end_color
 
         return output
 
