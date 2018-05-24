@@ -74,7 +74,3 @@ class Client:
 
                                 else:
                                     card.remove_remind(remind)
-
-
-
-

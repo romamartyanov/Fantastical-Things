@@ -2,11 +2,8 @@ from hashlib import sha1
 from collections import deque
 import datetime
 
-from scrumban_board_python.scrumban_board.card import Card
 from scrumban_board_python.scrumban_board.cardlist import CardList
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
-
-
 # from scrumban_board_python.scrumban_board.calendar import Calendar
 
 

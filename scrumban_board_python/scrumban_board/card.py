@@ -2,8 +2,6 @@ from hashlib import sha1
 from collections import deque
 import datetime
 
-from dateutil.relativedelta import relativedelta
-
 from scrumban_board_python.scrumban_board.task import Task
 from scrumban_board_python.scrumban_board.remind import Remind
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
@@ -11,7 +9,7 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 class Card:
     def __init__(self, task, users_login,
-                 reminds_list=None, deadline: Remind = None, repeatable_remind: relativedelta = None):
+                 reminds_list=None, deadline: Remind = None):
 
         if isinstance(task, Task):
             self.task = task
@@ -40,10 +38,6 @@ class Card:
         self.deadline = None
         if deadline is not None:
             self.deadline = deadline
-
-        # self.repeatable_remind = None
-        # if repeatable_remind is not None:
-        #     self.repeatable_remind = repeatable_remind
 
         self.id = sha1(("Card: " + " " +
                         self.task.title + " " +
@@ -113,8 +107,7 @@ Reminds:
     def update_card(self, task=None,
                     users: deque = None,
                     reminds_list: deque = None,
-                    deadline: Remind = None,
-                    repeatable_remind: relativedelta = None):
+                    deadline: Remind = None):
 
         if task is not None:
             if isinstance(task, Task):
@@ -139,9 +132,6 @@ Reminds:
 
         if deadline is not None:
             self.deadline = deadline
-
-        if repeatable_remind is not None:
-            self.repeatable_remind = repeatable_remind
 
     def find_user_on_card(self, user_id: str = None,
                           user_name_surname: str = None,

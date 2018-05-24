@@ -168,14 +168,18 @@ Boards ID:
             if duplicate_board is None:
                 self.team_boards.append(board)
 
-    def remove_team_board(self, board):
-        if isinstance(board, str):
-            duplicate_board = self.find_team_board(board.id)
+    def remove_team_board(self, board: Board = None, board_id: str = None, board_title: str = None):
+        if isinstance(board, Board):
+            duplicate_board = self.find_team_board(board_id=board.id)
             if duplicate_board is not None:
                 self.team_boards.remove(duplicate_board)
 
-        elif isinstance(board, Board):
-            duplicate_board = self.find_team_board(board.id)
-
+        elif isinstance(board_id, str):
+            duplicate_board = self.find_team_board(board_id=board_id)
             if duplicate_board is not None:
-                self.team_boards.remove(board)
+                self.team_boards.remove(duplicate_board)
+
+        elif isinstance(board_title, str):
+            duplicate_board = self.find_team_board(board_title=board_title)
+            if duplicate_board is not None:
+                self.team_boards.remove(duplicate_board)

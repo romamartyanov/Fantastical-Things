@@ -7,7 +7,7 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 class Remind:
     def __init__(self, title: str, when_remind,
-                 description: str = None, deadline: bool = None, card_id: str = None,
+                 description: str = None, card_id: str = None,
                  repeating_remind_relativedelta: relativedelta = None):
 
         self.title = title
@@ -16,11 +16,6 @@ class Remind:
             self.description = description
         else:
             self.description = self.title
-
-        # if deadline is not None:
-        #     self.is_deadline = deadline
-        # else:
-        #     self.is_deadline = False
 
         if card_id is not None:
             self.card_id = card_id
@@ -87,7 +82,7 @@ Repeating time delta: {}
 
     def update_remind(self, title: str = None, description: str = None,
                       when_remind=None,
-                      repeating_remind_timedelta: timedelta = None):
+                      repeating_remind_relativedelta: relativedelta = None):
 
         if title is not None:
             self.title = title
@@ -107,5 +102,6 @@ Repeating time delta: {}
                     except ValueError:
                         self.when_remind = datetime.now()
 
-        if repeating_remind_timedelta is not None:
-            self.repeating_remind_relativedelta = repeating_remind_timedelta
+        if repeating_remind_relativedelta is not None:
+            self.is_repeatable = True
+            self.repeating_remind_relativedelta = repeating_remind_relativedelta
