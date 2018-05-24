@@ -1,7 +1,7 @@
 from collections import deque
 from datetime import *
 from dateutil.relativedelta import *
-
+import time
 
 # from hashlib import sha1
 # import datetime
@@ -40,13 +40,13 @@ from dateutil.relativedelta import *
 # for i in a:
 #     print(i)
 
-NOW = datetime.now()
+# NOW = datetime.now()
 # b = date(2017, 9, 5)
 #
 # # if NOW > b:
 # #     print(NOW)
 #
-# NOW = NOW+relativedelta(months=+2)
+# NOW = NOW+relativedelta(minutes=+10)
 # print(NOW)
 
 # dt = datetime.strptime("2019/10/20 12:00", '%Y/%m/%d')
@@ -74,8 +74,43 @@ NOW = datetime.now()
 #        "remain." + scrumban_board.BColors.FAIL+" Continue?"
 #       + scrumban_board.BColors.ENDC)
 
+# t1 = datetime.now() + timedelta(seconds=1)
+# time.sleep(3)
+#
+# if t1 < datetime.now():
+#     print(True)
+
 from scrumban_board_python import scrumban_board
 
 client = scrumban_board.Client()
+
+user = scrumban_board.User("Roman", "Martyanov", "romamartyanov", "romamartyanov@gmail.com")
+client.client_users.add_new_user(user)
+
+task = scrumban_board.Task("title", "description")
+task.add_subtask(scrumban_board.Subtask("subtask1"))
+task.add_subtask(scrumban_board.Subtask("subtask2"))
+
+remind = scrumban_board.Remind("Remind", datetime.now(),
+                               repeating_remind_relativedelta=relativedelta(minutes=+2))
+
+card = scrumban_board.Card(task=task, users_login=user, deadline=remind, reminds_list=remind)
+
+remind_list = deque()
+remind_list.append(remind)
+
+card.update_card(reminds_list=remind_list)
+
+for board in user.user_boards:
+    for cardlist in board.cardlists:
+        cardlist.add_card(card)
+        break
+
+time.sleep(3)
+while not client.update_all_reminds():
+    continue
+
+for board in user.user_boards:
+    print(board)
 
 

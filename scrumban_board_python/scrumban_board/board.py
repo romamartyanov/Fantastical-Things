@@ -28,6 +28,7 @@ class Board:
                     if isinstance(cardlist, CardList):
                         self.cardlists.append(cardlist)
         else:
+
             to_do = CardList("To-Do")
             doing = CardList("Doing")
             done = CardList("Done")
@@ -55,6 +56,7 @@ class Board:
 
     def __str__(self):
         users_id = [user_id.hexdigest() for user_id in self.users_login]
+        cardlists = [cardlist for cardlist in self.cardlists]
 
         output = Colors.cardlist_green + """
 --- Board ---
@@ -71,14 +73,15 @@ Cardlists:
 --End Board--
 """.format(self.title,
            self.description,
-           self.id.hexdigit(),
+           self.id.hexdigest(),
            users_id,
-           self.cardlists) + Colors.end_color
+           cardlists) + Colors.end_color
 
         return output
 
     def __repr__(self):
         users_id = [user_id.hexdigest() for user_id in self.users_login]
+        cardlists = [cardlist for cardlist in self.cardlists]
 
         output = Colors.cardlist_green + """
 --- Board ---
@@ -95,9 +98,9 @@ Cardlists:
 --End Board--
 """.format(self.title,
            self.description,
-           self.id.hexdigit(),
+           self.id.hexdigest(),
            users_id,
-           self.cardlists) + Colors.end_color
+           cardlists) + Colors.end_color
 
         return output
 
@@ -179,10 +182,23 @@ Cardlists:
                 self.cardlists.insert(real_position, duplicate_cardlist)
 
     def move_card(self, card_id: str, old_cardlist_id: str, new_cardlist_id: str):
-        # may be it will not work
+        # for old_cardlist in self.cardlists:
+        #     if old_cardlist.id == old_cardlist_id:
+        #
+        #         for new_cardlist in self.cardlists:
+        #             if new_cardlist.id == new_cardlist_id:
+        #
+        #                 card = old_cardlist.find_card(card_id=card_id)
+        #                 old_cardlist.remove_card(card=card)
+        #                 new_cardlist.add_card(card)
+
         old_cardlist = self.find_cardlist(old_cardlist_id)
         new_cardlist = self.find_cardlist(new_cardlist_id)
+
+        print(new_cardlist.id.hexdigest())
 
         card = old_cardlist.find_card(card_id=card_id)
         old_cardlist.remove_card(card=card)
         new_cardlist.add_card(card)
+
+

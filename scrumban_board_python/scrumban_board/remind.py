@@ -52,12 +52,15 @@ class Remind:
 Title: {}
 Description: {}
 ID: {}
+
+When Remind: {}
 Is Repeatable: {}
 Repeating time delta: {}
 --End Remind--
 """.format(self.title,
            self.description,
-           self.id.hexdigest,
+           self.id.hexdigest(),
+           self.when_remind,
            self.is_repeatable,
            self.repeating_remind_relativedelta) + Colors.end_color
 
@@ -69,12 +72,15 @@ Repeating time delta: {}
 Title: {}
 Description: {}
 ID: {}
+
+When Remind: {}
 Is Repeatable: {}
 Repeating time delta: {}
 --End Remind--
 """.format(self.title,
            self.description,
-           self.id.hexdigest,
+           self.id.hexdigest(),
+           self.when_remind,
            self.is_repeatable,
            self.repeating_remind_relativedelta) + Colors.end_color
 

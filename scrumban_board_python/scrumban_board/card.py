@@ -48,7 +48,26 @@ class Card:
         users_id = [user_id.hexdigest() for user_id in self.users_login]
         reminds_list = [remind for remind in self.reminds_list]
 
-        output = Colors.card_yellow + """
+        if self.deadline is None:
+            output = Colors.card_yellow + """
+--- Card ---
+ID: {}
+Users ID: {}
+
+Task:
+{}
+
+Reminds:
+{}
+
+---End Card--
+""".format(self.id.hexdigest(),
+           users_id,
+           self.task,
+           reminds_list) + Colors.end_color
+
+        else:
+            output = Colors.card_yellow + """
 --- Card ---
 ID: {}
 Users ID: {}
@@ -65,7 +84,7 @@ Reminds:
 {}
 
 ---End Card--
-""".format(self.id,
+""".format(self.id.hexdigest(),
            users_id,
            self.deadline.when_remind,
            self.deadline.is_repeatable,
@@ -78,7 +97,26 @@ Reminds:
         users_id = [user_id.hexdigest() for user_id in self.users_login]
         reminds_list = [remind for remind in self.reminds_list]
 
-        output = Colors.card_yellow + """
+        if self.deadline is None:
+            output = Colors.card_yellow + """
+--- Card ---
+ID: {}
+Users ID: {}
+
+Task:
+{}
+
+Reminds:
+{}
+
+---End Card--
+""".format(self.id.hexdigest(),
+           users_id,
+           self.task,
+           reminds_list) + Colors.end_color
+
+        else:
+            output = Colors.card_yellow + """
 --- Card ---
 ID: {}
 Users ID: {}
@@ -95,7 +133,7 @@ Reminds:
 {}
 
 ---End Card--
-""".format(self.id,
+""".format(self.id.hexdigest(),
            users_id,
            self.deadline.when_remind,
            self.deadline.is_repeatable,
