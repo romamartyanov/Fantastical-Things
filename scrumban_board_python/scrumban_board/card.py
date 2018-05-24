@@ -10,7 +10,7 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Card:
-    def __init__(self, task, users_id,
+    def __init__(self, task, users_login,
                  reminds_list=None, deadline: Remind = None, repeatable_remind: relativedelta = None):
 
         if isinstance(task, Task):
@@ -20,12 +20,12 @@ class Card:
             task = Task(title=task)
             self.task = task
 
-        self.users_id = deque()
-        if isinstance(users_id, deque):
-            self.users_id = users_id
-        elif isinstance(users_id, str):
-            self.users_id = deque()
-            self.users_id.append(users_id)
+        self.users_login = deque()
+        if isinstance(users_login, deque):
+            self.users_login = users_login
+        elif isinstance(users_login, str):
+            self.users_login = deque()
+            self.users_login.append(users_login)
 
         self.reminds_list = deque()
         if reminds_list is not None:
@@ -41,9 +41,9 @@ class Card:
         if deadline is not None:
             self.deadline = deadline
 
-        self.repeatable_remind = None
-        if repeatable_remind is not None:
-            self.repeatable_remind = repeatable_remind
+        # self.repeatable_remind = None
+        # if repeatable_remind is not None:
+        #     self.repeatable_remind = repeatable_remind
 
         self.id = sha1(("Card: " + " " +
                         self.task.title + " " +
@@ -51,34 +51,48 @@ class Card:
                         str(datetime.datetime.now())).encode('utf-8'))
 
     def __str__(self):
-        users_id = [user_id.hexdigest() for user_id in self.users_id]
+        users_id = [user_id.hexdigest() for user_id in self.users_login]
         reminds_list = [remind for remind in self.reminds_list]
 
         output = Colors.card_yellow + """
 --- Card ---
 ID: {}
 Users ID: {}
+
+Deadline:
+{}
+
+Is Repeatable: {}
+
 Task:
 {}
 
 Reminds:
 {}
+
 ---End Card--
 """.format(self.id,
            users_id,
+           self.deadline.when_remind,
+           self.deadline.is_repeatable,
            self.task,
            reminds_list) + Colors.end_color
 
         return output
 
     def __repr__(self):
-        users_id = [user_id.hexdigest() for user_id in self.users_id]
+        users_id = [user_id.hexdigest() for user_id in self.users_login]
         reminds_list = [remind for remind in self.reminds_list]
 
         output = Colors.card_yellow + """
 --- Card ---
 ID: {}
 Users ID: {}
+
+Deadline:
+{}
+
+Is Repeatable: {}
 
 Task:
 {}
@@ -89,6 +103,8 @@ Reminds:
 ---End Card--
 """.format(self.id,
            users_id,
+           self.deadline.when_remind,
+           self.deadline.is_repeatable,
            self.task,
            reminds_list) + Colors.end_color
 
@@ -97,8 +113,8 @@ Reminds:
     def update_card(self, task=None,
                     users: deque = None,
                     reminds_list: deque = None,
-                    deadline: datetime.datetime = None,
-                    repeatable_remind: datetime.timedelta = None):
+                    deadline: Remind = None,
+                    repeatable_remind: relativedelta = None):
 
         if task is not None:
             if isinstance(task, Task):
@@ -107,8 +123,8 @@ Reminds:
                 self.task.title = task
 
         if users is not None:
-            self.users_id.clear()
-            self.users_id.append(users)
+            self.users_login.clear()
+            self.users_login.append(users)
 
         if reminds_list is not None:
             self.reminds_list.clear()
@@ -133,19 +149,19 @@ Reminds:
 
         if user_id is not None:
             try:
-                return next(user for user in self.users_id if user.id == user_id)
+                return next(user for user in self.users_login if user.id == user_id)
             except StopIteration:
                 return None
 
         elif user_name_surname is not None:
             try:
-                return next(user for user in self.users_id if (user.name + " " + user.surname) == user_name_surname)
+                return next(user for user in self.users_login if (user.name + " " + user.surname) == user_name_surname)
             except StopIteration:
                 return None
 
         elif user_nickname is not None:
             try:
-                return next(user for user in self.users_id if user.nickname == user_nickname)
+                return next(user for user in self.users_login if user.nickname == user_nickname)
             except StopIteration:
                 return None
 
@@ -156,13 +172,13 @@ Reminds:
         duplicate_user = self.find_user_on_card(user_nickname=user_id)
 
         if duplicate_user is None:
-            self.users_id.append(user_id)
+            self.users_login.append(user_id)
 
     def remove_user_from_card(self, user_id: str):
         duplicate_user = self.find_user_on_card(user_nickname=user_id)
 
         if duplicate_user is not None:
-            self.users_id.remove(duplicate_user)
+            self.users_login.remove(duplicate_user)
 
     def find_remind(self, title: str = None, remind_id: str = None):
         if title is not None:

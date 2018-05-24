@@ -159,7 +159,7 @@ Boards ID:
             duplicate_board = self.find_team_board(board)
 
             if duplicate_board is None:
-                board = Board(title=board, users_id=self.team_members_id)
+                board = Board(title=board, users_login=self.team_members_id)
                 self.team_boards.append(board)
 
         elif isinstance(board, Board):
