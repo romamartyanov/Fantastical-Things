@@ -26,13 +26,11 @@ class Client:
 
     def update_all_reminds(self):
         # going throw all users
-
         for user in self.client_users.users:
 
             # going throw all user boards
             for board in user.user_boards:
                 overdue_cardlist = board.find_cardlist(title="Overdue")
-                # print(overdue_cardlist.id.hexdigest())
 
                 for cardlist in board.cardlists:
 
@@ -47,19 +45,27 @@ class Client:
                             if card.deadline.when_remind < datetime.now():
 
                                 # print card with this deadline
-                                for user_login in card.users_login:
-                                    if user_login == self.current_user_login:
-                                        print(card)
+                                # for user_login in card.users_login:
+                                #     if user_login == self.current_user_login:
+                                #         print(card)
 
                                 # card is repeatable
                                 if card.deadline.repeating_remind_relativedelta is not None:
                                     card.deadline.when_remind += card.deadline.repeating_remind_relativedelta
-                                    # return False
+
+                                    for user_login in card.users_login:
+                                        if user_login == self.current_user_login:
+                                            print(card)
 
                                 # card is not repeatable
                                 else:
                                     # may be it will not work
                                     board.move_card(card.id, cardlist.id, overdue_cardlist.id)
+
+                                    for user_login in card.users_login:
+                                        if user_login == self.current_user_login:
+                                            print(card)
+
                                     return False
 
                         # check all reminds in the card
@@ -75,9 +81,10 @@ class Client:
 
                                 if remind.is_repeatable:
                                     remind.when_remind += remind.repeating_remind_relativedelta
-                                    # return False
 
                                 else:
                                     card.remove_remind(remind)
+                                    print(card)
+
                                     return False
         return True

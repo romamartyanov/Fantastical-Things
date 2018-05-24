@@ -22,7 +22,6 @@ class Card:
         if isinstance(users_login, deque):
             self.users_login = users_login
         elif isinstance(users_login, str):
-            self.users_login = deque()
             self.users_login.append(users_login)
 
         self.reminds_list = deque()
@@ -45,7 +44,7 @@ class Card:
                         str(datetime.datetime.now())).encode('utf-8'))
 
     def __str__(self):
-        users_id = [user_id.hexdigest() for user_id in self.users_login]
+        users_id = [user_login for user_login in self.users_login]
         reminds_list = [remind for remind in self.reminds_list]
 
         if self.deadline is None:
