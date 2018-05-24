@@ -24,7 +24,7 @@ class CardList:
 
         self.id = sha1(("CardList: " + " " +
                         self.title + " " +
-                        str(datetime.datetime.now())).encode('utf-8'))
+                        str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
         cards = [card for card in self.cards]
@@ -41,7 +41,7 @@ Cards:
 ---End Cardlist--
 """.format(self.title,
            self.description,
-           self.id.hexdigest(),
+           self.id,
            cards) + Colors.end_color
 
         return output
@@ -61,7 +61,7 @@ Cards:
 ---End Cardlist--
 """.format(self.title,
            self.description,
-           self.id.hexdigest(),
+           self.id,
            cards) + Colors.end_color
 
         return output

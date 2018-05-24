@@ -41,7 +41,7 @@ class Card:
         self.id = sha1(("Card: " + " " +
                         self.task.title + " " +
                         self.task.description + " " +
-                        str(datetime.datetime.now())).encode('utf-8'))
+                        str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
         users_id = [user_login for user_login in self.users_login]
@@ -60,7 +60,7 @@ Reminds:
 {}
 
 ---End Card--
-""".format(self.id.hexdigest(),
+""".format(self.id,
            users_id,
            self.task,
            reminds_list) + Colors.end_color
@@ -83,7 +83,7 @@ Reminds:
 {}
 
 ---End Card--
-""".format(self.id.hexdigest(),
+""".format(self.id,
            users_id,
            self.deadline.when_remind,
            self.deadline.is_repeatable,
@@ -93,7 +93,7 @@ Reminds:
         return output
 
     def __repr__(self):
-        users_id = [user_id.hexdigest() for user_id in self.users_login]
+        users_id = [user_id for user_id in self.users_login]
         reminds_list = [remind for remind in self.reminds_list]
 
         if self.deadline is None:
@@ -132,7 +132,7 @@ Reminds:
 {}
 
 ---End Card--
-""".format(self.id.hexdigest(),
+""".format(self.id,
            users_id,
            self.deadline.when_remind,
            self.deadline.is_repeatable,

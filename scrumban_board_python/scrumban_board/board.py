@@ -52,10 +52,10 @@ class Board:
 
         self.id = sha1(("Board: " + " " +
                         self.title + " " +
-                        str(datetime.datetime.now())).encode('utf-8'))
+                        str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
-        users_id = [user_id.hexdigest() for user_id in self.users_login]
+        users_id = [user_id for user_id in self.users_login]
         cardlists = [cardlist for cardlist in self.cardlists]
 
         output = Colors.cardlist_green + """
@@ -73,14 +73,14 @@ Cardlists:
 --End Board--
 """.format(self.title,
            self.description,
-           self.id.hexdigest(),
+           self.id,
            users_id,
            cardlists) + Colors.end_color
 
         return output
 
     def __repr__(self):
-        users_id = [user_id.hexdigest() for user_id in self.users_login]
+        users_id = [user_id for user_id in self.users_login]
         cardlists = [cardlist for cardlist in self.cardlists]
 
         output = Colors.cardlist_green + """
@@ -98,7 +98,7 @@ Cardlists:
 --End Board--
 """.format(self.title,
            self.description,
-           self.id.hexdigest(),
+           self.id,
            users_id,
            cardlists) + Colors.end_color
 

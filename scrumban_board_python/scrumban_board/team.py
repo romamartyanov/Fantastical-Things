@@ -41,11 +41,11 @@ class Team:
 
         self.id = sha1(("Team: " +
                         self.title + " " +
-                        str(datetime.datetime.now())).encode('utf-8'))
+                        str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
-        users_id = [user_id.hexdigest() for user_id in self.team_members_id]
-        boards_id = [board.id.hexdigest() for board in self.team_boards]
+        users_id = [user_id for user_id in self.team_members_id]
+        boards_id = [board.id for board in self.team_boards]
 
         output = Colors.team_cyan + """
 --- Team ---
@@ -67,8 +67,8 @@ Boards ID:
         return output
 
     def __repr__(self):
-        users_id = [user_id.hexdigest() for user_id in self.team_members_id]
-        boards_id = [board.id.hexdigest() for board in self.team_boards]
+        users_id = [user_id for user_id in self.team_members_id]
+        boards_id = [board.id for board in self.team_boards]
 
         output = Colors.team_cyan + """
 --- Team ---

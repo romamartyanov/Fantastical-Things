@@ -14,6 +14,7 @@ class Client:
         self.client_teams = ClientTeams()
 
         config = configparser.ConfigParser()
+
         config.read(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'current_user.cfg'))
 
         self.current_user_login = config["USER"]["UserLogin"]

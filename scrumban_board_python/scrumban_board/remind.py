@@ -44,7 +44,7 @@ class Remind:
         self.id = sha1(("Remind: " + " " +
                         self.title + " " +
                         str(self.when_remind) + " " +
-                        str(datetime.now())).encode('utf-8'))
+                        str(datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
         output = Colors.remind_red + """
@@ -59,7 +59,7 @@ Repeating time delta: {}
 --End Remind--
 """.format(self.title,
            self.description,
-           self.id.hexdigest(),
+           self.id,
            self.when_remind,
            self.is_repeatable,
            self.repeating_remind_relativedelta) + Colors.end_color
@@ -79,7 +79,7 @@ Repeating time delta: {}
 --End Remind--
 """.format(self.title,
            self.description,
-           self.id.hexdigest(),
+           self.id,
            self.when_remind,
            self.is_repeatable,
            self.repeating_remind_relativedelta) + Colors.end_color

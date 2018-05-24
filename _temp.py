@@ -3,6 +3,7 @@ from datetime import *
 from dateutil.relativedelta import *
 import time
 
+
 # from hashlib import sha1
 # import datetime
 #
@@ -110,7 +111,33 @@ time.sleep(3)
 while not client.update_all_reminds():
     continue
 
-# for board in user.user_boards:
-#     print(board)
+# import json
+# import jsonpickle
+#
+# frozen = jsonpickle.encode(client)
+# with open('client.json', 'w') as outfile:
+#     json.dump(frozen, outfile)
+#
+#
+# with open('client.json') as infile:
+#     data = json.load(infile)
+
+# client = jsonpickle.decode(data)
+
+import pickle
+
+with open('client.json', 'wb') as pickle_file:
+    pickle.dump(client, pickle_file)
+
+with open('client.json', 'rb') as pickle_file:
+    client = pickle.load(pickle_file)
+
+while not client.update_all_reminds():
+    continue
+
+for board in user.user_boards:
+    print(board)
+
+
 
 

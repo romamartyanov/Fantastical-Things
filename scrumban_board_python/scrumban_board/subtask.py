@@ -15,7 +15,7 @@ class Subtask:
 
         self.id = sha1(("Subtask: " + " " +
                         self.title + " " +
-                        str(datetime.datetime.now())).encode('utf-8'))
+                        str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
         output = Colors.subtask_lightblue + """
@@ -28,7 +28,7 @@ ID: {}
 """.format(self.title,
            self.description,
            self.completed,
-           self.id.hexdigest()) + Colors.end_color
+           self.id) + Colors.end_color
 
         return output
 
@@ -43,7 +43,7 @@ ID: {}
 """.format(self.title,
            self.description,
            self.completed,
-           self.id.hexdigest()) + Colors.end_color
+           self.id) + Colors.end_color
 
         return output
 

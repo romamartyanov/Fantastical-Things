@@ -16,7 +16,7 @@ class User:
         self.email = email
 
         self.id = sha1(("User: " + " " +
-                        self.login).encode('utf-8'))
+                        self.login).encode('utf-8')).hexdigest()
 
         self.user_boards = deque()
         if user_boards is not None:
@@ -56,7 +56,7 @@ Boards ID: {}
 """.format(self.name,
            self.surname,
            self.login,
-           self.id.hexdigest(),
+           self.id,
            self.email,
            boards_id) + Colors.end_color
 
@@ -78,7 +78,7 @@ Boards ID: {}
 """.format(self.name,
            self.surname,
            self.login,
-           self.id.hexdigest(),
+           self.id,
            self.email,
            boards_id) + Colors.end_color
 

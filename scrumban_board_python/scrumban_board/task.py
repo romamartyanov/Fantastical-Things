@@ -28,7 +28,7 @@ class Task:
 
         self.id = sha1(("Task: " + " " +
                         self.title + " " +
-                        str(datetime.datetime.now())).encode('utf-8'))
+                        str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
         subtasks_list = [subtask for subtask in self.subtasks_list]
@@ -46,7 +46,7 @@ Subtasks:
 --End Task--
 """.format(self.title,
            self.description,
-           self.id.hexdigest(),
+           self.id,
            self.completed,
            subtasks_list) + Colors.end_color
 
