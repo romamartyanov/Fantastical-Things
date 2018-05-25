@@ -6,7 +6,7 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Remind:
-    def __init__(self, title: str, when_remind,
+    def __init__(self, logger,  title: str, when_remind,
                  description: str = None, card_id: str = None,
                  repeating_remind_relativedelta: relativedelta = None):
 

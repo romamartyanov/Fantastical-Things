@@ -5,3 +5,19 @@
 2018-05-25 23:56:32,884 - ScrumbanBoard - INFO - User wasn't found by user_id (5079b56e6f185d46dbf4267b0076299038f6dd9c)
 2018-05-25 23:56:32,884 - ScrumbanBoard - INFO - new User (5079b56e6f185d46dbf4267b0076299038f6dd9c) was added
 2018-05-25 23:56:35,887 - ScrumbanBoard - INFO - Deadline in card (a2154200186404c1918fb2713447a46f3a7007d4) was delayed
+2018-05-26 00:59:25,895 - ScrumbanBoard - INFO - ClientUsers was created
+2018-05-26 00:59:25,895 - ScrumbanBoard - INFO - ClientTeams was created
+2018-05-26 00:59:25,896 - ScrumbanBoard - INFO - Client was created
+2018-05-26 00:59:25,896 - ScrumbanBoard - INFO - Cardlist (ce39b6b1258fa3dcadd78f0335c10ddb0245ec2b) was created
+2018-05-26 00:59:25,896 - ScrumbanBoard - INFO - Cardlist (44043c2dba9a66c5f7f502d02cb896e92e3e339d) was created
+2018-05-26 00:59:25,896 - ScrumbanBoard - INFO - Cardlist (1f789a278d4623c2300448f3a005a3100a12894d) was created
+2018-05-26 00:59:25,896 - ScrumbanBoard - INFO - Cardlist (a522dfe4b3f1f8f13612b0e780ee62f1b0869aa0) was created
+2018-05-26 00:59:25,896 - ScrumbanBoard - INFO - Board (b61cbd30763c86499f56507e4431f7b451d5bec3) was created
+2018-05-26 00:59:25,896 - ScrumbanBoard - INFO - User (5079b56e6f185d46dbf4267b0076299038f6dd9c) was created
+2018-05-26 00:59:25,896 - ScrumbanBoard - INFO - User wasn't found by user_id (5079b56e6f185d46dbf4267b0076299038f6dd9c)
+2018-05-26 00:59:25,896 - ScrumbanBoard - INFO - new User (5079b56e6f185d46dbf4267b0076299038f6dd9c) was added
+2018-05-26 00:59:25,896 - ScrumbanBoard - INFO - Card (b6a794db3868f1584a5e34cac5ec5189a9de8699) wasn't found by card_id in Cardlist (ce39b6b1258fa3dcadd78f0335c10ddb0245ec2b)
+2018-05-26 00:59:25,897 - ScrumbanBoard - INFO - Card (b6a794db3868f1584a5e34cac5ec5189a9de8699) was added in Cardlist (ce39b6b1258fa3dcadd78f0335c10ddb0245ec2b)
+2018-05-26 00:59:28,900 - ScrumbanBoard - INFO - Cardlist (a522dfe4b3f1f8f13612b0e780ee62f1b0869aa0) was found by cardlist_title on the Board (b61cbd30763c86499f56507e4431f7b451d5bec3)
+2018-05-26 00:59:28,900 - ScrumbanBoard - INFO - Deadline in card (b6a794db3868f1584a5e34cac5ec5189a9de8699) was delayed
+2018-05-26 00:59:28,962 - ScrumbanBoard - INFO - Cardlist (a522dfe4b3f1f8f13612b0e780ee62f1b0869aa0) was found by cardlist_title on the Board (b61cbd30763c86499f56507e4431f7b451d5bec3)

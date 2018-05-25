@@ -7,7 +7,7 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Task:
-    def __init__(self, title: str,
+    def __init__(self, logger, title: str,
                  description: str = None, subtasks_list: deque = None):
 
         self.title = title
