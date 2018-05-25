@@ -3,7 +3,6 @@ from datetime import *
 from dateutil.relativedelta import *
 import time
 
-
 # from hashlib import sha1
 # import datetime
 #
@@ -85,17 +84,17 @@ from scrumban_board_python import scrumban_board
 
 client = scrumban_board.Client()
 
-user = scrumban_board.User("Roman", "Martyanov", "romamartyanov", "romamartyanov@gmail.com")
+user = scrumban_board.User(client.logger, "Roman", "Martyanov", "romamartyanov", "romamartyanov@gmail.com")
 client.client_users.add_new_user(user)
 
-task = scrumban_board.Task("title", "description")
-task.add_subtask(scrumban_board.Subtask("subtask1"))
-task.add_subtask(scrumban_board.Subtask("subtask2"))
+task = scrumban_board.Task(client.logger, "title", "description")
+task.add_subtask(scrumban_board.Subtask(client.logger, "subtask1"))
+task.add_subtask(scrumban_board.Subtask(client.logger, "subtask2"))
 
-remind = scrumban_board.Remind("Remind", datetime.now(),
-                               )
+remind = scrumban_board.Remind(client.logger, "Remind", datetime.now(),
+                               repeating_remind_relativedelta=relativedelta(minutes=+2))
 
-card = scrumban_board.Card(task=task, users_login=user.login, deadline=remind, reminds_list=remind)
+card = scrumban_board.Card(client.logger, task=task, users_login=user.login, deadline=remind, reminds_list=remind)
 
 remind_list = deque()
 remind_list.append(remind)
@@ -118,7 +117,6 @@ frozen = jsonpickle.encode(client)
 with open('client.json', 'w') as outfile:
     json.dump(frozen, outfile)
 
-
 with open('client.json') as infile:
     data = json.load(infile)
 
@@ -137,7 +135,3 @@ while not client.update_all_reminds():
 
 for board in user.user_boards:
     print(board)
-
-
-
-
