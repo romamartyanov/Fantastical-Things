@@ -41,7 +41,7 @@ class User:
                     self.teams_list.append(team_id)
 
     def __str__(self):
-        boards_id = [board_id.id.hexdigest() for board_id in self.user_boards]
+        boards_id = [board_id.id for board_id in self.user_boards]
 
         output = Colors.user_magenta + """
 --- User ---
@@ -63,7 +63,7 @@ Boards ID: {}
         return output
 
     def __repr__(self):
-        boards_id = [board_id.id.hexdigest() for board_id in self.user_boards]
+        boards_id = [board_id.id for board_id in self.user_boards]
 
         output = Colors.user_magenta + """
 --- User ---

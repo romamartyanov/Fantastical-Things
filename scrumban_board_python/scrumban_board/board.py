@@ -195,8 +195,6 @@ Cardlists:
         old_cardlist = self.find_cardlist(old_cardlist_id)
         new_cardlist = self.find_cardlist(new_cardlist_id)
 
-        print(new_cardlist.id.hexdigest())
-
         card = old_cardlist.find_card(card_id=card_id)
         old_cardlist.remove_card(card=card)
         new_cardlist.add_card(card)
