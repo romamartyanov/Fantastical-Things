@@ -4,13 +4,34 @@ import datetime
 
 from scrumban_board_python.scrumban_board.cardlist import CardList
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
-# from scrumban_board_python.scrumban_board.calendar import Calendar
 
 
 class Board:
-    def __init__(self, title: str, users_login: deque,
-                 description: str = None, cardlists=None):
+    """
+    Board contains Cardlists with cards
 
+    Example:
+    client = scrumban_board.Client()
+
+    user = scrumban_board.User(client.logger, "Roman", "Martyanov", "romamartyanov", "romamartyanov@gmail.com")
+    client.client_users.add_new_user(user)
+
+    for board in user.user_boards:
+        for cardlist in board.cardlists:
+            cardlist.add_card(card)
+            break
+    """
+
+    def __init__(self, logger, title: str, users_login,
+                 description: str = None, cardlists=None):
+        """
+        Initialising of Board
+
+        :param title: board title
+        :param users_login: users login
+        :param description: board description
+        :param cardlists: board cardlists
+        """
         self.title = title
         self.description = self.title
 
@@ -18,6 +39,7 @@ class Board:
             self.description = description
 
         self.cardlists = deque()
+        self.logger = logger
 
         if cardlists is not None:
             if isinstance(cardlists, CardList):
@@ -29,10 +51,10 @@ class Board:
                         self.cardlists.append(cardlist)
         else:
 
-            to_do = CardList("To-Do")
-            doing = CardList("Doing")
-            done = CardList("Done")
-            overdue = CardList("Overdue")
+            to_do = CardList(self.logger, "To-Do")
+            doing = CardList(self.logger, "Doing")
+            done = CardList(self.logger, "Done")
+            overdue = CardList(self.logger, "Overdue")
 
             self.cardlists.append(to_do)
             self.cardlists.append(doing)
@@ -53,6 +75,8 @@ class Board:
         self.id = sha1(("Board: " + " " +
                         self.title + " " +
                         str(datetime.datetime.now())).encode('utf-8')).hexdigest()
+
+        self.logger.info("Board ({}) was created".format(self.id))
 
     def __str__(self):
         users_id = [user_id for user_id in self.users_login]
@@ -104,7 +128,17 @@ Cardlists:
 
         return output
 
-    def update_board(self, title: str = None, users: deque = None, description: str = None, cardlists: deque = None):
+    def update_board(self, title: str = None, users_login: deque = None, description: str = None,
+                     cardlists: deque = None):
+        """
+        Updating board params
+
+        :param title: board title
+        :param users_login: users login
+        :param description: board description
+        :param cardlists: board cardlists
+        :return:
+        """
         if title is not None:
             self.title = title
 
@@ -122,47 +156,93 @@ Cardlists:
                     if isinstance(cardlist, CardList):
                         self.cardlists.append(cardlist)
 
-        if users is not None:
+        if users_login is not None:
             self.users_login.clear()
 
-            for user in users:
+            for user in users_login:
                 self.users_login.append(user)
 
-    def find_cardlist(self, cardlist_id=None, title=None):
+        self.logger.info("Board ({}) was updated".format(self.id))
+
+    def find_cardlist(self, cardlist_id=None, cardlist_title=None):
+        """
+        Searching cardlist on the board
+
+        :param cardlist_id:
+        :param cardlist_title:
+        :return:
+        """
         if cardlist_id is not None:
             try:
-                return next(cardlist for cardlist in self.cardlists if cardlist.id == cardlist_id)
-            except StopIteration:
-                return None
+                cardlist = next(cardlist for cardlist in self.cardlists if cardlist.id == cardlist_id)
+                self.logger.info("Cardlist ({}) was found by cardlist_id on the Board ({})".format(cardlist.id,
+                                                                                                   self.id))
+                return cardlist
 
-        elif title is not None:
-            try:
-                return next(cardlist for cardlist in self.cardlists if cardlist.title == title)
             except StopIteration:
-                return None
-        else:
-            return None
+                self.logger.info("Cardlist ({}) wasn't found by cardlist_id on the Board ({})".format(cardlist_id,
+                                                                                                      self.id))
+
+        elif cardlist_title is not None:
+            try:
+                cardlist = next(cardlist for cardlist in self.cardlists if cardlist.title == cardlist_title)
+                self.logger.info("Cardlist ({}) was found by cardlist_title on the Board ({})".format(cardlist.id,
+                                                                                                      self.id))
+                return cardlist
+
+            except StopIteration:
+                self.logger.info("Cardlist ({}) wasn't found by cardlist_title on the Board ({})".format(cardlist_title,
+                                                                                                         self.id))
+
+        return None
 
     def add_cardlist(self, new_cardlist: CardList):
+        """
+        Adding new cardlist
+
+        :param new_cardlist: new cardlist
+        :return:
+        """
         duplicate_cardlist = self.find_cardlist(new_cardlist)
 
         if duplicate_cardlist is None:
             self.cardlists.append(new_cardlist)
+            self.logger.info("Cardlist ({}) was added on the Board ({})".format(new_cardlist.id,
+                                                                                self.id))
 
     def remove_cardlist(self, cardlist: CardList = None, cardlist_id: str = None):
+        """
+        Removing cardlist from the board
+
+        :param cardlist: Cardlist
+        :param cardlist_id: cardlist id as str
+        :return:
+        """
         if cardlist is not None:
             duplicate_cardlist = self.find_cardlist(cardlist.id)
 
             if duplicate_cardlist is not None:
                 self.cardlists.remove(duplicate_cardlist)
+                self.logger.info("Cardlist ({}) was removed from the Board ({})".format(duplicate_cardlist.id,
+                                                                                        self.id))
 
         elif cardlist_id is not None:
             duplicate_cardlist = self.find_cardlist(cardlist_id)
 
             if duplicate_cardlist is not None:
                 self.cardlists.remove(duplicate_cardlist)
+                self.logger.info("Cardlist ({}) was removed from the Board ({})".format(duplicate_cardlist.id,
+                                                                                        self.id))
 
     def change_cardlist_position(self, position: int, cardlist: CardList = None, cardlist_id: str = None):
+        """
+        Changing cardlist position on the board
+
+        :param position: 1, 2, 3 ... n
+        :param cardlist: Cardlist
+        :param cardlist_id: cardlist id
+        :return:
+        """
         if cardlist is not None:
             duplicate_cardlist = self.find_cardlist(cardlist.id)
 
@@ -172,6 +252,11 @@ Cardlists:
                 real_position = position - 1
                 self.cardlists.insert(real_position, duplicate_cardlist)
 
+                self.logger.info(
+                    "Cardlist ({}) was moved in the Board ({}) to position {}".format(duplicate_cardlist.id,
+                                                                                      self.id,
+                                                                                      real_position))
+
         elif cardlist_id is not None:
             duplicate_cardlist = self.find_cardlist(cardlist_id)
 
@@ -180,8 +265,20 @@ Cardlists:
 
                 real_position = position - 1
                 self.cardlists.insert(real_position, duplicate_cardlist)
+                self.logger.info(
+                    "Cardlist ({}) was moved in the Board ({}) to position {}".format(duplicate_cardlist.id,
+                                                                                      self.id,
+                                                                                      real_position))
 
     def move_card(self, card_id: str, old_cardlist_id: str, new_cardlist_id: str):
+        """
+        Moving cards between cardlists
+
+        :param card_id: card id
+        :param old_cardlist_id: old cardlist id
+        :param new_cardlist_id: new cardlist id
+        :return:
+        """
         # for old_cardlist in self.cardlists:
         #     if old_cardlist.id == old_cardlist_id:
         #
@@ -199,4 +296,7 @@ Cardlists:
         old_cardlist.remove_card(card=card)
         new_cardlist.add_card(card)
 
-
+        self.logger.info(
+            "Card ({}) was moved from CardList ({}) to Cardlist ({})".format(card.id,
+                                                                             old_cardlist.id,
+                                                                             new_cardlist.id))

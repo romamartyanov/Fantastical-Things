@@ -50,6 +50,7 @@ class User:
         self.surname = surname
         self.login = nickname
         self.email = email
+        self.logger = logger
 
         self.id = sha1(("User: " + " " +
                         self.login).encode('utf-8')).hexdigest()
@@ -75,8 +76,6 @@ class User:
             for team_id in teams_id:
                 if isinstance(team_id, str):
                     self.teams_list.append(team_id)
-
-        self.logger = logger
 
         self.logger.info("User ({}) was created".format(self.id))
 

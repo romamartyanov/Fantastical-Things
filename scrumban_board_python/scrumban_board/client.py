@@ -62,7 +62,7 @@ while not client.update_all_reminds():
 
             # going throw all user boards
             for board in user.user_boards:
-                overdue_cardlist = board.find_cardlist(title="Overdue")
+                overdue_cardlist = board.find_cardlist(cardlist_title="Overdue")
 
                 for cardlist in board.cardlists:
 
@@ -122,7 +122,7 @@ while not client.update_all_reminds():
                                 if remind.is_repeatable:
                                     remind.when_remind += remind.repeating_remind_relativedelta
 
-                                    self._logger.info(
+                                    self.logger.info(
                                         "Remind ({}) was delayed in the "
                                         "Card ({}) in the Cardlist ({}) on the Board ({})".format(remind.id,
                                                                                                   card.id,
@@ -132,7 +132,7 @@ while not client.update_all_reminds():
                                 else:
                                     card.remove_remind(remind)
 
-                                    self._logger.info(
+                                    self.logger.info(
                                         "Remind ({}) was removed in the "
                                         "Card ({}) in the Cardlist ({}) on the Board ({})".format(remind.id,
                                                                                                   card.id,

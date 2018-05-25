@@ -21,6 +21,7 @@ class ClientUsers:
         :param users: Users for the storage
         """
         self.users = deque()
+        self.logger = logger
 
         if users is not None:
             for user in users:
@@ -30,8 +31,6 @@ class ClientUsers:
                 elif isinstance(user, str):
                     temp_user = User(self.logger, "", "", user, "")
                     self.users.append(temp_user)
-
-        self.logger = logger
 
         self.logger.info("ClientUsers was created")
 

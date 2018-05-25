@@ -32,6 +32,7 @@ class Team:
 
         self.title = title
         self.login = login
+        self.logger = logger
 
         if description is not None:
             self.description = description
@@ -63,7 +64,6 @@ class Team:
                         self.title + " " +
                         str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
-        self.logger = logger
         self.logger.info("Team ({}) was created".format(self.id))
 
     def __str__(self):
