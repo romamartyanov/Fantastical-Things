@@ -255,6 +255,7 @@ Boards ID: {}
         Searching teams id in this user
 
         :param team_id: team id
+        :param team_login: team login
         :return:
         """
         if team_id is not None:

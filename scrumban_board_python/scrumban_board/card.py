@@ -8,7 +8,7 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Card:
-    def __init__(self, task, users_login,
+    def __init__(self, logger, task, users_login,
                  reminds_list=None, deadline: Remind = None):
 
         if isinstance(task, Task):

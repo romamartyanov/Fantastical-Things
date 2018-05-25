@@ -94,7 +94,7 @@ task.add_subtask(scrumban_board.Subtask("subtask2"))
 remind = scrumban_board.Remind("Remind", datetime.now(),
                                repeating_remind_relativedelta=relativedelta(minutes=+2))
 
-card = scrumban_board.Card(task=task, users_login=user.login, deadline=remind, reminds_list=remind)
+card = scrumban_board.Card(client.logger, task=task, users_login=user.login, deadline=remind, reminds_list=remind)
 
 remind_list = deque()
 remind_list.append(remind)
