@@ -6,11 +6,29 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
 class Remind:
+    """
+    Description of Remind
+
+    Example:
+    remind = scrumban_board.Remind(client.logger, "Remind", datetime.now(),
+
+    """
     def __init__(self, logger,  title: str, when_remind,
                  description: str = None, card_id: str = None,
                  repeating_remind_relativedelta: relativedelta = None):
+        """
+        Initialising of Remind
+
+        :param logger: client logger
+        :param title: remind title
+        :param when_remind: when remind
+        :param description: remind description
+        :param card_id: card id of remind
+        :param repeating_remind_relativedelta: if remind is periodical
+        """
 
         self.title = title
+        self.logger = logger
 
         if description is not None:
             self.description = description
@@ -45,6 +63,8 @@ class Remind:
                         self.title + " " +
                         str(self.when_remind) + " " +
                         str(datetime.now())).encode('utf-8')).hexdigest()
+
+        self.logger.info("Remind ({}) was created".format(self.id))
 
     def __str__(self):
         output = Colors.remind_red + """
@@ -86,15 +106,31 @@ Repeating time delta: {}
 
         return output
 
-    def update_remind(self, title: str = None, description: str = None,
+    def update_remind(self, title: str = None, description: str = None, card_id: str = None,
                       when_remind=None,
                       repeating_remind_relativedelta: relativedelta = None):
+        """
+        Updating of Remind
+
+
+        :param title: remind title
+        :param when_remind: when remind
+        :param description: remind description
+        :param card_id: card id of remind
+        :param repeating_remind_relativedelta: if remind is periodical
+        :return:
+        """
 
         if title is not None:
             self.title = title
 
         if description is not None:
             self.description = description
+
+        if card_id is not None:
+            self.card_id = card_id
+        else:
+            self.card_id = None
 
         if when_remind is not None:
             try:
@@ -111,3 +147,5 @@ Repeating time delta: {}
         if repeating_remind_relativedelta is not None:
             self.is_repeatable = True
             self.repeating_remind_relativedelta = repeating_remind_relativedelta
+
+        self.logger.info("Remind ({}) was updated".format(self.id))
