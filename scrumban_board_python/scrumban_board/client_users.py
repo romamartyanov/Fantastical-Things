@@ -28,12 +28,12 @@ class ClientUsers:
                     self.users.append(user)
 
                 elif isinstance(user, str):
-                    temp_user = User("", "", user, "")
+                    temp_user = User(self.logger, "", "", user, "")
                     self.users.append(temp_user)
 
-        self._logger = logger
+        self.logger = logger
 
-        self._logger.info("ClientUsers was created")
+        self.logger.info("ClientUsers was created")
 
     def update_client_users(self, users: deque):
         """
@@ -50,10 +50,10 @@ class ClientUsers:
                 self.users.append(user)
 
             elif isinstance(user, str):
-                temp_user = User(user, user, user, "@")
+                temp_user = User(self.logger, user, user, user, "@")
                 self.users.append(temp_user)
 
-        self._logger.info("ClientUsers was updated")
+        self.logger.info("ClientUsers was updated")
 
     def find_user(self, user_id: str = None, user_login: str = None):
         """
@@ -66,26 +66,24 @@ class ClientUsers:
         if user_id is not None:
             try:
                 user = next(user for user in self.users if user.id == user_id)
-                self._logger.info("User was found by user_id ({})".format(user_id))
+                self.logger.info("User was found by user_id ({})".format(user_id))
 
                 return user
 
             except StopIteration:
-                self._logger.info("User wasn't found by user_id ({})".format(user_id))
-
-                return None
+                self.logger.info("User wasn't found by user_id ({})".format(user_id))
 
         elif user_login is not None:
             try:
                 user = next(user for user in self.users if user.login == user_login)
-                self._logger.info("User was found by user_login ({})".format(user_login))
+                self.logger.info("User was found by user_login ({})".format(user_login))
 
                 return user
 
             except StopIteration:
-                self._logger.info("User wasn't found by user_login ({})".format(user_login))
+                self.logger.info("User wasn't found by user_login ({})".format(user_login))
 
-                return None
+        return None
 
     def add_new_user(self, user):
         """
@@ -99,16 +97,16 @@ class ClientUsers:
 
             if duplicate_user is None:
                 self.users.append(user)
-                self._logger.info("new User ({}) was added".format(user.id))
+                self.logger.info("new User ({}) was added".format(user.id))
 
         elif isinstance(user, str):
             duplicate_user = self.find_user(user_login=user)
 
             if duplicate_user is None:
-                temp_user = User(user, user, user, "none@none.none")
+                temp_user = User(self.logger, user, user, user, "none@none.none")
 
                 self.users.append(temp_user)
-                self._logger.info("new User ({}) was added".format(temp_user.id))
+                self.logger.info("new User ({}) was added".format(temp_user.id))
 
     def remove_user(self, user):
         """
@@ -123,7 +121,7 @@ class ClientUsers:
             if duplicate_user is not None:
                 self.users.remove(user)
 
-                self._logger.info("User ({}) was removed".format(user.id))
+                self.logger.info("User ({}) was removed".format(user.id))
 
         elif isinstance(user, str):
             duplicate_user_id = self.find_user(user_id=user)
@@ -131,8 +129,8 @@ class ClientUsers:
 
             if duplicate_user_id is not None:
                 self.users.remove(duplicate_user_id)
-                self._logger.info("User ({}) was removed".format(duplicate_user_id.id))
+                self.logger.info("User ({}) was removed".format(duplicate_user_id.id))
 
             elif duplicate_user_login is not None:
                 self.users.remove(duplicate_user_login)
-                self._logger.info("User ({}) was removed".format(duplicate_user_login.id))
+                self.logger.info("User ({}) was removed".format(duplicate_user_login.id))

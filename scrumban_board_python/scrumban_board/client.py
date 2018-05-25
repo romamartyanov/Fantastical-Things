@@ -41,10 +41,10 @@ while not client.update_all_reminds():
         # creating logger for client
         logging.config.fileConfig(
             os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logging.cfg'))
-        self._logger = logging.getLogger("ScrumbanBoard")
+        self.logger = logging.getLogger("ScrumbanBoard")
 
-        self.client_users = ClientUsers(self._logger)
-        self.client_teams = ClientTeams(self._logger)
+        self.client_users = ClientUsers(self.logger)
+        self.client_teams = ClientTeams(self.logger)
 
         if client_users is not None:
             self.client_users = client_users
@@ -52,7 +52,7 @@ while not client.update_all_reminds():
         if client_teams is not None:
             self.client_teams = client_teams
 
-        self._logger.info("Client was created")
+        self.logger.info("Client was created")
 
     def update_all_reminds(self):
         """Updating all reminds in the Client"""
@@ -80,7 +80,7 @@ while not client.update_all_reminds():
                                 if card.deadline.repeating_remind_relativedelta is not None:
                                     card.deadline.when_remind += card.deadline.repeating_remind_relativedelta
 
-                                    self._logger.info("Deadline in card ({}) was delayed".format(card.id))
+                                    self.logger.info("Deadline in card ({}) was delayed".format(card.id))
 
                                     for user_login in card.users_login:
                                         if user_login == self.current_user_login:
@@ -91,7 +91,7 @@ while not client.update_all_reminds():
                                     # may be it will not work
                                     board.move_card(card.id, cardlist.id, overdue_cardlist.id)
 
-                                    self._logger.info(
+                                    self.logger.info(
                                         "Card ({}) was moved to the Overdue Cardlist ({}) in the Board ({})".format(
                                             card.id,
                                             cardlist.id,
@@ -109,7 +109,7 @@ while not client.update_all_reminds():
                             # if we need to remind about card
                             if remind.when_remind < datetime.now():
 
-                                self._logger.info(
+                                self.logger.info(
                                     "Remind about Card ({}) in the Cardlist ({}) on the Board ({})".format(card.id,
                                                                                                            cardlist.id,
                                                                                                            board.id))

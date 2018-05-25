@@ -9,7 +9,7 @@ class ClientTeams:
 
     Example:
 
-    team = scrumban_board.Team("200 OK", "200_OK", "romamartyanov")
+    team = scrumban_board.Team(client.logger, "200 OK", "200_OK", "romamartyanov")
     client.client_teams.add_new_team(team)
     """
 
@@ -64,8 +64,6 @@ class ClientTeams:
             except StopIteration:
                 self._logger.info("Team wasn't found by team_id ({})".format(team_id))
 
-                return None
-
         elif team_login is not None:
             try:
                 team = next(team for team in self.teams if team.nickname == team_login)
@@ -76,7 +74,7 @@ class ClientTeams:
             except StopIteration:
                 self._logger.info("Team wasn't found by team_login ({})".format(team_login))
 
-                return None
+        return None
 
     def add_new_team(self, team: Team):
         """

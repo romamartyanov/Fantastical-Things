@@ -84,7 +84,7 @@ from scrumban_board_python import scrumban_board
 
 client = scrumban_board.Client()
 
-user = scrumban_board.User("Roman", "Martyanov", "romamartyanov", "romamartyanov@gmail.com")
+user = scrumban_board.User(client.logger, "Roman", "Martyanov", "romamartyanov", "romamartyanov@gmail.com")
 client.client_users.add_new_user(user)
 
 task = scrumban_board.Task("title", "description")
