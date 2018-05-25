@@ -3,7 +3,6 @@ from datetime import *
 from dateutil.relativedelta import *
 import time
 
-
 # from hashlib import sha1
 # import datetime
 #
@@ -93,7 +92,7 @@ task.add_subtask(scrumban_board.Subtask("subtask1"))
 task.add_subtask(scrumban_board.Subtask("subtask2"))
 
 remind = scrumban_board.Remind("Remind", datetime.now(),
-                               )
+                               repeating_remind_relativedelta=relativedelta(minutes=+2))
 
 card = scrumban_board.Card(task=task, users_login=user.login, deadline=remind, reminds_list=remind)
 
@@ -118,7 +117,6 @@ frozen = jsonpickle.encode(client)
 with open('client.json', 'w') as outfile:
     json.dump(frozen, outfile)
 
-
 with open('client.json') as infile:
     data = json.load(infile)
 
@@ -137,7 +135,3 @@ while not client.update_all_reminds():
 
 for board in user.user_boards:
     print(board)
-
-
-
-
