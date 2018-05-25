@@ -1,13 +1,7 @@
-2018-05-25 22:48:50,071 - ScrumbanBoard - INFO - ClientUsers was created
-2018-05-25 22:48:50,071 - ScrumbanBoard - INFO - ClientTeams was created
-2018-05-25 22:48:50,071 - ScrumbanBoard - INFO - Client was created
-2018-05-25 22:48:50,072 - ScrumbanBoard - INFO - User wasn't found by user_id (5079b56e6f185d46dbf4267b0076299038f6dd9c)
-2018-05-25 22:48:50,072 - ScrumbanBoard - INFO - new User (5079b56e6f185d46dbf4267b0076299038f6dd9c) was added
-2018-05-25 22:48:53,075 - ScrumbanBoard - INFO - Deadline in card (dc1bd83aa215807963fecbef6bf0f562bf7f7193) was delayed
-2018-05-25 23:05:05,048 - ScrumbanBoard - INFO - ClientUsers was created
-2018-05-25 23:05:05,049 - ScrumbanBoard - INFO - ClientTeams was created
-2018-05-25 23:05:05,049 - ScrumbanBoard - INFO - Client was created
-2018-05-25 23:05:05,049 - ScrumbanBoard - INFO - User (5079b56e6f185d46dbf4267b0076299038f6dd9c) was created
-2018-05-25 23:05:05,049 - ScrumbanBoard - INFO - User wasn't found by user_id (5079b56e6f185d46dbf4267b0076299038f6dd9c)
-2018-05-25 23:05:05,049 - ScrumbanBoard - INFO - new User (5079b56e6f185d46dbf4267b0076299038f6dd9c) was added
-2018-05-25 23:05:08,052 - ScrumbanBoard - INFO - Deadline in card (2d96957b5d40d08f83fe94d8762625bca7d12b1c) was delayed
+2018-05-25 23:56:32,883 - ScrumbanBoard - INFO - ClientUsers was created
+2018-05-25 23:56:32,883 - ScrumbanBoard - INFO - ClientTeams was created
+2018-05-25 23:56:32,884 - ScrumbanBoard - INFO - Client was created
+2018-05-25 23:56:32,884 - ScrumbanBoard - INFO - User (5079b56e6f185d46dbf4267b0076299038f6dd9c) was created
+2018-05-25 23:56:32,884 - ScrumbanBoard - INFO - User wasn't found by user_id (5079b56e6f185d46dbf4267b0076299038f6dd9c)
+2018-05-25 23:56:32,884 - ScrumbanBoard - INFO - new User (5079b56e6f185d46dbf4267b0076299038f6dd9c) was added
+2018-05-25 23:56:35,887 - ScrumbanBoard - INFO - Deadline in card (a2154200186404c1918fb2713447a46f3a7007d4) was delayed

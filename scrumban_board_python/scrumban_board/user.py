@@ -65,7 +65,7 @@ class User:
                         self.user_boards.append(board)
 
         else:
-            board = Board("{}'s Board".format(self.name), self.id, "default agile board")
+            board = Board(self.logger, "{}'s Board".format(self.name), self.id, "default agile board")
             self.user_boards.append(board)
 
         # self.user_calendar = Calendar(users_id=self.id)
@@ -200,20 +200,32 @@ Boards ID: {}
 
         return None
 
-    def add_board(self, new_board: Board):
+    def add_board(self, new_board):
         """
         Adding new board to the user
 
         :param new_board: new Board
         :return:
         """
-        duplicate_board = self.find_board(board_id=new_board.id)
 
-        if duplicate_board is None:
-            self.user_boards.append(new_board)
+        if isinstance(new_board, Board):
+            duplicate_board = self.find_board(board_id=new_board.id)
 
-            self.logger.info("Border ({}) was added to User ({})".format(new_board.id,
-                                                                         self.id))
+            if duplicate_board is None:
+                self.user_boards.append(new_board)
+
+                self.logger.info("Border ({}) was added to User ({})".format(new_board.id,
+                                                                             self.id))
+
+        elif isinstance(new_board, str):
+            duplicate_board = self.find_board(board_title=new_board)
+
+            if duplicate_board is None:
+                board = Board(logger=self.logger, title=new_board, users_login=self.id)
+                self.user_boards.append(board)
+
+                self.logger.info("Board ({}) was added to the Team ({})".format(board.id,
+                                                                                self.id))
 
     def remove_board(self, board: Board = None, board_id: str = None):
         """
