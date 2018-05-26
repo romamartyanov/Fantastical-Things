@@ -51,15 +51,15 @@ class CardList:
         cards = [card for card in self.cards]
 
         output = Colors.cardlist_green + """
---- Cardlist ---
-Title: {}
-Description: {}
-ID: {}
-
-Cards: 
-{}
-
----End Cardlist--
+    --- Cardlist ---
+    Title: {}
+    Description: {}
+    ID: {}
+    
+    Cards: 
+    {}
+    
+    ---End Cardlist--
 """.format(self.title,
            self.description,
            self.id,
@@ -71,15 +71,15 @@ Cards:
         cards = [card for card in self.cards]
 
         output = Colors.cardlist_green + """
---- Cardlist ---
-Title: {}
-Description: {}
-ID: {}
-
-Cards: 
-{}
-
----End Cardlist--
+    --- Cardlist ---
+    Title: {}
+    Description: {}
+    ID: {}
+    
+    Cards: 
+    {}
+    
+    ---End Cardlist--
 """.format(self.title,
            self.description,
            self.id,

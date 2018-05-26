@@ -73,17 +73,17 @@ class Card:
 
         if self.deadline is None:
             output = Colors.card_yellow + """
---- Card ---
-ID: {}
-Users ID: {}
-
-Task:
-{}
-
-Reminds:
-{}
-
----End Card--
+        --- Card ---
+        ID: {}
+        Users ID: {}
+        
+        Task:
+        {}
+        
+        Reminds:
+        {}
+        
+        ---End Card--
 """.format(self.id,
            users_id,
            self.task,
@@ -91,22 +91,22 @@ Reminds:
 
         else:
             output = Colors.card_yellow + """
---- Card ---
-ID: {}
-Users ID: {}
-
-Deadline:
-{}
-
-Is Repeatable: {}
-
-Task:
-{}
-
-Reminds:
-{}
-
----End Card--
+        --- Card ---
+        ID: {}
+        Users ID: {}
+        
+        Deadline:
+        {}
+        
+        Is Repeatable: {}
+        
+        Task:
+        {}
+        
+        Reminds:
+        {}
+        
+        ---End Card--
 """.format(self.id,
            users_id,
            self.deadline.when_remind,

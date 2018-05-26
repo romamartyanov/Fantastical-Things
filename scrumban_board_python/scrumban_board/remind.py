@@ -70,15 +70,15 @@ class Remind(object):
 
     def __str__(self):
         output = Colors.remind_red + """
---- Remind ---
-Title: {}
-Description: {}
-ID: {}
-
-When Remind: {}
-Is Repeatable: {}
-Repeating time delta: {}
---End Remind--
+            --- Remind ---
+            Title: {}
+            Description: {}
+            ID: {}
+            
+            When Remind: {}
+            Is Repeatable: {}
+            Repeating time delta: {}
+            --End Remind--
 """.format(self.title,
            self.description,
            self.id,
@@ -90,15 +90,15 @@ Repeating time delta: {}
 
     def __repr__(self):
         output = Colors.remind_red + """
---- Remind ---
-Title: {}
-Description: {}
-ID: {}
-
-When Remind: {}
-Is Repeatable: {}
-Repeating time delta: {}
---End Remind--
+            --- Remind ---
+            Title: {}
+            Description: {}
+            ID: {}
+            
+            When Remind: {}
+            Is Repeatable: {}
+            Repeating time delta: {}
+            --End Remind--
 """.format(self.title,
            self.description,
            self.id,

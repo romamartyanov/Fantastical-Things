@@ -52,16 +52,16 @@ class Task:
         subtasks_list = [subtask for subtask in self.subtasks_list]
 
         output = Colors.task_blue + """
---- TASK ---
-Title: {}
-Description: {}
-ID: {}
-Completed: {}
-
-Subtasks:
-{}
-
---End Task--
+            --- TASK ---
+            Title: {}
+            Description: {}
+            ID: {}
+            Completed: {}
+            
+            Subtasks:
+            {}
+            
+            --End Task--
 """.format(self.title,
            self.description,
            self.id,

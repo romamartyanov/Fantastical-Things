@@ -37,12 +37,12 @@ class Subtask:
 
     def __str__(self):
         output = Colors.subtask_lightblue + """
---- SUBTASK ---
-Title: {}
-Description: {}
-Completed: {}
-ID: {}
---End Subtask--
+                --- SUBTASK ---
+                Title: {}
+                Description: {}
+                Completed: {}
+                ID: {}
+                --End Subtask--
 """.format(self.title,
            self.description,
            self.completed,
@@ -52,12 +52,12 @@ ID: {}
 
     def __repr__(self):
         output = Colors.subtask_lightblue + """
---- SUBTASK ---
-Title: {}
-Description: {}
-Completed: {}
-ID: {}
---End Subtask--
+                --- SUBTASK ---
+                Title: {}
+                Description: {}
+                Completed: {}
+                ID: {}
+                --End Subtask--
 """.format(self.title,
            self.description,
            self.completed,
