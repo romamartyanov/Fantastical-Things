@@ -1,3 +1,5 @@
+import os
+import logging.config
 from hashlib import sha1
 from collections import deque
 import datetime
@@ -5,24 +7,26 @@ import datetime
 from scrumban_board_python.scrumban_board.board import Board
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
+logging.config.fileConfig(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logging.cfg'))
+logger = logging.getLogger("ScrumbanBoard")
+
 
 class Team:
     """
     Description of the essence of the Team and his ability to interact with other classes
 
     Example:
-    team = scrumban_board.Team(client.logger, "200 OK", "200_OK", "romamartyanov")
+    team = scrumban_board.Team("200 OK", "200_OK", "romamartyanov")
 
     client.client_teams.add_new_team(team)
     """
 
-    def __init__(self, logger, title: str, login: str, users_id,
+    def __init__(self, title: str, login: str, users_id,
                  description: str = None, boards=None):
         """
         Initialising of Team
 
-
-        :param logger: client logger
         :param title: team title
         :param login: team login
         :param users_id: team users (deque or str)
@@ -32,7 +36,6 @@ class Team:
 
         self.title = title
         self.login = login
-        self.logger = logger
 
         if description is not None:
             self.description = description
@@ -57,14 +60,14 @@ class Team:
                         self.team_boards.append(board)
 
         else:
-            board = Board(self.logger, "{}'s Board".format(self.title), self.id, "default agile board")
+            board = Board("{}'s Board".format(self.title), self.id, "default agile board")
             self.team_boards.append(board)
 
         self.id = sha1(("Team: " +
                         self.title + " " +
                         str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
-        self.logger.info("Team ({}) was created".format(self.id))
+        logger.info("Team ({}) was created".format(self.id))
 
     def __str__(self):
         users_id = [user_id for user_id in self.team_members_id]
@@ -153,7 +156,7 @@ Boards ID:
                     if isinstance(board, Board):
                         self.team_boards.append(board)
 
-        self.logger.info("Team ({}) was updated".format(self.id))
+        logger.info("Team ({}) was updated".format(self.id))
 
     def find_team_member(self, user_id: str):
         """
@@ -164,14 +167,14 @@ Boards ID:
         """
         try:
             user_id = next(team_user_id for team_user_id in self.team_members_id if team_user_id == user_id)
-            self.logger.info("User ({}) was found by user_id in the Team ({})".format(user_id,
-                                                                                      self.id))
+            logger.info("User ({}) was found by user_id in the Team ({})".format(user_id,
+                                                                                 self.id))
 
             return user_id
 
         except StopIteration:
-            self.logger.info("User ({}) wasn't found by user_id on Team ({})".format(user_id,
-                                                                                     self.id))
+            logger.info("User ({}) wasn't found by user_id on Team ({})".format(user_id,
+                                                                                self.id))
         return None
 
     def add_team_member(self, user_id: str):
@@ -185,8 +188,8 @@ Boards ID:
 
         if duplicate_user is None:
             self.team_members_id.append(user_id)
-            self.logger.info("User ({}) was added in the Team ({})".format(user_id,
-                                                                           self.id))
+            logger.info("User ({}) was added in the Team ({})".format(user_id,
+                                                                      self.id))
 
     def remove_team_member(self, user_id: str):
         """
@@ -199,8 +202,8 @@ Boards ID:
 
         if duplicate_user is not None:
             self.team_members_id.remove(duplicate_user)
-            self.logger.info("User ({}) was removed from the Team ({})".format(duplicate_user,
-                                                                               self.id))
+            logger.info("User ({}) was removed from the Team ({})".format(duplicate_user,
+                                                                          self.id))
 
     def find_team_board(self, board_id: str = None, board_title: str = None):
         """
@@ -216,8 +219,8 @@ Boards ID:
                 return board
 
             except StopIteration:
-                self.logger.info("Board ({}) wasn't found by board_id in User({})".format(board_id,
-                                                                                          self.id))
+                logger.info("Board ({}) wasn't found by board_id in User({})".format(board_id,
+                                                                                     self.id))
 
         elif board_title is not None:
             try:
@@ -225,8 +228,8 @@ Boards ID:
                 return board
 
             except StopIteration:
-                self.logger.info("Board ({}) wasn't found by board_title in User({})".format(board_title,
-                                                                                             self.id))
+                logger.info("Board ({}) wasn't found by board_title in User({})".format(board_title,
+                                                                                        self.id))
 
         return None
 
@@ -241,11 +244,11 @@ Boards ID:
             duplicate_board = self.find_team_board(board)
 
             if duplicate_board is None:
-                board = Board(logger=self.logger, title=board, users_login=self.team_members_id)
+                board = Board(title=board, users_login=self.team_members_id)
                 self.team_boards.append(board)
 
-                self.logger.info("Board ({}) was added to the Team ({})".format(board.id,
-                                                                                self.id))
+                logger.info("Board ({}) was added to the Team ({})".format(board.id,
+                                                                           self.id))
 
         elif isinstance(board, Board):
             duplicate_board = self.find_team_board(board.id)
@@ -253,8 +256,8 @@ Boards ID:
             if duplicate_board is None:
                 self.team_boards.append(board)
 
-                self.logger.info("Board ({}) was added to the Team ({})".format(board.id,
-                                                                                self.id))
+                logger.info("Board ({}) was added to the Team ({})".format(board.id,
+                                                                           self.id))
 
     def remove_team_board(self, board: Board = None, board_id: str = None, board_title: str = None):
         """
@@ -270,19 +273,19 @@ Boards ID:
             if duplicate_board is not None:
                 self.team_boards.remove(duplicate_board)
 
-                self.logger.info("Board ({}) was removed to the Team ({})".format(duplicate_board.id,
-                                                                                  self.id))
+                logger.info("Board ({}) was removed to the Team ({})".format(duplicate_board.id,
+                                                                             self.id))
 
         elif isinstance(board_id, str):
             duplicate_board = self.find_team_board(board_id=board_id)
             if duplicate_board is not None:
                 self.team_boards.remove(duplicate_board)
-                self.logger.info("Board ({}) was removed by board_id to the Team ({})".format(duplicate_board.id,
-                                                                                              self.id))
+                logger.info("Board ({}) was removed by board_id to the Team ({})".format(duplicate_board.id,
+                                                                                         self.id))
 
         elif isinstance(board_title, str):
             duplicate_board = self.find_team_board(board_title=board_title)
             if duplicate_board is not None:
                 self.team_boards.remove(duplicate_board)
-                self.logger.info("Board ({}) was removed by board_title to the Team ({})".format(duplicate_board.id,
-                                                                                                 self.id))
+                logger.info("Board ({}) was removed by board_title to the Team ({})".format(duplicate_board.id,
+                                                                                            self.id))

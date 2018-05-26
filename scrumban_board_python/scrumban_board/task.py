@@ -1,3 +1,6 @@
+import os
+import logging.config
+
 from hashlib import sha1
 from collections import deque
 import datetime
@@ -5,21 +8,24 @@ import datetime
 from scrumban_board_python.scrumban_board.subtask import Subtask
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
+logging.config.fileConfig(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logging.cfg'))
+logger = logging.getLogger("ScrumbanBoard")
+
 
 class Task:
     """
     Description of Task class
 
     Example:
-    task = scrumban_board.Task(client.logger, "title", "description")
+    task = scrumban_board.Task("title", "description")
     """
 
-    def __init__(self, logger, title: str,
+    def __init__(self, title: str,
                  description: str = None, subtasks_list: deque = None):
         """
         Initialising of task
 
-        :param logger: client logger
         :param title: task title
         :param description: task description
         :param subtasks_list: subtasks list
@@ -27,12 +33,11 @@ class Task:
 
         self.title = title
         self.description = description
-        self.logger = logger
 
         self.subtasks_list = deque()
         if subtasks_list is not None:
             if isinstance(subtasks_list, str):
-                subtask = Subtask(self.logger, subtasks_list)
+                subtask = Subtask(subtasks_list)
                 self.subtasks_list.append(subtask)
 
             elif isinstance(subtasks_list, deque):
@@ -46,7 +51,7 @@ class Task:
                         self.title + " " +
                         str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
-        self.logger.info("Task ({}) was created".format(self.id))
+        logger.info("Task ({}) was created".format(self.id))
 
     def __str__(self):
         subtasks_list = [subtask for subtask in self.subtasks_list]
@@ -92,7 +97,7 @@ class Task:
             self.subtasks_list.clear()
 
             if isinstance(subtasks_list, str):
-                subtask = Subtask(self.logger, subtasks_list)
+                subtask = Subtask(subtasks_list)
                 self.subtasks_list.append(subtask)
 
             elif isinstance(subtasks_list, deque):
@@ -103,7 +108,7 @@ class Task:
         if completed is not None:
             self.completed = completed
 
-        self.logger.info("Task ({}) was updated".format(self.id))
+        logger.info("Task ({}) was updated".format(self.id))
 
     def find_subtask(self, title: str = None, subtask_id: str = None):
         """
@@ -116,24 +121,24 @@ class Task:
         if subtask_id is not None:
             try:
                 subtask = next(subtask for subtask in self.subtasks_list if subtask.id == subtask_id)
-                self.logger.info("Subtask ({}) wasn found by subtask_id in Task ({})".format(subtask_id,
-                                                                                             self.id))
-                return subtask
-
-            except StopIteration:
-                self.logger.info("Subtask ({}) wasn't found by subtask_id in Task ({})".format(subtask_id,
-                                                                                               self.id))
-
-        elif title is not None:
-            try:
-                subtask = next(subtask for subtask in self.subtasks_list if subtask.title == title)
-                self.logger.info("Subtask ({}) wasn found by title in Task ({})".format(title,
+                logger.info("Subtask ({}) wasn found by subtask_id in Task ({})".format(subtask_id,
                                                                                         self.id))
                 return subtask
 
             except StopIteration:
-                self.logger.info("Subtask ({}) wasn't found by title in Task ({})".format(title,
+                logger.info("Subtask ({}) wasn't found by subtask_id in Task ({})".format(subtask_id,
                                                                                           self.id))
+
+        elif title is not None:
+            try:
+                subtask = next(subtask for subtask in self.subtasks_list if subtask.title == title)
+                logger.info("Subtask ({}) wasn found by title in Task ({})".format(title,
+                                                                                   self.id))
+                return subtask
+
+            except StopIteration:
+                logger.info("Subtask ({}) wasn't found by title in Task ({})".format(title,
+                                                                                     self.id))
         return None
 
     def add_subtask(self, subtask):
@@ -148,17 +153,17 @@ class Task:
 
             if duplicate_subtask is None:
                 self.subtasks_list.append(subtask)
-                self.logger.info("Subtask ({}) was added to the Task ({})".format(subtask.id,
-                                                                                  self.id))
+                logger.info("Subtask ({}) was added to the Task ({})".format(subtask.id,
+                                                                             self.id))
 
         elif isinstance(subtask, str):
             duplicate_subtask = self.find_subtask(subtask)
             if duplicate_subtask is None:
-                new_subtask = Subtask(self.logger, title=subtask)
+                new_subtask = Subtask(title=subtask)
 
                 self.subtasks_list.append(new_subtask)
-                self.logger.info("Subtask ({}) was added to the Task ({})".format(new_subtask.id,
-                                                                                  self.id))
+                logger.info("Subtask ({}) was added to the Task ({})".format(new_subtask.id,
+                                                                             self.id))
 
     def remove_subtask(self, subtask: Subtask = None, subtask_id: str = None):
         """
@@ -173,8 +178,8 @@ class Task:
 
             if duplicate_subtask is not None:
                 self.subtasks_list.remove(duplicate_subtask)
-                self.logger.info("Subtask ({}) was removed from the Task ({})".format(duplicate_subtask.id,
-                                                                                      self.id))
+                logger.info("Subtask ({}) was removed from the Task ({})".format(duplicate_subtask.id,
+                                                                                 self.id))
 
         elif subtask_id is not None:
             duplicate_subtask = self.find_subtask(subtask_id=subtask_id)
@@ -182,8 +187,8 @@ class Task:
             if duplicate_subtask is not None:
                 self.subtasks_list.remove(duplicate_subtask)
 
-                self.logger.info("Subtask ({}) was removed from the Task ({})".format(duplicate_subtask.id,
-                                                                                      self.id))
+                logger.info("Subtask ({}) was removed from the Task ({})".format(duplicate_subtask.id,
+                                                                                 self.id))
 
     def change_subtask_position(self, position: int, subtask: Subtask = None, subtask_id: str = None):
         """
@@ -203,9 +208,9 @@ class Task:
                 real_position = position - 1
                 self.subtasks_list.insert(real_position, duplicate_subtask)
 
-                self.logger.info("Subtask ({}) was moved in the Task ({}) to position {}".format(duplicate_subtask.id,
-                                                                                                 self.id,
-                                                                                                 real_position))
+                logger.info("Subtask ({}) was moved in the Task ({}) to position {}".format(duplicate_subtask.id,
+                                                                                            self.id,
+                                                                                            real_position))
 
         elif subtask_id is not None:
             duplicate_subtask = self.find_subtask(subtask_id=subtask_id)
@@ -216,6 +221,6 @@ class Task:
                 real_position = position - 1
                 self.subtasks_list.insert(real_position, duplicate_subtask)
 
-                self.logger.info("Subtask ({}) was moved in the Task ({}) to position {}".format(duplicate_subtask.id,
-                                                                                                 self.id,
-                                                                                                 real_position))
+                logger.info("Subtask ({}) was moved in the Task ({}) to position {}".format(duplicate_subtask.id,
+                                                                                            self.id,
+                                                                                            real_position))

@@ -1,6 +1,13 @@
+import os
+import logging.config
+
 from collections import deque
 
 from scrumban_board_python.scrumban_board.team import Team
+
+logging.config.fileConfig(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logging.cfg'))
+logger = logging.getLogger("ScrumbanBoard")
 
 
 class ClientTeams:
@@ -9,26 +16,24 @@ class ClientTeams:
 
     Example:
 
-    team = scrumban_board.Team(client.logger, "200 OK", "200_OK", "romamartyanov")
+    team = scrumban_board.Team("200 OK", "200_OK", "romamartyanov")
     client.client_teams.add_new_team(team)
     """
 
-    def __init__(self, logger, teams: deque = None):
+    def __init__(self, teams: deque = None):
         """
         Initialising of ClientTeams
 
-        :param logger: client logger
         :param teams: Teams for the storage
         """
         self.teams = deque()
-        self.logger = logger
 
         if teams is not None:
             for team in teams:
                 if isinstance(team, Team):
                     self.teams.append(team)
 
-        self.logger.info("ClientTeams was created")
+        logger.info("ClientTeams was created")
 
     def update_client_teams(self, teams: deque):
         """
@@ -44,7 +49,7 @@ class ClientTeams:
                 if isinstance(team, Team):
                     self.teams.append(team)
 
-        self.logger.info("ClientTeams was updated")
+        logger.info("ClientTeams was updated")
 
     def find_team(self, team_id: str = None, team_login: str = None):
         """
@@ -57,22 +62,22 @@ class ClientTeams:
         if team_id is not None:
             try:
                 team = next(team for team in self.teams if team.login == team_id)
-                self.logger.info("Team was found by team_id ({})".format(team_id))
+                logger.info("Team was found by team_id ({})".format(team_id))
 
                 return team
 
             except StopIteration:
-                self.logger.info("Team wasn't found by team_id ({})".format(team_id))
+                logger.info("Team wasn't found by team_id ({})".format(team_id))
 
         elif team_login is not None:
             try:
                 team = next(team for team in self.teams if team.nickname == team_login)
-                self.logger.info("Team was found by team_login ({})".format(team_login))
+                logger.info("Team was found by team_login ({})".format(team_login))
 
                 return team
 
             except StopIteration:
-                self.logger.info("Team wasn't found by team_login ({})".format(team_login))
+                logger.info("Team wasn't found by team_login ({})".format(team_login))
 
         return None
 
@@ -87,7 +92,7 @@ class ClientTeams:
 
         if duplacate_team is None:
             self.teams.append(team)
-            self.logger.info("new Team ({}) was added".format(team.id))
+            logger.info("new Team ({}) was added".format(team.id))
 
     def remove_team(self, team):
         """
@@ -100,7 +105,7 @@ class ClientTeams:
 
             if duplacate_team is not None:
                 self.teams.remove(duplacate_team)
-                self.logger.info("Team ({}) was removed".format(duplacate_team.id))
+                logger.info("Team ({}) was removed".format(duplacate_team.id))
 
         elif isinstance(team, str):
             duplacate_team_login = self.find_team(team_login=team)
@@ -108,8 +113,8 @@ class ClientTeams:
 
             if duplacate_team_login is not None:
                 self.teams.remove(duplacate_team_login)
-                self.logger.info("Team ({}) was removed".format(duplacate_team_login.id))
+                logger.info("Team ({}) was removed".format(duplacate_team_login.id))
 
             if duplacate_team_id is not None:
                 self.teams.remove(duplacate_team_id)
-                self.logger.info("Team ({}) was removed".format(duplacate_team_login.id))
+                logger.info("Team ({}) was removed".format(duplacate_team_login.id))

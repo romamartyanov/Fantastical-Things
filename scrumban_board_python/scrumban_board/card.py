@@ -1,3 +1,6 @@
+import os
+import logging.config
+
 from hashlib import sha1
 from collections import deque
 import datetime
@@ -6,13 +9,17 @@ from scrumban_board_python.scrumban_board.task import Task
 from scrumban_board_python.scrumban_board.remind import Remind
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
+logging.config.fileConfig(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logging.cfg'))
+logger = logging.getLogger("ScrumbanBoard")
+
 
 class Card:
     """
     Card contains one Task and Reminds
 
     Example:
-    card = scrumban_board.Card(client.logger, task=task, users_login=user.login, deadline=remind, reminds_list=remind)
+    card = scrumban_board.Card(task=task, users_login=user.login, deadline=remind, reminds_list=remind)
 
     remind_list = deque()
     remind_list.append(remind)
@@ -20,25 +27,22 @@ class Card:
     card.update_card(reminds_list=remind_list)
     """
 
-    def __init__(self, logger, task, users_login,
+    def __init__(self, task, users_login,
                  reminds_list=None, deadline: Remind = None):
         """
         Initialising of Card
 
-        :param logger: client logger
         :param task: card task
         :param users_login: card users
         :param reminds_list: card reminds
         :param deadline: card deadline
         """
 
-        self.logger = logger
-
         if isinstance(task, Task):
             self.task = task
 
         elif isinstance(task, str):
-            task = Task(self.logger, title=task)
+            task = Task(title=task)
             self.task = task
 
         self.users_login = deque()
@@ -65,7 +69,7 @@ class Card:
                         self.task.title + " " +
                         str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
-        self.logger.info("Card ({}) was created".format(self.id))
+        logger.info("Card ({}) was created".format(self.id))
 
     def __str__(self):
         users_id = [user_login for user_login in self.users_login]
@@ -203,7 +207,7 @@ Reminds:
         if deadline is not None:
             self.deadline = deadline
 
-        self.logger.info("Card ({}) was updated".format(self.id))
+        logger.info("Card ({}) was updated".format(self.id))
 
     def find_user_on_card(self, user_login: str = None):
         """
@@ -216,13 +220,13 @@ Reminds:
         if user_login is not None:
             try:
                 user_login = next(user_login for user_login in self.users_login if user_login == user_login)
-                self.logger.info("Users ({}) was found in the card ({})".format(user_login,
-                                                                                self.id))
+                logger.info("Users ({}) was found in the card ({})".format(user_login,
+                                                                           self.id))
                 return user_login
 
             except StopIteration:
-                self.logger.info("Users ({}) wasn't found in the card ({})".format(user_login,
-                                                                                   self.id))
+                logger.info("Users ({}) wasn't found in the card ({})".format(user_login,
+                                                                              self.id))
 
         else:
             return None
@@ -239,8 +243,8 @@ Reminds:
         if duplicate_user is None:
             self.users_login.append(user_login)
 
-            self.logger.info("Users ({}) was added to the card ({})".format(user_login,
-                                                                            self.id))
+            logger.info("Users ({}) was added to the card ({})".format(user_login,
+                                                                       self.id))
 
     def remove_user_from_card(self, user_login: str):
         """
@@ -254,8 +258,8 @@ Reminds:
         if duplicate_user is not None:
             self.users_login.remove(duplicate_user)
 
-            self.logger.info("Users ({}) was removed from the card ({})".format(user_login,
-                                                                                self.id))
+            logger.info("Users ({}) was removed from the card ({})".format(user_login,
+                                                                           self.id))
 
     def find_remind(self, title: str = None, remind_id: str = None):
         """
@@ -268,24 +272,24 @@ Reminds:
         if title is not None:
             try:
                 remind = next(remind for remind in self.reminds_list if remind.title == title)
-                self.logger.info("Remind ({}) was found by title in the card ({})".format(remind.title,
-                                                                                          self.id))
+                logger.info("Remind ({}) was found by title in the card ({})".format(remind.title,
+                                                                                     self.id))
                 return remind
 
             except StopIteration:
-                self.logger.info("Users ({}) wasn't found in the card ({})".format(title,
-                                                                                   self.id))
+                logger.info("Users ({}) wasn't found in the card ({})".format(title,
+                                                                              self.id))
 
         elif remind_id is not None:
             try:
                 remind = next(remind for remind in self.reminds_list if remind.id == remind_id)
-                self.logger.info("Remind ({}) was found by remind_id in the card ({})".format(remind.id,
-                                                                                              self.id))
+                logger.info("Remind ({}) was found by remind_id in the card ({})".format(remind.id,
+                                                                                         self.id))
                 return remind
 
             except StopIteration:
-                self.logger.info("Remind ({}) wasn't found by remind_id in the card ({})".format(remind_id,
-                                                                                                 self.id))
+                logger.info("Remind ({}) wasn't found by remind_id in the card ({})".format(remind_id,
+                                                                                            self.id))
         return None
 
     def add_remind(self, remind: Remind):
@@ -300,8 +304,8 @@ Reminds:
         if duplicate_remind is None:
             self.reminds_list.append(remind)
 
-            self.logger.info("Remind ({}) was added to the card ({})".format(remind.id,
-                                                                             self.id))
+            logger.info("Remind ({}) was added to the card ({})".format(remind.id,
+                                                                        self.id))
 
     def remove_remind(self, remind: Remind):
         """
@@ -315,5 +319,5 @@ Reminds:
         if duplicate_remind is not None:
             self.reminds_list.remove(duplicate_remind)
 
-            self.logger.info("Remind ({}) was removed from the card ({})".format(duplicate_remind.id,
-                                                                                 self.id))
+            logger.info("Remind ({}) was removed from the card ({})".format(duplicate_remind.id,
+                                                                            self.id))

@@ -1,8 +1,15 @@
+import os
+import logging.config
+
 from hashlib import sha1
 from datetime import *
 from dateutil.relativedelta import *
 
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
+
+logging.config.fileConfig(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logging.cfg'))
+logger = logging.getLogger("ScrumbanBoard")
 
 
 class Remind(object):
@@ -10,17 +17,16 @@ class Remind(object):
     Description of Remind
 
     Example:
-    remind = scrumban_board.Remind(client.logger, "Remind", datetime.now(),)
+    remind = scrumban_board.Remind("Remind", datetime.now(),)
 
     """
 
-    def __init__(self, logger, title: str, when_remind,
+    def __init__(self, title: str, when_remind,
                  description: str = None, card_id: str = None,
                  repeating_remind_relativedelta: relativedelta = None):
         """
         Initialising of Remind
 
-        :param logger: client logger
         :param title: remind title
         :param when_remind: when remind
         :param description: remind description
@@ -29,7 +35,6 @@ class Remind(object):
         """
 
         self.title = title
-        self.logger = logger
 
         if description is not None:
             self.description = description
@@ -66,7 +71,7 @@ class Remind(object):
                         str(self.when_remind) + " " +
                         str(datetime.now())).encode('utf-8')).hexdigest()
 
-        self.logger.info("Remind ({}) was created".format(self.id))
+        logger.info("Remind ({}) was created".format(self.id))
 
     def __str__(self):
         output = Colors.remind_red + """
@@ -150,4 +155,4 @@ class Remind(object):
             self.is_repeatable = True
             self.repeating_remind_relativedelta = repeating_remind_relativedelta
 
-        self.logger.info("Remind ({}) was updated".format(self.id))
+            logger.info("Remind ({}) was updated".format(self.id))

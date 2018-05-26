@@ -9,7 +9,10 @@ from scrumban_board_python.scrumban_board.team import Team
 
 from scrumban_board_python.scrumban_board.client import Client
 
-# from scrumban_board_python.scrumban_board.calendar import Calendar
-# from scrumban_board_python.scrumban_board.terminal_colors import Colors
-
-
+# import os
+# import logging
+# import logging.config
+#
+# logging.config.fileConfig(
+#     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logging.cfg'))
+# logger = logging.getLogger("ScrumbanBoard")

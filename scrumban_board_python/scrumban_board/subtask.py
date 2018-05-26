@@ -1,7 +1,14 @@
-from hashlib import sha1
+import os
+import logging.config
 import datetime
 
+from hashlib import sha1
+
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
+
+logging.config.fileConfig(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logging.cfg'))
+logger = logging.getLogger("ScrumbanBoard")
 
 
 class Subtask:
@@ -9,23 +16,21 @@ class Subtask:
     Description of Subtask
 
     Example:
-    task.add_subtask(scrumban_board.Subtask(client.logger, "subtask1"))
-    task.add_subtask(scrumban_board.Subtask(client.logger, "subtask2"))
+    task.add_subtask(scrumban_board.Subtask("subtask1"))
+    task.add_subtask(scrumban_board.Subtask("subtask2"))
     """
 
-    def __init__(self, logger, title: str,
+    def __init__(self, title: str,
                  description: str = None):
         """
         Initialising of Subtask
 
-        :param logger: client logger
         :param title: subtask title
         :param description: subtask description
         """
 
         self.title = title
         self.description = description
-        self.logger = logger
 
         self.completed = False
 
@@ -33,7 +38,7 @@ class Subtask:
                         self.title + " " +
                         str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
-        self.logger.info("Subtask ({}) was created".format(self.id))
+        logger.info("Subtask ({}) was created".format(self.id))
 
     def __str__(self):
         output = Colors.subtask_lightblue + """
@@ -83,5 +88,4 @@ class Subtask:
         if completed is not None:
             self.completed = completed
 
-        self.logger.info("Subtask ({}) was updated".format(self.id))
-
+        logger.info("Subtask ({}) was updated".format(self.id))

@@ -1,8 +1,15 @@
+import os
+import logging.config
+
 from hashlib import sha1
 from collections import deque
 
 from scrumban_board_python.scrumban_board.board import Board
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
+
+logging.config.fileConfig(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logging.cfg'))
+logger = logging.getLogger("ScrumbanBoard")
 
 
 class User:
@@ -10,7 +17,7 @@ class User:
     Description of the essence of the User and his ability to interact with other classes
 
     Example:
-    user = scrumban_board.User(client.logger, "Roman", "Martyanov", "romamartyanov", "romamartyanov@gmail.com")
+    user = scrumban_board.User("Roman", "Martyanov", "romamartyanov", "romamartyanov@gmail.com")
     client.client_users.add_new_user(user)
 
     task = scrumban_board.Task("title", "description")
@@ -33,7 +40,7 @@ class User:
             break
     """
 
-    def __init__(self, logger, name: str, surname: str, nickname: str, email: str,
+    def __init__(self, name: str, surname: str, nickname: str, email: str,
                  user_boards=None, teams_id=None):
         """
         Initialising of User
@@ -50,7 +57,6 @@ class User:
         self.surname = surname
         self.login = nickname
         self.email = email
-        self.logger = logger
 
         self.id = sha1(("User: " + " " +
                         self.login).encode('utf-8')).hexdigest()
@@ -66,7 +72,7 @@ class User:
                         self.user_boards.append(board)
 
         else:
-            board = Board(self.logger, "{}'s Board".format(self.name), self.login, "default agile board")
+            board = Board("{}'s Board".format(self.name), self.login, "default agile board")
             self.user_boards.append(board)
 
         # self.user_calendar = Calendar(users_id=self.id)
@@ -77,7 +83,7 @@ class User:
                 if isinstance(team_id, str):
                     self.teams_list.append(team_id)
 
-        self.logger.info("User ({}) was created".format(self.id))
+                logger.info("User ({}) was created".format(self.id))
 
     def __str__(self):
         boards_id = [board_id.id for board_id in self.user_boards]
@@ -164,7 +170,7 @@ Boards ID: {}
                 if isinstance(team_id, str):
                     self.teams_list.append(team_id)
 
-        self.logger.info("User ({}) was updated".format(self.id))
+        logger.info("User ({}) was updated".format(self.id))
 
     def find_board(self, board_id: str = None, board_title: str = None):
         """
@@ -177,25 +183,25 @@ Boards ID: {}
         if board_id is not None:
             try:
                 board = next(board for board in self.user_boards if board.id == board_id)
-                self.logger.info("Border ({}) was found by board_id on User ({})".format(board_id,
-                                                                                         self.id))
+                logger.info("Border ({}) was found by board_id on User ({})".format(board_id,
+                                                                                    self.id))
 
                 return board
             except StopIteration:
-                self.logger.info("Border ({}) wasn't found by board_id on User ({})".format(board_id,
-                                                                                            self.id))
+                logger.info("Border ({}) wasn't found by board_id on User ({})".format(board_id,
+                                                                                       self.id))
 
         elif board_title is not None:
             try:
                 board = next(board for board in self.user_boards if board.title == board_title)
-                self.logger.info("Border ({}) was found by board_title on User ({})".format(board_title,
-                                                                                            self.id))
+                logger.info("Border ({}) was found by board_title on User ({})".format(board_title,
+                                                                                       self.id))
 
                 return board
 
             except StopIteration:
-                self.logger.info("Border ({}) wasn't found by board_title on User ({})".format(board_title,
-                                                                                               self.id))
+                logger.info("Border ({}) wasn't found by board_title on User ({})".format(board_title,
+                                                                                          self.id))
 
         return None
 
@@ -213,18 +219,18 @@ Boards ID: {}
             if duplicate_board is None:
                 self.user_boards.append(new_board)
 
-                self.logger.info("Border ({}) was added to User ({})".format(new_board.id,
-                                                                             self.id))
+                logger.info("Border ({}) was added to User ({})".format(new_board.id,
+                                                                        self.id))
 
         elif isinstance(new_board, str):
             duplicate_board = self.find_board(board_title=new_board)
 
             if duplicate_board is None:
-                board = Board(logger=self.logger, title=new_board, users_login=self.id)
+                board = Board(title=new_board, users_login=self.id)
                 self.user_boards.append(board)
 
-                self.logger.info("Board ({}) was added to the Team ({})".format(board.id,
-                                                                                self.id))
+                logger.info("Board ({}) was added to the Team ({})".format(board.id,
+                                                                           self.id))
 
     def remove_board(self, board: Board = None, board_id: str = None):
         """
@@ -239,16 +245,16 @@ Boards ID: {}
 
             if duplicate_board is not None:
                 self.user_boards.remove(duplicate_board)
-                self.logger.info("Border ({}) was removed from User ({})".format(duplicate_board.id,
-                                                                                 self.id))
+                logger.info("Border ({}) was removed from User ({})".format(duplicate_board.id,
+                                                                            self.id))
 
         elif board_id is not None:
             duplicate_board = self.find_board(board_id=board_id)
 
             if duplicate_board is not None:
                 self.user_boards.remove(duplicate_board)
-                self.logger.info("Border ({}) was removed from User ({})".format(duplicate_board.id,
-                                                                                 self.id))
+                logger.info("Border ({}) was removed from User ({})".format(duplicate_board.id,
+                                                                            self.id))
 
     def find_team_id(self, team_id: str = None, team_login: str = None):
         """
@@ -261,24 +267,24 @@ Boards ID: {}
         if team_id is not None:
             try:
                 team = next(team for team in self.teams_list if team.id == team_id)
-                self.logger.info("Team ({}) was found by team_id in User({})".format(team_id,
-                                                                                     self.id))
+                logger.info("Team ({}) was found by team_id in User({})".format(team_id,
+                                                                                self.id))
                 return team
 
             except StopIteration:
-                self.logger.info("Team ({}) wasn't found by team_id in User({})".format(team_id,
-                                                                                        self.id))
+                logger.info("Team ({}) wasn't found by team_id in User({})".format(team_id,
+                                                                                   self.id))
 
         elif team_login is not None:
             try:
                 team = next(team for team in self.teams_list if team.login == team_login)
-                self.logger.info("Team ({}) was found by team_login in User({})".format(team_login,
-                                                                                        self.id))
+                logger.info("Team ({}) was found by team_login in User({})".format(team_login,
+                                                                                   self.id))
                 return team
 
             except StopIteration:
-                self.logger.info("Team ({}) wasn't found by team_login in User({})".format(team_login,
-                                                                                           self.id))
+                logger.info("Team ({}) wasn't found by team_login in User({})".format(team_login,
+                                                                                      self.id))
         return None
 
     def add_team_id(self, new_team_id: str):
@@ -293,8 +299,8 @@ Boards ID: {}
         if duplicate_team_id is None:
             self.teams_list.append(new_team_id)
 
-            self.logger.info("Team ({}) was added by to User({})".format(new_team_id,
-                                                                         self.id))
+            logger.info("Team ({}) was added by to User({})".format(new_team_id,
+                                                                    self.id))
 
     def remove_team_id(self, team_id: str):
         """
@@ -309,5 +315,5 @@ Boards ID: {}
             if duplicate_team_id is not None:
                 self.teams_list.remove(duplicate_team_id)
 
-                self.logger.info("Team ({}) was removed by in User({})".format(duplicate_team_id,
-                                                                               self.id))
+                logger.info("Team ({}) was removed by in User({})".format(duplicate_team_id,
+                                                                          self.id))
