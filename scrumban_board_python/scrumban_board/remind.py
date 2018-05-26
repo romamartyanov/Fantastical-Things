@@ -5,15 +5,16 @@ from dateutil.relativedelta import *
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
 
-class Remind:
+class Remind(object):
     """
     Description of Remind
 
     Example:
-    remind = scrumban_board.Remind(client.logger, "Remind", datetime.now(),
+    remind = scrumban_board.Remind(client.logger, "Remind", datetime.now(),)
 
     """
-    def __init__(self, logger,  title: str, when_remind,
+
+    def __init__(self, logger, title: str, when_remind,
                  description: str = None, card_id: str = None,
                  repeating_remind_relativedelta: relativedelta = None):
         """
@@ -40,9 +41,10 @@ class Remind:
         else:
             self.card_id = None
 
-        try:
+        if isinstance(when_remind, datetime):
             self.when_remind = when_remind
-        except ValueError:
+
+        elif isinstance(when_remind, str):
             try:
                 self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d %H:%M')
             except ValueError:
@@ -132,17 +134,17 @@ Repeating time delta: {}
         else:
             self.card_id = None
 
-        if when_remind is not None:
+        if isinstance(when_remind, datetime):
+            self.when_remind = when_remind
+
+        elif isinstance(when_remind, str):
             try:
-                self.when_remind = when_remind
+                self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d %H:%M')
             except ValueError:
                 try:
-                    self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d %H:%M')
+                    self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d')
                 except ValueError:
-                    try:
-                        self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d')
-                    except ValueError:
-                        self.when_remind = datetime.now()
+                    self.when_remind = datetime.now()
 
         if repeating_remind_relativedelta is not None:
             self.is_repeatable = True

@@ -57,7 +57,7 @@ while not client.update_all_reminds():
     def update_all_reminds(self):
         """Updating all reminds in the Client"""
 
-        # going throw all users
+        # going through all users
         for user in self.client_users.users:
 
             # going throw all user boards
@@ -78,7 +78,6 @@ while not client.update_all_reminds():
 
                                 # card is repeatable
                                 if card.deadline.repeating_remind_relativedelta is not None:
-                                    card.deadline.when_remind += card.deadline.repeating_remind_relativedelta
 
                                     self.logger.info("Deadline in card ({}) was delayed".format(card.id))
 

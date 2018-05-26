@@ -63,7 +63,6 @@ class Card:
 
         self.id = sha1(("Card: " + " " +
                         self.task.title + " " +
-                        self.task.description + " " +
                         str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
         self.logger.info("Card ({}) was created".format(self.id))
@@ -134,7 +133,7 @@ Reminds:
 {}
 
 ---End Card--
-""".format(self.id.hexdigest(),
+""".format(self.id,
            users_id,
            self.task,
            reminds_list) + Colors.end_color

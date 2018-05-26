@@ -88,7 +88,7 @@ Title: {}
 Description: {}
 ID: {}
 
-Users ID:
+Users logins:
 {}
 
 Cardlists:
@@ -113,7 +113,7 @@ Title: {}
 Description: {}
 ID: {}
 
-Users ID:
+Users logins:
 {}
 
 Cardlists:

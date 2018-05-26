@@ -91,15 +91,10 @@ task = scrumban_board.Task(client.logger, "title", "description")
 task.add_subtask(scrumban_board.Subtask(client.logger, "subtask1"))
 task.add_subtask(scrumban_board.Subtask(client.logger, "subtask2"))
 
-remind = scrumban_board.Remind(client.logger, "Remind", datetime.now(),
-                               repeating_remind_relativedelta=relativedelta(minutes=+2))
+remind = scrumban_board.Remind(client.logger, title="Remind", when_remind=datetime.now(),
+                               repeating_remind_relativedelta=relativedelta(hours=+2))
 
-card = scrumban_board.Card(client.logger, task=task, users_login=user.login, deadline=remind, reminds_list=remind)
-
-remind_list = deque()
-remind_list.append(remind)
-
-card.update_card(reminds_list=remind_list)
+card = scrumban_board.Card(client.logger, task=task, users_login=user.login, deadline=remind)
 
 for board in user.user_boards:
     for cardlist in board.cardlists:
@@ -117,21 +112,17 @@ frozen = jsonpickle.encode(client)
 with open('client.json', 'w') as outfile:
     json.dump(frozen, outfile)
 
-with open('client.json') as infile:
+with open('client.json', 'r') as infile:
     data = json.load(infile)
 
 client = jsonpickle.decode(data)
-
-# import pickle
-#
-# with open('client.json', 'wb') as pickle_file:
-#     pickle.dump(client, pickle_file)
-#
-# with open('client.json', 'rb') as pickle_file:
-#     client = pickle.load(pickle_file)
 
 while not client.update_all_reminds():
     continue
 
 for board in user.user_boards:
     print(board)
+
+# import console_handler
+#
+# console_handler.Handler()
