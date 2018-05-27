@@ -1,3 +1,3 @@
 import console_handler
 
-console_handler.Handler()
+console_handler.ConsoleHandler()

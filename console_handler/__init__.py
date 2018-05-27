@@ -1,1 +1,1 @@
-from console_handler.console_handler import Handler
+from console_handler.console_handler import ConsoleHandler
