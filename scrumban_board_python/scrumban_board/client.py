@@ -1,5 +1,4 @@
 import configparser
-import os
 import logging.config
 
 from datetime import *
@@ -7,10 +6,7 @@ from datetime import *
 from scrumban_board_python.scrumban_board.client_users import ClientUsers
 from scrumban_board_python.scrumban_board.client_teams import ClientTeams
 
-# creating logger for client
-logging.config.fileConfig(
-    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logging.cfg'))
-
+logging.config.fileConfig('logging.cfg')
 logger = logging.getLogger("ScrumbanBoard")
 
 
