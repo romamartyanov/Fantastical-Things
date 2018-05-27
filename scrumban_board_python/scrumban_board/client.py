@@ -38,7 +38,6 @@ class Client:
         :param client_teams: all Teams
         """
 
-        # reading client configurations
         config = configparser.ConfigParser()
         config.read(config_file_path)
 
@@ -56,95 +55,133 @@ class Client:
 
         logger.info("Client was created")
 
+    def _check_deadline(self, board, overdue_cardlist, cardlist, card):
+        if card.deadline.when_remind < datetime.now():
+
+            if card.deadline.repeating_remind_relativedelta is not None:
+
+                card.deadline.when_remind += card.deadline.repeating_remind_relativedelta
+                logger.info("Deadline in card ({}) was delayed".format(card.id))
+
+                for user_login in card.users_login:
+                    if user_login == self.current_user_login:
+                        print(card)
+
+            else:
+                board.move_card(card.id, cardlist.id, overdue_cardlist.id)
+
+                print(board)
+
+                logger.info(
+                    "Card ({}) was moved to the Overdue Cardlist ({}) in the Board ({})".format(
+                        card.id,
+                        cardlist.id,
+                        board.id))
+
+                for user_login in card.users_login:
+                    if user_login == self.current_user_login:
+                        print(card)
+
+                return False
+
+        return True
+
+    def _check_remind(self, board, cardlist, card, remind):
+        if remind.when_remind < datetime.now():
+
+            logger.info(
+                "Remind about Card ({}) in the Cardlist ({}) on the Board ({})".format(card.id,
+                                                                                       cardlist.id,
+                                                                                       board.id))
+
+            for user_login in card.users_login:
+                if user_login == self.current_user_login:
+                    print(card)
+
+            if remind.is_repeatable:
+                remind.when_remind += remind.repeating_remind_relativedelta
+
+                logger.info(
+                    "Remind ({}) was delayed in the "
+                    "Card ({}) in the Cardlist ({}) on the Board ({})".format(remind.id,
+                                                                              card.id,
+                                                                              cardlist.id,
+                                                                              board.id))
+
+            else:
+                card.remove_remind(remind)
+
+                logger.info(
+                    "Remind ({}) was removed in the "
+                    "Card ({}) in the Cardlist ({}) on the Board ({})".format(remind.id,
+                                                                              card.id,
+                                                                              cardlist.id,
+                                                                              board.id))
+
+            for user_login in card.users_login:
+                if user_login == self.current_user_login:
+                    print(card)
+
+            return False
+
+    def _check_card(self, board, overdue_cardlist, cardlist, card):
+        if card.deadline is not None:
+            if not self._check_deadline(board, overdue_cardlist, cardlist, card):
+                return False
+
+        for remind in card.reminds_list:
+            # if not self.check_remind(board, cardlist, card, remind):
+            #   return False
+            pass
+
+        return True
+
+    def _check_cardlist(self, board, overdue_cardlist, cardlist):
+        if cardlist.title == "Overdue":
+            return True
+
+        for card in cardlist.cards:
+            if not self._check_card(board, overdue_cardlist, cardlist, card):
+                return False
+
+        return True
+
+    def _check_board(self, board):
+        overdue_cardlist = board.find_cardlist(cardlist_title="Overdue")
+
+        for cardlist in board.cardlists:
+            if not self._check_cardlist(board, overdue_cardlist, cardlist):
+                print(board)
+
+                return False
+
+        return True
+
+    def _updating_users(self):
+        for user in self.client_users.users:
+
+            for board in user.user_boards:
+                if not self._check_board(board):
+                    return False
+
+        return True
+
+    def _updating_teams(self):
+        for team in self.client_teams.teams:
+
+            for board in team.team_boards:
+                if not self._check_board(board):
+                    return False
+
+        return True
+
     def update_all_reminds(self):
         """Updating all reminds in the Client"""
 
-        # going through all users
-        for user in self.client_users.users:
+        if not self._updating_users():
+            return False
 
-            # going throw all user boards
-            for board in user.user_boards:
-                overdue_cardlist = board.find_cardlist(cardlist_title="Overdue")
-
-                for cardlist in board.cardlists:
-
-                    # if cardlist is for overdue cards
-                    if cardlist.title == "Overdue":
-                        continue
-
-                    for card in cardlist.cards:
-
-                        # check deadline:
-                        if card.deadline is not None:
-                            if card.deadline.when_remind < datetime.now():
-
-                                # card is repeatable
-                                if card.deadline.repeating_remind_relativedelta is not None:
-
-                                    logger.info("Deadline in card ({}) was delayed".format(card.id))
-
-                                    for user_login in card.users_login:
-                                        if user_login == self.current_user_login:
-                                            print(card)
-
-                                # card is not repeatable
-                                else:
-                                    # may be it will not work
-                                    board.move_card(card.id, cardlist.id, overdue_cardlist.id)
-
-                                    logger.info(
-                                        "Card ({}) was moved to the Overdue Cardlist ({}) in the Board ({})".format(
-                                            card.id,
-                                            cardlist.id,
-                                            board.id))
-
-                                    for user_login in card.users_login:
-                                        if user_login == self.current_user_login:
-                                            print(card)
-
-                                    return False
-
-                        # check all reminds in the card
-                        for remind in card.reminds_list:
-
-                            # if we need to remind about card
-                            if remind.when_remind < datetime.now():
-
-                                logger.info(
-                                    "Remind about Card ({}) in the Cardlist ({}) on the Board ({})".format(card.id,
-                                                                                                           cardlist.id,
-                                                                                                           board.id))
-
-                                # print card with this remind
-                                for user_login in card.users_login:
-                                    if user_login == self.current_user_login:
-                                        print(card)
-
-                                if remind.is_repeatable:
-                                    remind.when_remind += remind.repeating_remind_relativedelta
-
-                                    logger.info(
-                                        "Remind ({}) was delayed in the "
-                                        "Card ({}) in the Cardlist ({}) on the Board ({})".format(remind.id,
-                                                                                                  card.id,
-                                                                                                  cardlist.id,
-                                                                                                  board.id))
-
-                                else:
-                                    card.remove_remind(remind)
-
-                                    logger.info(
-                                        "Remind ({}) was removed in the "
-                                        "Card ({}) in the Cardlist ({}) on the Board ({})".format(remind.id,
-                                                                                                  card.id,
-                                                                                                  cardlist.id,
-                                                                                                  board.id))
-
-                                # print card with this remind
-                                for user_login in card.users_login:
-                                    if user_login == self.current_user_login:
-                                        print(card)
-
-                                return False
+        if not self._updating_teams():
+            return False
 
         return True
