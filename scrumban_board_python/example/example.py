@@ -16,8 +16,7 @@ task = scrumban_board.Task("title", "description")
 task.add_subtask(scrumban_board.Subtask("subtask1"))
 task.add_subtask(scrumban_board.Subtask("subtask2"))
 
-remind = scrumban_board.Remind(title="Remind", when_remind=datetime.now(),
-                               )
+remind = scrumban_board.Remind(title="Remind", when_remind=datetime.now())
 
 card = scrumban_board.Card(task=task, users_login=user.login, deadline=remind)
 
