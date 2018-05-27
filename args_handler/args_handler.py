@@ -84,6 +84,15 @@ class ArgsHandler:
 
     ###
 
+        parser.add_argument('--create_board_where', action="store",
+                            help='Create Board: Team id')
+
+        parser.add_argument('--create_board', action="store_true",
+                            help='Create Board: Creating to Current user')
+
+        parser.add_argument('--board_title', action="store",
+                            help='Board title')
+
     ###
 
         args = parser.parse_args()
@@ -111,6 +120,15 @@ class ArgsHandler:
 
         ###
 
+        if args.create_board:
+            if args.board_title is not None:
+                self.create_board(args.board_title)
+
+                print(self.current_user)
+
+        if args.create_board_where is not None:
+            if args.board_title is not None:
+                self.create_team_board(args.create_board_where, args.board_title)
 
 ###
 
@@ -165,3 +183,17 @@ class ArgsHandler:
                         print(subtask)
 
                         return
+
+
+###
+
+    def create_board(self, board_title):
+        self.current_user.add_board(board_title)
+
+    def create_team_board(self, team_id, board_title):
+        for team in self.current_user_teams:
+            if team.id == team_id:
+                team_members_login = [login for login in team.team_members_login]
+                board = scrumban_board.Board(title=board_title, users_login=team_members_login)
+
+                team.add_team_board(board)
