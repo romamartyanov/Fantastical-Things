@@ -9,8 +9,7 @@ from dateutil.relativedelta import *
 
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
 
-logging.config.fileConfig(
-    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logging.cfg'))
+logging.config.fileConfig('logging.cfg')
 logger = logging.getLogger("ScrumbanBoard")
 
 
