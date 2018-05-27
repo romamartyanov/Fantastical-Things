@@ -1,5 +1,7 @@
 import os
 import logging.config
+import string
+import random
 
 from hashlib import sha1
 from datetime import *
@@ -21,6 +23,46 @@ class Remind(object):
 
     """
 
+    @staticmethod
+    def _get_card_id(card_id=None):
+        if card_id is not None:
+            return card_id
+        else:
+            return None
+
+    @staticmethod
+    def _get_repeating_remind_relativedelta(repeating_remind_relativedelta=None):
+        if repeating_remind_relativedelta is not None:
+            is_repeatable = True
+        else:
+            is_repeatable = False
+
+        return repeating_remind_relativedelta, is_repeatable
+
+    @staticmethod
+    def _get_when_remind(when_remind):
+        """
+        Checking correct datetime input
+
+        :param when_remind: datetime/str
+        :return: datetime
+        """
+        if isinstance(when_remind, datetime):
+            return when_remind
+
+        elif isinstance(when_remind, str):
+            try:
+                return datetime.strptime(when_remind, '%Y/%m/%d %H:%M')
+
+            except ValueError:
+                try:
+                    return datetime.strptime(when_remind, '%Y/%m/%d')
+
+                except ValueError:
+                    return None
+
+        return None
+
     def __init__(self, title: str, when_remind,
                  description: str = None, card_id: str = None,
                  repeating_remind_relativedelta: relativedelta = None):
@@ -35,43 +77,33 @@ class Remind(object):
         """
 
         self.title = title
+        self.description = description
 
-        if description is not None:
-            self.description = description
-        else:
-            self.description = self.title
+        self.card_id = Remind._get_card_id(card_id)
 
-        if card_id is not None:
-            self.card_id = card_id
-        else:
-            self.card_id = None
+        self.when_remind = self._get_when_remind(when_remind)
+        self.repeating_remind_relativedelta, self.is_repeatable = Remind._get_repeating_remind_relativedelta(
+            repeating_remind_relativedelta)
 
-        if isinstance(when_remind, datetime):
-            self.when_remind = when_remind
-
-        elif isinstance(when_remind, str):
-            try:
-                self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d %H:%M')
-            except ValueError:
-                try:
-                    self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d')
-                except ValueError:
-                    self.when_remind = datetime.now()
-
-        self.is_repeatable = False
-        if repeating_remind_relativedelta is not None:
-            self.is_repeatable = True
-            self.repeating_remind_relativedelta = repeating_remind_relativedelta
-
-        else:
-            self.repeating_remind_relativedelta = None
-
-        self.id = sha1(("Remind: " + " " +
-                        self.title + " " +
-                        str(self.when_remind) + " " +
-                        str(datetime.now())).encode('utf-8')).hexdigest()
+        self.id = self._get_id()
 
         logger.info("Remind ({}) was created".format(self.id))
+
+    def _get_id(self):
+        """
+        Getting remind id with a help of sha1
+
+        :return: sha1 hash
+        """
+
+        key = ''.join(
+            random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(len(self.title)))
+
+        return sha1(("Remind: " +
+                     self.title + " " +
+                     key + " " +
+                     str(self.when_remind) + " " +
+                     str(datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
         output = Colors.remind_red + """
@@ -135,24 +167,13 @@ class Remind(object):
             self.description = description
 
         if card_id is not None:
-            self.card_id = card_id
-        else:
-            self.card_id = None
+            self.card_id = Remind._get_card_id(card_id)
 
-        if isinstance(when_remind, datetime):
-            self.when_remind = when_remind
-
-        elif isinstance(when_remind, str):
-            try:
-                self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d %H:%M')
-            except ValueError:
-                try:
-                    self.when_remind = datetime.strptime(when_remind, '%Y/%m/%d')
-                except ValueError:
-                    self.when_remind = datetime.now()
+        if when_remind is not None:
+            self.when_remind = Remind._get_when_remind(when_remind)
 
         if repeating_remind_relativedelta is not None:
-            self.is_repeatable = True
-            self.repeating_remind_relativedelta = repeating_remind_relativedelta
+            self.repeating_remind_relativedelta, self.is_repeatable = Remind._get_repeating_remind_relativedelta(
+                repeating_remind_relativedelta)
 
-            logger.info("Remind ({}) was updated".format(self.id))
+        logger.info("Remind ({}) was updated".format(self.id))

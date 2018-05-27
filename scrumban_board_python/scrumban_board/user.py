@@ -1,5 +1,7 @@
 import os
 import logging.config
+import string
+import random
 
 from hashlib import sha1
 from collections import deque
@@ -40,6 +42,35 @@ class User:
             break
     """
 
+    @staticmethod
+    def _get_user_boards(login, boards=None):
+        new_user_boards = deque()
+
+        if boards is not None:
+            if isinstance(boards, Board):
+                new_user_boards.append(boards)
+
+            elif isinstance(boards, deque):
+                for board in boards:
+                    if isinstance(board, Board):
+                        new_user_boards.append(board)
+        else:
+            board = Board("Agile Board", login, "default agile board")
+            new_user_boards.append(board)
+
+        return new_user_boards
+
+    @staticmethod
+    def _get_teams_list(teams_id=None):
+        teams_list = deque()
+
+        if teams_id is not None:
+            for team_id in teams_id:
+                if isinstance(team_id, str):
+                    teams_list.append(team_id)
+
+        return teams_list
+
     def __init__(self, name: str, surname: str, nickname: str, email: str,
                  user_boards=None, teams_id=None):
         """
@@ -58,32 +89,20 @@ class User:
         self.login = nickname
         self.email = email
 
-        self.id = sha1(("User: " + " " +
-                        self.login).encode('utf-8')).hexdigest()
+        self.user_boards = User._get_user_boards(self.login, user_boards)
+        self.teams_id = User._get_teams_list(teams_id)
 
-        self.user_boards = deque()
-        if user_boards is not None:
-            if isinstance(user_boards, Board):
-                self.user_boards.append(user_boards)
+        self.id = self._get_id()
 
-            elif isinstance(user_boards, deque):
-                for board in user_boards:
-                    if isinstance(board, Board):
-                        self.user_boards.append(board)
+        logger.info("User ({}) was created".format(self.id))
 
-        else:
-            board = Board("{}'s Board".format(self.name), self.login, "default agile board")
-            self.user_boards.append(board)
+    def _get_id(self):
+        key = ''.join(
+            random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(len(self.login)))
 
-        # self.user_calendar = Calendar(users_id=self.id)
-
-        self.teams_list = deque()
-        if teams_id is not None:
-            for team_id in teams_id:
-                if isinstance(team_id, str):
-                    self.teams_list.append(team_id)
-
-                logger.info("User ({}) was created".format(self.id))
+        return sha1(("User: " +
+                     key + " " +
+                     self.login).encode('utf-8')).hexdigest()
 
     def __str__(self):
         boards_id = [board_id.id for board_id in self.user_boards]
@@ -153,22 +172,10 @@ Boards ID: {}
             self.email = email
 
         if user_boards is not None:
-            self.user_boards.clear()
-
-            if isinstance(user_boards, Board):
-                self.user_boards.append(user_boards)
-
-            elif isinstance(user_boards, deque):
-                for board in user_boards:
-                    if isinstance(board, Board):
-                        self.user_boards.append(board)
+            self.user_boards = User._get_user_boards(self.login, user_boards)
 
         if teams_id is not None:
-            self.teams_list.clear()
-
-            for team_id in teams_id:
-                if isinstance(team_id, str):
-                    self.teams_list.append(team_id)
+            self.teams_id = User._get_teams_list(teams_id)
 
         logger.info("User ({}) was updated".format(self.id))
 
@@ -266,7 +273,7 @@ Boards ID: {}
         """
         if team_id is not None:
             try:
-                team = next(team for team in self.teams_list if team.id == team_id)
+                team = next(team for team in self.teams_id if team.id == team_id)
                 logger.info("Team ({}) was found by team_id in User({})".format(team_id,
                                                                                 self.id))
                 return team
@@ -277,7 +284,7 @@ Boards ID: {}
 
         elif team_login is not None:
             try:
-                team = next(team for team in self.teams_list if team.login == team_login)
+                team = next(team for team in self.teams_id if team.login == team_login)
                 logger.info("Team ({}) was found by team_login in User({})".format(team_login,
                                                                                    self.id))
                 return team
@@ -297,7 +304,7 @@ Boards ID: {}
         duplicate_team_id = self.find_team_id(team_id=new_team_id)
 
         if duplicate_team_id is None:
-            self.teams_list.append(new_team_id)
+            self.teams_id.append(new_team_id)
 
             logger.info("Team ({}) was added by to User({})".format(new_team_id,
                                                                     self.id))
@@ -313,7 +320,7 @@ Boards ID: {}
             duplicate_team_id = self.find_team_id(team_id=team_id)
 
             if duplicate_team_id is not None:
-                self.teams_list.remove(duplicate_team_id)
+                self.teams_id.remove(duplicate_team_id)
 
                 logger.info("Team ({}) was removed by in User({})".format(duplicate_team_id,
                                                                           self.id))

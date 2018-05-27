@@ -1,9 +1,11 @@
 import os
 import logging.config
+import string
+import random
+import datetime
 
 from hashlib import sha1
 from collections import deque
-import datetime
 
 from scrumban_board_python.scrumban_board.subtask import Subtask
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
@@ -21,6 +23,27 @@ class Task:
     task = scrumban_board.Task("title", "description")
     """
 
+    @staticmethod
+    def _get_subtask_list(subtasks_list):
+        new_subtasks_list = deque()
+
+        if subtasks_list is not None:
+
+            if isinstance(subtasks_list, str):
+                subtask = Subtask(subtasks_list)
+                new_subtasks_list.append(subtask)
+
+                return new_subtasks_list
+
+            elif isinstance(subtasks_list, deque):
+                for subtask in subtasks_list:
+                    if isinstance(subtask, Subtask):
+                        new_subtasks_list.append(subtask)
+
+                        return new_subtasks_list
+
+        return new_subtasks_list
+
     def __init__(self, title: str,
                  description: str = None, subtasks_list: deque = None):
         """
@@ -34,24 +57,28 @@ class Task:
         self.title = title
         self.description = description
 
-        self.subtasks_list = deque()
-        if subtasks_list is not None:
-            if isinstance(subtasks_list, str):
-                subtask = Subtask(subtasks_list)
-                self.subtasks_list.append(subtask)
-
-            elif isinstance(subtasks_list, deque):
-                for subtask in subtasks_list:
-                    if isinstance(subtask, Subtask):
-                        self.subtasks_list.append(subtask)
+        self.subtasks_list = Task._get_subtask_list(subtasks_list)
 
         self.completed = False
 
-        self.id = sha1(("Task: " + " " +
-                        self.title + " " +
-                        str(datetime.datetime.now())).encode('utf-8')).hexdigest()
+        self.id = self._get_id()
 
         logger.info("Task ({}) was created".format(self.id))
+
+    def _get_id(self):
+        """
+        Getting task id with a help of sha1
+
+        :return: sha1 hash
+        """
+
+        key = ''.join(
+            random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(len(self.title)))
+
+        return sha1(("Task: " +
+                     key + " " +
+                     self.title + " " +
+                     str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
         subtasks_list = [subtask for subtask in self.subtasks_list]
@@ -78,7 +105,7 @@ class Task:
     def update_task(self, title: str = None, description: str = None,
                     subtasks_list=None, completed: bool = None):
         """
-
+        Updating task
 
         :param title: task title
         :param description: task description
@@ -94,16 +121,7 @@ class Task:
             self.description = description
 
         if subtasks_list is not None:
-            self.subtasks_list.clear()
-
-            if isinstance(subtasks_list, str):
-                subtask = Subtask(subtasks_list)
-                self.subtasks_list.append(subtask)
-
-            elif isinstance(subtasks_list, deque):
-                for subtask in subtasks_list:
-                    if isinstance(subtask, Subtask):
-                        self.subtasks_list.append(subtask)
+            self.subtasks_list = Task._get_subtask_list(subtasks_list)
 
         if completed is not None:
             self.completed = completed
@@ -112,7 +130,7 @@ class Task:
 
     def find_subtask(self, title: str = None, subtask_id: str = None):
         """
-
+        Searching subtask
 
         :param title:
         :param subtask_id:

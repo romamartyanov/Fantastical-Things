@@ -19,6 +19,16 @@ class ClientTeams:
     team = scrumban_board.Team("200 OK", "200_OK", "romamartyanov")
     client.client_teams.add_new_team(team)
     """
+    @staticmethod
+    def _get_client_teams(teams):
+        new_teams = deque()
+
+        if teams is not None:
+            for team in teams:
+                if isinstance(team, Team):
+                    new_teams.append(team)
+
+        return new_teams
 
     def __init__(self, teams: deque = None):
         """
@@ -26,12 +36,7 @@ class ClientTeams:
 
         :param teams: Teams for the storage
         """
-        self.teams = deque()
-
-        if teams is not None:
-            for team in teams:
-                if isinstance(team, Team):
-                    self.teams.append(team)
+        self.teams = ClientTeams._get_client_teams(teams)
 
         logger.info("ClientTeams was created")
 
@@ -42,12 +47,7 @@ class ClientTeams:
         :param teams: new Teams for the storage
         :return:
         """
-        self.teams.clear()
-
-        for team in teams:
-            if isinstance(team, Team):
-                if isinstance(team, Team):
-                    self.teams.append(team)
+        self.teams = ClientTeams._get_client_teams(teams)
 
         logger.info("ClientTeams was updated")
 

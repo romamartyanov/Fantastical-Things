@@ -1,5 +1,7 @@
 import os
 import logging.config
+import string
+import random
 
 from hashlib import sha1
 from collections import deque
@@ -24,6 +26,21 @@ class CardList:
     overdue = CardList("Overdue")
     """
 
+    @staticmethod
+    def _get_cards(cards):
+        new_cards = deque()
+
+        if cards is not None:
+            if isinstance(cards, Card):
+                new_cards.append(cards)
+
+            elif isinstance(cards, deque):
+                for card in cards:
+                    if isinstance(card, Card):
+                        new_cards.append(card)
+
+        return new_cards
+
     def __init__(self, title: str,
                  cards=None, description: str = None):
         """
@@ -36,21 +53,20 @@ class CardList:
         self.title = title
         self.description = description
 
-        self.cards = deque()
-        if cards is not None:
-            if isinstance(cards, Card):
-                self.cards.append(cards)
+        self.cards = CardList._get_cards(cards)
 
-            elif isinstance(cards, deque):
-                for card in cards:
-                    if isinstance(card, Card):
-                        cards.append(card)
-
-        self.id = sha1(("CardList: " + " " +
-                        self.title + " " +
-                        str(datetime.datetime.now())).encode('utf-8')).hexdigest()
+        self.id = self._get_id()
 
         logger.info("Cardlist ({}) was created".format(self.id))
+
+    def _get_id(self):
+        key = ''.join(
+            random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(len(self.title)))
+
+        return sha1(("CardList: " +
+                     key + " " +
+                     self.title + " " +
+                     str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
         cards = [card for card in self.cards]
@@ -105,15 +121,7 @@ class CardList:
             self.title = title
 
         if cards is not None:
-            self.cards.clear()
-
-            if isinstance(cards, Card):
-                self.cards.append(cards)
-
-            elif isinstance(cards, deque):
-                for card in cards:
-                    if isinstance(card, Card):
-                        cards.append(card)
+            self.cards = CardList._get_cards(cards)
 
         if description is not None:
             self.description = description

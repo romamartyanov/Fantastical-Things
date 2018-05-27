@@ -1,0 +1,67 @@
+2018-05-27 19:04:08,095 - ScrumbanBoard - INFO - ClientUsers was created
+2018-05-27 19:04:08,095 - ScrumbanBoard - INFO - ClientTeams was created
+2018-05-27 19:04:08,095 - ScrumbanBoard - INFO - Client was created
+2018-05-27 19:04:08,096 - ScrumbanBoard - INFO - Cardlist (05815f35f918680c37aa0f803ad2c1417756e9a4) was created
+2018-05-27 19:04:08,096 - ScrumbanBoard - INFO - Cardlist (a7f5b996a754ec62debf45f114298455dc8c420d) was created
+2018-05-27 19:04:08,096 - ScrumbanBoard - INFO - Cardlist (d4377ad76a83f2c28a334ae166327f42baa41e18) was created
+2018-05-27 19:04:08,097 - ScrumbanBoard - INFO - Cardlist (003a32ba272483218a115c9860e5489e591011fc) was created
+2018-05-27 19:04:08,098 - ScrumbanBoard - INFO - Board (e8ea81d1fab706f5bf0e320f859dbad5075e8cad) was created
+2018-05-27 19:04:08,098 - ScrumbanBoard - INFO - User (a67cabfc674d8467ae89aa9e2a3246d549994f53) was created
+2018-05-27 19:04:08,098 - ScrumbanBoard - INFO - User wasn't found by user_id (a67cabfc674d8467ae89aa9e2a3246d549994f53)
+2018-05-27 19:04:08,099 - ScrumbanBoard - INFO - new User (a67cabfc674d8467ae89aa9e2a3246d549994f53) was added
+2018-05-27 19:04:08,099 - ScrumbanBoard - INFO - Task (93c0728b515e8994050d8e189eec14b01bb0a66e) was created
+2018-05-27 19:04:08,099 - ScrumbanBoard - INFO - Subtask (6d1979dfac65b80cf7c1d8de607f4c6657696fbd) was created
+2018-05-27 19:04:08,100 - ScrumbanBoard - INFO - Subtask (subtask1) wasn't found by title in Task (93c0728b515e8994050d8e189eec14b01bb0a66e)
+2018-05-27 19:04:08,100 - ScrumbanBoard - INFO - Subtask (6d1979dfac65b80cf7c1d8de607f4c6657696fbd) was added to the Task (93c0728b515e8994050d8e189eec14b01bb0a66e)
+2018-05-27 19:04:08,100 - ScrumbanBoard - INFO - Subtask (f60916857803a76be98406dfaf9daf6b90e7180a) was created
+2018-05-27 19:04:08,101 - ScrumbanBoard - INFO - Subtask (subtask2) wasn't found by title in Task (93c0728b515e8994050d8e189eec14b01bb0a66e)
+2018-05-27 19:04:08,101 - ScrumbanBoard - INFO - Subtask (f60916857803a76be98406dfaf9daf6b90e7180a) was added to the Task (93c0728b515e8994050d8e189eec14b01bb0a66e)
+2018-05-27 19:04:08,101 - ScrumbanBoard - INFO - Remind (8b1bdc57ae743105e5181eea673a4abca8df5056) was created
+2018-05-27 19:04:08,102 - ScrumbanBoard - INFO - Card (301e6369a2904cc9b3a835fd3f20d0783d39ac12) was created
+2018-05-27 19:04:08,102 - ScrumbanBoard - INFO - Card (301e6369a2904cc9b3a835fd3f20d0783d39ac12) wasn't found by card_id in Cardlist (05815f35f918680c37aa0f803ad2c1417756e9a4)
+2018-05-27 19:04:08,102 - ScrumbanBoard - INFO - Card (301e6369a2904cc9b3a835fd3f20d0783d39ac12) was added in Cardlist (05815f35f918680c37aa0f803ad2c1417756e9a4)
+2018-05-27 19:04:11,106 - ScrumbanBoard - INFO - Cardlist (003a32ba272483218a115c9860e5489e591011fc) was found by cardlist_title on the Board (e8ea81d1fab706f5bf0e320f859dbad5075e8cad)
+2018-05-27 19:04:26,160 - ScrumbanBoard - INFO - Cardlist (05815f35f918680c37aa0f803ad2c1417756e9a4) was found by cardlist_id on the Board (e8ea81d1fab706f5bf0e320f859dbad5075e8cad)
+2018-05-27 19:04:26,161 - ScrumbanBoard - INFO - Cardlist (003a32ba272483218a115c9860e5489e591011fc) was found by cardlist_id on the Board (e8ea81d1fab706f5bf0e320f859dbad5075e8cad)
+2018-05-27 19:04:26,161 - ScrumbanBoard - INFO - Card (301e6369a2904cc9b3a835fd3f20d0783d39ac12) was found by card_id in Cardlist (05815f35f918680c37aa0f803ad2c1417756e9a4)
+2018-05-27 19:04:26,162 - ScrumbanBoard - INFO - Card (301e6369a2904cc9b3a835fd3f20d0783d39ac12) was found by card_id in Cardlist (05815f35f918680c37aa0f803ad2c1417756e9a4)
+2018-05-27 19:04:26,163 - ScrumbanBoard - INFO - Card (301e6369a2904cc9b3a835fd3f20d0783d39ac12) was removed from Cardlist (05815f35f918680c37aa0f803ad2c1417756e9a4)
+2018-05-27 19:04:26,165 - ScrumbanBoard - INFO - Card (301e6369a2904cc9b3a835fd3f20d0783d39ac12) wasn't found by card_id in Cardlist (003a32ba272483218a115c9860e5489e591011fc)
+2018-05-27 19:04:26,167 - ScrumbanBoard - INFO - Card (301e6369a2904cc9b3a835fd3f20d0783d39ac12) was added in Cardlist (003a32ba272483218a115c9860e5489e591011fc)
+2018-05-27 19:04:26,169 - ScrumbanBoard - INFO - Card (301e6369a2904cc9b3a835fd3f20d0783d39ac12) was moved from CardList (05815f35f918680c37aa0f803ad2c1417756e9a4) to Cardlist (003a32ba272483218a115c9860e5489e591011fc)
+2018-05-27 19:04:27,920 - ScrumbanBoard - INFO - Card (301e6369a2904cc9b3a835fd3f20d0783d39ac12) was moved to the Overdue Cardlist (05815f35f918680c37aa0f803ad2c1417756e9a4) in the Board (e8ea81d1fab706f5bf0e320f859dbad5075e8cad)
+2018-05-27 19:04:45,855 - ScrumbanBoard - INFO - Cardlist (003a32ba272483218a115c9860e5489e591011fc) was found by cardlist_title on the Board (e8ea81d1fab706f5bf0e320f859dbad5075e8cad)
+2018-05-27 19:06:29,025 - ScrumbanBoard - INFO - ClientUsers was created
+2018-05-27 19:06:29,026 - ScrumbanBoard - INFO - ClientTeams was created
+2018-05-27 19:06:29,026 - ScrumbanBoard - INFO - Client was created
+2018-05-27 19:06:29,026 - ScrumbanBoard - INFO - Cardlist (e3e4d04099b4c00db0254236d48ca266774c0fb4) was created
+2018-05-27 19:06:29,026 - ScrumbanBoard - INFO - Cardlist (800de31e888d023418a5e05a130a3c00e98acc18) was created
+2018-05-27 19:06:29,026 - ScrumbanBoard - INFO - Cardlist (984bdf0a4a3782ec4c592dad764ccf5781b5596e) was created
+2018-05-27 19:06:29,027 - ScrumbanBoard - INFO - Cardlist (c6e47122c9776495fec2d8a8c7392e3ff7d015a9) was created
+2018-05-27 19:06:29,027 - ScrumbanBoard - INFO - Board (4fe5435ed802872e0c6a5a4dd714ccdca5eef036) was created
+2018-05-27 19:06:29,027 - ScrumbanBoard - INFO - User (d0f19d971b7fd926c5ca38f497db972d2155fec7) was created
+2018-05-27 19:06:29,028 - ScrumbanBoard - INFO - User wasn't found by user_id (d0f19d971b7fd926c5ca38f497db972d2155fec7)
+2018-05-27 19:06:29,028 - ScrumbanBoard - INFO - new User (d0f19d971b7fd926c5ca38f497db972d2155fec7) was added
+2018-05-27 19:06:29,028 - ScrumbanBoard - INFO - Task (47f687433925c98b4cf8fbe1297efdf267ce38d2) was created
+2018-05-27 19:06:29,029 - ScrumbanBoard - INFO - Subtask (a5166ff88c8d66c20c96c67fc804835652ec2c58) was created
+2018-05-27 19:06:29,029 - ScrumbanBoard - INFO - Subtask (subtask1) wasn't found by title in Task (47f687433925c98b4cf8fbe1297efdf267ce38d2)
+2018-05-27 19:06:29,029 - ScrumbanBoard - INFO - Subtask (a5166ff88c8d66c20c96c67fc804835652ec2c58) was added to the Task (47f687433925c98b4cf8fbe1297efdf267ce38d2)
+2018-05-27 19:06:29,029 - ScrumbanBoard - INFO - Subtask (e602553f66ac5d7c21ee88bdb206434d0bf9fa74) was created
+2018-05-27 19:06:29,029 - ScrumbanBoard - INFO - Subtask (subtask2) wasn't found by title in Task (47f687433925c98b4cf8fbe1297efdf267ce38d2)
+2018-05-27 19:06:29,030 - ScrumbanBoard - INFO - Subtask (e602553f66ac5d7c21ee88bdb206434d0bf9fa74) was added to the Task (47f687433925c98b4cf8fbe1297efdf267ce38d2)
+2018-05-27 19:06:29,030 - ScrumbanBoard - INFO - Remind (6a2e1746f0fbdfab4a3cb7cab515afb87d04e40c) was created
+2018-05-27 19:06:29,030 - ScrumbanBoard - INFO - Card (a025186c6352893fbc516c0c032d962462a7fdd3) was created
+2018-05-27 19:06:29,030 - ScrumbanBoard - INFO - Card (a025186c6352893fbc516c0c032d962462a7fdd3) wasn't found by card_id in Cardlist (e3e4d04099b4c00db0254236d48ca266774c0fb4)
+2018-05-27 19:06:29,030 - ScrumbanBoard - INFO - Card (a025186c6352893fbc516c0c032d962462a7fdd3) was added in Cardlist (e3e4d04099b4c00db0254236d48ca266774c0fb4)
+2018-05-27 19:06:32,033 - ScrumbanBoard - INFO - Cardlist (c6e47122c9776495fec2d8a8c7392e3ff7d015a9) was found by cardlist_title on the Board (4fe5435ed802872e0c6a5a4dd714ccdca5eef036)
+2018-05-27 19:06:32,034 - ScrumbanBoard - INFO - Cardlist (e3e4d04099b4c00db0254236d48ca266774c0fb4) was found by cardlist_id on the Board (4fe5435ed802872e0c6a5a4dd714ccdca5eef036)
+2018-05-27 19:06:32,034 - ScrumbanBoard - INFO - Cardlist (c6e47122c9776495fec2d8a8c7392e3ff7d015a9) was found by cardlist_id on the Board (4fe5435ed802872e0c6a5a4dd714ccdca5eef036)
+2018-05-27 19:06:32,034 - ScrumbanBoard - INFO - Card (a025186c6352893fbc516c0c032d962462a7fdd3) was found by card_id in Cardlist (e3e4d04099b4c00db0254236d48ca266774c0fb4)
+2018-05-27 19:06:32,034 - ScrumbanBoard - INFO - Card (a025186c6352893fbc516c0c032d962462a7fdd3) was found by card_id in Cardlist (e3e4d04099b4c00db0254236d48ca266774c0fb4)
+2018-05-27 19:06:32,035 - ScrumbanBoard - INFO - Card (a025186c6352893fbc516c0c032d962462a7fdd3) was removed from Cardlist (e3e4d04099b4c00db0254236d48ca266774c0fb4)
+2018-05-27 19:06:32,035 - ScrumbanBoard - INFO - Card (a025186c6352893fbc516c0c032d962462a7fdd3) wasn't found by card_id in Cardlist (c6e47122c9776495fec2d8a8c7392e3ff7d015a9)
+2018-05-27 19:06:32,035 - ScrumbanBoard - INFO - Card (a025186c6352893fbc516c0c032d962462a7fdd3) was added in Cardlist (c6e47122c9776495fec2d8a8c7392e3ff7d015a9)
+2018-05-27 19:06:32,035 - ScrumbanBoard - INFO - Card (a025186c6352893fbc516c0c032d962462a7fdd3) was moved from CardList (e3e4d04099b4c00db0254236d48ca266774c0fb4) to Cardlist (c6e47122c9776495fec2d8a8c7392e3ff7d015a9)
+2018-05-27 19:06:32,036 - ScrumbanBoard - INFO - Card (a025186c6352893fbc516c0c032d962462a7fdd3) was moved to the Overdue Cardlist (e3e4d04099b4c00db0254236d48ca266774c0fb4) in the Board (4fe5435ed802872e0c6a5a4dd714ccdca5eef036)
+2018-05-27 19:06:32,036 - ScrumbanBoard - INFO - Cardlist (c6e47122c9776495fec2d8a8c7392e3ff7d015a9) was found by cardlist_title on the Board (4fe5435ed802872e0c6a5a4dd714ccdca5eef036)
+2018-05-27 19:06:32,055 - ScrumbanBoard - INFO - Cardlist (c6e47122c9776495fec2d8a8c7392e3ff7d015a9) was found by cardlist_title on the Board (4fe5435ed802872e0c6a5a4dd714ccdca5eef036)

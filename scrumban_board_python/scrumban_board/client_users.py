@@ -20,22 +20,28 @@ class ClientUsers:
     client.client_users.add_new_user(user)
     """
 
-    def __init__(self, users: deque = None, ):
+    @staticmethod
+    def _get_users(users):
+        new_users = deque()
+
+        if users is not None:
+            for user in users:
+                if isinstance(user, User):
+                    new_users.append(user)
+
+                elif isinstance(user, str):
+                    temp_user = User(user, user, user, "@")
+                    new_users.append(temp_user)
+
+        return new_users
+
+    def __init__(self, users: deque = None):
         """
         Initialising of ClientUsers
 
         :param users: Users for the storage
         """
-        self.users = deque()
-
-        if users is not None:
-            for user in users:
-                if isinstance(user, User):
-                    self.users.append(user)
-
-                elif isinstance(user, str):
-                    temp_user = User("", "", user, "")
-                    self.users.append(temp_user)
+        self.users = ClientUsers._get_users(users)
 
         logger.info("ClientUsers was created")
 
@@ -47,15 +53,7 @@ class ClientUsers:
         :return:
         """
 
-        self.users.clear()
-
-        for user in users:
-            if isinstance(user, User):
-                self.users.append(user)
-
-            elif isinstance(user, str):
-                temp_user = User(user, user, user, "@")
-                self.users.append(temp_user)
+        self.users = ClientUsers._get_users(users)
 
         logger.info("ClientUsers was updated")
 

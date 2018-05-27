@@ -1,9 +1,11 @@
 import os
 import logging.config
+import string
+import random
+import datetime
 
 from hashlib import sha1
 from collections import deque
-import datetime
 
 from scrumban_board_python.scrumban_board.cardlist import CardList
 from scrumban_board_python.scrumban_board.terminal_colors import Colors
@@ -29,6 +31,46 @@ class Board:
             break
     """
 
+    @staticmethod
+    def _get_cardlists(cardlists):
+        new_cardlists = deque()
+
+        if cardlists is not None:
+            if isinstance(cardlists, CardList):
+                new_cardlists.append(cardlists)
+
+            elif isinstance(cardlists, deque):
+                for cardlist in cardlists:
+                    if isinstance(cardlist, CardList):
+                        new_cardlists.append(cardlist)
+
+        else:
+            to_do = CardList("To-Do")
+            doing = CardList("Doing")
+            done = CardList("Done")
+            overdue = CardList("Overdue")
+
+            new_cardlists.append(to_do)
+            new_cardlists.append(doing)
+            new_cardlists.append(done)
+            new_cardlists.append(overdue)
+
+        return new_cardlists
+
+    @staticmethod
+    def _get_users_login(users_login):
+        new_users_login = deque()
+
+        if isinstance(users_login, str):
+            new_users_login.append(users_login)
+
+        elif isinstance(users_login, deque):
+            for user_id in users_login:
+                if isinstance(user_id, str):
+                    new_users_login.append(user_id)
+
+        return new_users_login
+
     def __init__(self, title: str, users_login,
                  description: str = None, cardlists=None):
         """
@@ -40,49 +82,23 @@ class Board:
         :param cardlists: board cardlists
         """
         self.title = title
-        self.description = self.title
+        self.description = description
 
-        if description is not None:
-            self.description = description
+        self.cardlists = Board._get_cardlists(cardlists)
+        self.users_login = Board._get_users_login(users_login)
 
-        self.cardlists = deque()
-
-        if cardlists is not None:
-            if isinstance(cardlists, CardList):
-                self.cardlists.append(cardlists)
-
-            elif isinstance(cardlists, deque):
-                for cardlist in cardlists:
-                    if isinstance(cardlist, CardList):
-                        self.cardlists.append(cardlist)
-        else:
-
-            to_do = CardList("To-Do")
-            doing = CardList("Doing")
-            done = CardList("Done")
-            overdue = CardList("Overdue")
-
-            self.cardlists.append(to_do)
-            self.cardlists.append(doing)
-            self.cardlists.append(done)
-            self.cardlists.append(overdue)
-
-        self.users_login = deque()
-        if isinstance(users_login, str):
-            self.users_login.append(users_login)
-
-        elif isinstance(users_login, deque):
-            for user_id in users_login:
-                if isinstance(user_id, str):
-                    self.users_login.append(user_id)
-
-        # self.calendar = Calendar(self.users_id)
-
-        self.id = sha1(("Board: " + " " +
-                        self.title + " " +
-                        str(datetime.datetime.now())).encode('utf-8')).hexdigest()
+        self.id = self._get_id()
 
         logger.info("Board ({}) was created".format(self.id))
+
+    def _get_id(self):
+        key = ''.join(
+            random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(len(self.title)))
+
+        return sha1(("Board: " +
+                     key + " " +
+                     self.title + " " +
+                     str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
         users_id = [user_id for user_id in self.users_login]
@@ -152,21 +168,10 @@ Cardlists:
             self.description = description
 
         if cardlists is not None:
-            self.cardlists.clear()
-
-            if isinstance(cardlists, CardList):
-                self.cardlists.append(cardlists)
-
-            elif isinstance(cardlists, deque):
-                for cardlist in cardlists:
-                    if isinstance(cardlist, CardList):
-                        self.cardlists.append(cardlist)
+            self.cardlists = Board._get_cardlists(cardlists)
 
         if users_login is not None:
-            self.users_login.clear()
-
-            for user in users_login:
-                self.users_login.append(user)
+            self.users_login = Board._get_users_login(users_login)
 
         logger.info("Board ({}) was updated".format(self.id))
 

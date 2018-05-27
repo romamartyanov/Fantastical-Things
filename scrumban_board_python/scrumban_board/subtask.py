@@ -1,6 +1,8 @@
 import os
 import logging.config
 import datetime
+import string
+import random
 
 from hashlib import sha1
 
@@ -34,9 +36,7 @@ class Subtask:
 
         self.completed = False
 
-        self.id = sha1(("Subtask: " + " " +
-                        self.title + " " +
-                        str(datetime.datetime.now())).encode('utf-8')).hexdigest()
+        self.id = self._get_id()
 
         logger.info("Subtask ({}) was created".format(self.id))
 
@@ -69,6 +69,20 @@ class Subtask:
            self.id) + Colors.end_color
 
         return output
+
+    def _get_id(self):
+        """
+        Getting subtask id with a help of sha1
+
+        :return: sha1 hash
+        """
+        key = ''.join(
+            random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(len(self.title)))
+
+        return sha1(("Subtask: " +
+                     key + " " +
+                     self.title + " " +
+                     str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
     def update_subtask(self, title: str = None, description: str = None, completed: bool = None):
         """

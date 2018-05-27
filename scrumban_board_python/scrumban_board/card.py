@@ -1,5 +1,7 @@
 import os
 import logging.config
+import string
+import random
 
 from hashlib import sha1
 from collections import deque
@@ -27,6 +29,48 @@ class Card:
     card.update_card(reminds_list=remind_list)
     """
 
+    @staticmethod
+    def _get_task(task):
+        if isinstance(task, Task):
+            return task
+
+        elif isinstance(task, str):
+            task = Task(title=task)
+            return task
+
+    @staticmethod
+    def _get_users_login(users_login):
+        if isinstance(users_login, deque):
+            return users_login
+
+        elif isinstance(users_login, str):
+            users_login = deque()
+            users_login.append(users_login)
+
+            return users_login
+
+    @staticmethod
+    def _get_remind_list(reminds_list):
+        new_reminds_list = deque()
+
+        if reminds_list is not None:
+            if isinstance(reminds_list, Remind):
+                new_reminds_list.append(reminds_list)
+
+            elif isinstance(reminds_list, deque):
+                for remind in reminds_list:
+                    if isinstance(remind, Remind):
+                        new_reminds_list.append(remind)
+
+        return new_reminds_list
+
+    @staticmethod
+    def _get_deadline(deadline):
+        if deadline is not None:
+            return deadline
+        else:
+            return None
+
     def __init__(self, task, users_login,
                  reminds_list=None, deadline: Remind = None):
         """
@@ -38,38 +82,25 @@ class Card:
         :param deadline: card deadline
         """
 
-        if isinstance(task, Task):
-            self.task = task
+        self.task = Card._get_task(task)
 
-        elif isinstance(task, str):
-            task = Task(title=task)
-            self.task = task
+        self.users_login = Card._get_users_login(users_login)
+        self.reminds_list = Card._get_remind_list(reminds_list)
 
-        self.users_login = deque()
-        if isinstance(users_login, deque):
-            self.users_login = users_login
-        elif isinstance(users_login, str):
-            self.users_login.append(users_login)
+        self.deadline = Card._get_deadline(deadline)
 
-        self.reminds_list = deque()
-        if reminds_list is not None:
-            if isinstance(reminds_list, Remind):
-                self.reminds_list.append(reminds_list)
-
-            elif isinstance(reminds_list, deque):
-                for remind in reminds_list:
-                    if isinstance(remind, Remind):
-                        self.reminds_list.append(remind)
-
-        self.deadline = None
-        if deadline is not None:
-            self.deadline = deadline
-
-        self.id = sha1(("Card: " + " " +
-                        self.task.title + " " +
-                        str(datetime.datetime.now())).encode('utf-8')).hexdigest()
+        self.id = self._get_id()
 
         logger.info("Card ({}) was created".format(self.id))
+
+    def _get_id(self):
+        key = ''.join(
+            random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(len(self.task.title)))
+
+        return sha1(("Card: " +
+                     key + " " +
+                     self.task.title + " " +
+                     str(datetime.datetime.now())).encode('utf-8')).hexdigest()
 
     def __str__(self):
         users_id = [user_login for user_login in self.users_login]
@@ -88,10 +119,10 @@ class Card:
         {}
         
         ---End Card--
-""".format(self.id,
-           users_id,
-           self.task,
-           reminds_list) + Colors.end_color
+        """.format(self.id,
+                   users_id,
+                   self.task,
+                   reminds_list) + Colors.end_color
 
         else:
             output = Colors.card_yellow + """
@@ -111,12 +142,12 @@ class Card:
         {}
         
         ---End Card--
-""".format(self.id,
-           users_id,
-           self.deadline.when_remind,
-           self.deadline.is_repeatable,
-           self.task,
-           reminds_list) + Colors.end_color
+        """.format(self.id,
+                   users_id,
+                   self.deadline.when_remind,
+                   self.deadline.is_repeatable,
+                   self.task,
+                   reminds_list) + Colors.end_color
 
         return output
 
@@ -126,46 +157,46 @@ class Card:
 
         if self.deadline is None:
             output = Colors.card_yellow + """
---- Card ---
-ID: {}
-Users ID: {}
-
-Task:
-{}
-
-Reminds:
-{}
-
----End Card--
-""".format(self.id,
-           users_id,
-           self.task,
-           reminds_list) + Colors.end_color
+        --- Card ---
+        ID: {}
+        Users ID: {}
+        
+        Task:
+        {}
+        
+        Reminds:
+        {}
+        
+        ---End Card--
+            """.format(self.id,
+                       users_id,
+                       self.task,
+                       reminds_list) + Colors.end_color
 
         else:
             output = Colors.card_yellow + """
---- Card ---
-ID: {}
-Users ID: {}
+        --- Card ---
+        ID: {}
+        Users ID: {}
+        
+        Deadline:
+        {}
+        
+        Is Repeatable: {}
+        
+        Task:
+        {}
+        
+        Reminds:
+        {}
 
-Deadline:
-{}
-
-Is Repeatable: {}
-
-Task:
-{}
-
-Reminds:
-{}
-
----End Card--
-""".format(self.id,
-           users_id,
-           self.deadline.when_remind,
-           self.deadline.is_repeatable,
-           self.task,
-           reminds_list) + Colors.end_color
+        ---End Card--
+            """.format(self.id,
+                       users_id,
+                       self.deadline.when_remind,
+                       self.deadline.is_repeatable,
+                       self.task,
+                       reminds_list) + Colors.end_color
 
         return output
 
@@ -184,28 +215,16 @@ Reminds:
         """
 
         if task is not None:
-            if isinstance(task, Task):
-                self.task = task
-            elif isinstance(task, str):
-                self.task.title = task
+            self.task = Card._get_task(task)
 
         if users_login is not None:
-            self.users_login.clear()
-            self.users_login.append(users_login)
+            self.users_login = Card._get_users_login(users_login)
 
         if reminds_list is not None:
-            self.reminds_list.clear()
-
-            if isinstance(reminds_list, Remind):
-                self.reminds_list.append(reminds_list)
-
-            elif isinstance(reminds_list, deque):
-                for remind in reminds_list:
-                    if isinstance(remind, Remind):
-                        self.reminds_list.append(remind)
+            self.reminds_list = Card._get_remind_list(reminds_list)
 
         if deadline is not None:
-            self.deadline = deadline
+            self.deadline = Card._get_deadline(deadline)
 
         logger.info("Card ({}) was updated".format(self.id))
 
