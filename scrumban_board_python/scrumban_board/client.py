@@ -75,8 +75,6 @@ class Client:
             else:
                 board.move_card(card.id, cardlist.id, overdue_cardlist.id)
 
-                print(board)
-
                 logger.info(
                     "Card ({}) was moved to the Overdue Cardlist ({}) in the Board ({})".format(
                         card.id,
