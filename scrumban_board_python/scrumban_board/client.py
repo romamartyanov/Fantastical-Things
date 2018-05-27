@@ -52,6 +52,15 @@ class Client:
         logger.info("Client was created")
 
     def _check_deadline(self, board, overdue_cardlist, cardlist, card):
+        """
+        Checking user/team card's deadline
+
+        :param board: card's Board
+        :param overdue_cardlist: overdue Cardlist
+        :param cardlist: card's Cardlist
+        :param card: Card
+        :return:
+        """
         if card.deadline.when_remind < datetime.now():
 
             if card.deadline.repeating_remind_relativedelta is not None:
@@ -83,6 +92,15 @@ class Client:
         return True
 
     def _check_remind(self, board, cardlist, card, remind):
+        """
+        Checking user/team remind
+
+        :param board: remind's Board
+        :param cardlist: remind's Cardlist
+        :param card: remind's Card
+        :param remind: Remind
+        :return:
+        """
         if remind.when_remind < datetime.now():
 
             logger.info(
@@ -121,6 +139,15 @@ class Client:
             return False
 
     def _check_card(self, board, overdue_cardlist, cardlist, card):
+        """
+        Checking user/team card
+
+        :param board: card's Board
+        :param overdue_cardlist: overdue Cardlist
+        :param cardlist: card's Cardlist
+        :param card: Card
+        :return:
+        """
         if card.deadline is not None:
             if not self._check_deadline(board, overdue_cardlist, cardlist, card):
                 return False
@@ -133,6 +160,14 @@ class Client:
         return True
 
     def _check_cardlist(self, board, overdue_cardlist, cardlist):
+        """
+        Checking user/board cardlist
+
+        :param board: cardlist's Board
+        :param overdue_cardlist: overdue Cardlist
+        :param cardlist: Cardlist
+        :return:
+        """
         if cardlist.title == "Overdue":
             return True
 
@@ -143,6 +178,12 @@ class Client:
         return True
 
     def _check_board(self, board):
+        """
+        Checking user/team board
+
+        :param board: Board
+        :return:
+        """
         overdue_cardlist = board.find_cardlist(cardlist_title="Overdue")
 
         for cardlist in board.cardlists:
@@ -154,8 +195,12 @@ class Client:
         return True
 
     def _updating_users(self):
-        for user in self.client_users.users:
+        """
+        Updating users reminds
 
+        :return:
+        """
+        for user in self.client_users.users:
             for board in user.user_boards:
                 if not self._check_board(board):
                     return False
@@ -163,6 +208,11 @@ class Client:
         return True
 
     def _updating_teams(self):
+        """
+        Updating teams reminds
+
+        :return:
+        """
         for team in self.client_teams.teams:
 
             for board in team.team_boards:
