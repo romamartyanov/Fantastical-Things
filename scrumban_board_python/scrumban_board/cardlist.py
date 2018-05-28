@@ -26,7 +26,7 @@ class CardList:
     """
 
     @staticmethod
-    def _get_cards(cards):
+    def get_cards(cards):
         new_cards = deque()
 
         if cards is not None:
@@ -52,7 +52,7 @@ class CardList:
         self.title = title
         self.description = description
 
-        self.cards = CardList._get_cards(cards)
+        self.cards = CardList.get_cards(cards)
 
         self.id = self._get_id()
 
@@ -120,7 +120,7 @@ class CardList:
             self.title = title
 
         if cards is not None:
-            self.cards = CardList._get_cards(cards)
+            self.cards = CardList.get_cards(cards)
 
         if description is not None:
             self.description = description

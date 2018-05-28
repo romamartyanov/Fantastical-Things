@@ -30,7 +30,7 @@ class Remind(object):
             return None
 
     @staticmethod
-    def _get_repeating_remind_relativedelta(repeatable_time=None):
+    def get_repeating_remind_relativedelta(repeatable_time=None):
         repeating_remind_relativedelta = None
 
         if repeatable_time is not None:
@@ -99,7 +99,7 @@ class Remind(object):
         self.card_id = Remind._get_card_id(card_id)
 
         self.when_remind = self._get_when_remind(when_remind)
-        self.repeating_remind_relativedelta, self.is_repeatable = Remind._get_repeating_remind_relativedelta(
+        self.repeating_remind_relativedelta, self.is_repeatable = Remind.get_repeating_remind_relativedelta(
             repeatable_time)
 
         self.id = self._get_id()
@@ -190,7 +190,7 @@ class Remind(object):
             self.when_remind = Remind._get_when_remind(when_remind)
 
         if repeatable_time is not None:
-            self.repeating_remind_relativedelta, self.is_repeatable = Remind._get_repeating_remind_relativedelta(
+            self.repeating_remind_relativedelta, self.is_repeatable = Remind.get_repeating_remind_relativedelta(
                 repeatable_time)
 
         logger.info("Remind ({}) was updated".format(self.id))

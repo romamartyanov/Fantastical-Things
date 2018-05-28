@@ -22,7 +22,7 @@ class Task:
     """
 
     @staticmethod
-    def _get_subtask_list(subtasks_list):
+    def get_subtask_list(subtasks_list):
         new_subtasks_list = deque()
 
         if subtasks_list is not None:
@@ -55,7 +55,7 @@ class Task:
         self.title = title
         self.description = description
 
-        self.subtasks_list = Task._get_subtask_list(subtasks_list)
+        self.subtasks_list = Task.get_subtask_list(subtasks_list)
 
         self.completed = False
 
@@ -119,7 +119,7 @@ class Task:
             self.description = description
 
         if subtasks_list is not None:
-            self.subtasks_list = Task._get_subtask_list(subtasks_list)
+            self.subtasks_list = Task.get_subtask_list(subtasks_list)
 
         if completed is not None:
             self.completed = completed

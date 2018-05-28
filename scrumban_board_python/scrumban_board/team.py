@@ -25,7 +25,7 @@ class Team:
     """
 
     @staticmethod
-    def _get_team_boards(login, boards=None):
+    def get_team_boards(login, boards=None):
         new_team_boards = deque()
 
         if boards is not None:
@@ -43,7 +43,7 @@ class Team:
         return new_team_boards
 
     @staticmethod
-    def _get_team_members_login(users_login):
+    def get_team_members_login(users_login):
         if isinstance(users_login, deque):
             return users_login
 
@@ -71,8 +71,8 @@ class Team:
         if description is not None:
             self.description = description
 
-        self.team_members_login = Team._get_team_members_login(users_login)
-        self.team_boards = Team._get_team_boards(login, boards)
+        self.team_members_login = Team.get_team_members_login(users_login)
+        self.team_boards = Team.get_team_boards(login, boards)
 
         self.id = self._get_id()
 
@@ -153,10 +153,10 @@ Boards ID:
             self.description = description
 
         if users_login is not None:
-            self.team_members_login = Team._get_team_members_login(users_login)
+            self.team_members_login = Team.get_team_members_login(users_login)
 
         if boards is not None:
-            self.team_boards = Team._get_team_boards(self.login, boards)
+            self.team_boards = Team.get_team_boards(self.login, boards)
 
         logger.info("Team ({}) was updated".format(self.id))
 

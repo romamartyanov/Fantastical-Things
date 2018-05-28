@@ -31,7 +31,7 @@ class Board:
     """
 
     @staticmethod
-    def _get_cardlists(cardlists):
+    def get_cardlists(cardlists):
         new_cardlists = deque()
 
         if cardlists is not None:
@@ -61,7 +61,7 @@ class Board:
         return new_cardlists
 
     @staticmethod
-    def _get_users_login(users_login):
+    def get_users_login(users_login):
         new_users_login = deque()
 
         if isinstance(users_login, str):
@@ -87,8 +87,8 @@ class Board:
         self.title = title
         self.description = description
 
-        self.cardlists = Board._get_cardlists(cardlists)
-        self.users_login = Board._get_users_login(users_login)
+        self.cardlists = Board.get_cardlists(cardlists)
+        self.users_login = Board.get_users_login(users_login)
 
         self.id = self._get_id()
 
@@ -171,10 +171,10 @@ Cardlists:
             self.description = description
 
         if cardlists is not None:
-            self.cardlists = Board._get_cardlists(cardlists)
+            self.cardlists = Board.get_cardlists(cardlists)
 
         if users_login is not None:
-            self.users_login = Board._get_users_login(users_login)
+            self.users_login = Board.get_users_login(users_login)
 
         logger.info("Board ({}) was updated".format(self.id))
 

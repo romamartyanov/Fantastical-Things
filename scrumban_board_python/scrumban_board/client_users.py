@@ -20,7 +20,7 @@ class ClientUsers:
     """
 
     @staticmethod
-    def _get_users(users):
+    def get_users(users):
         new_users = deque()
 
         if users is not None:
@@ -40,7 +40,7 @@ class ClientUsers:
 
         :param users: Users for the storage
         """
-        self.users = ClientUsers._get_users(users)
+        self.users = ClientUsers.get_users(users)
 
         logger.info("ClientUsers was created")
 
@@ -52,7 +52,7 @@ class ClientUsers:
         :return:
         """
 
-        self.users = ClientUsers._get_users(users)
+        self.users = ClientUsers.get_users(users)
 
         logger.info("ClientUsers was updated")
 
