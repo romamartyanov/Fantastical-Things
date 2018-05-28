@@ -135,10 +135,27 @@ class ArgsHandler:
                             help='update card info: card id')
 
         parser.add_argument('--update_task', action="store",
-                            help='update_task info: task id')
+                            help='update task info: task id')
 
         parser.add_argument('--update_subtask', action="store",
-                            help='Subtask completed: subtask id')
+                            help='update subtask: subtask id')
+
+        ###
+
+        parser.add_argument('--remove_board', action="store",
+                            help='remove board: board id')
+
+        parser.add_argument('--remove_cardlist', action="store",
+                            help='remove cardlist info: cardlist id')
+
+        parser.add_argument('--remove_card', action="store",
+                            help='remove card info: card id')
+
+        parser.add_argument('--remove_task', action="store",
+                            help='remove info: task id')
+
+        parser.add_argument('--remove_subtask', action="store",
+                            help='remove subtask: subtask id')
 
         ###
 
@@ -219,6 +236,20 @@ class ArgsHandler:
             self._update_subtask(subtask_id=args.update_subtask,
                                  title=args.subtask_title, description=args.subtask_description,
                                  completed=args.subtask_completed)
+
+        ###
+
+        if args.remove_board is not None:
+            self._remove_board(args.remove_board)
+
+        if args.remove_cardlist is not None:
+            self._remove_cardlist(args.remove_cardlist)
+
+        if args.remove_card is not None:
+            self._remove_card(args.remove_card)
+
+        if args.remove_subtask is not None:
+            self._remove_subtask(args.remove_subtask)
 
         ###
 
@@ -364,13 +395,22 @@ class ArgsHandler:
     ###
 
     def _remove_board(self, board_id):
-        pass
+        self.current_user.remove_board(board_id=board_id)
 
     def _remove_cardlist(self, cardlist_id):
-        pass
+        for board in self.current_user.user_boards:
+            if board.find_cardlist(cardlist_id=cardlist_id):
+                board.remove_cardlist(cardlist_id=cardlist_id)
 
     def _remove_card(self, card_id):
-        pass
+        for board in self.current_user.user_boards:
+            for cardlist in board.cardlists:
+                if cardlist.find_card(card_id=card_id):
+                    cardlist.remove_card(card_id=card_id)
 
     def _remove_subtask(self, subtask_id):
-        pass
+        for board in self.current_user.user_boards:
+            for cardlist in board.cardlists:
+                for card in cardlist.cards:
+                    if card.task.find_subtask(subtask_id=subtask_id):
+                        card.task.remove_subtask(subtask_id=subtask_id)
