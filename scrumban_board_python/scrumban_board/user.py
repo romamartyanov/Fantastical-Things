@@ -42,7 +42,7 @@ class User:
     """
 
     @staticmethod
-    def _get_user_boards(login, boards=None):
+    def get_user_boards(login, boards=None):
         new_user_boards = deque()
 
         if boards is not None:
@@ -60,7 +60,7 @@ class User:
         return new_user_boards
 
     @staticmethod
-    def _get_teams_list(teams_id=None):
+    def get_teams_list(teams_id=None):
         teams_list = deque()
 
         if teams_id is not None:
@@ -88,8 +88,8 @@ class User:
         self.login = nickname
         self.email = email
 
-        self.user_boards = User._get_user_boards(self.login, user_boards)
-        self.teams_id = User._get_teams_list(teams_id)
+        self.user_boards = User.get_user_boards(self.login, user_boards)
+        self.teams_id = User.get_teams_list(teams_id)
 
         self.id = self._get_id()
 
@@ -171,10 +171,10 @@ Boards ID: {}
             self.email = email
 
         if user_boards is not None:
-            self.user_boards = User._get_user_boards(self.login, user_boards)
+            self.user_boards = User.get_user_boards(self.login, user_boards)
 
         if teams_id is not None:
-            self.teams_id = User._get_teams_list(teams_id)
+            self.teams_id = User.get_teams_list(teams_id)
 
         logger.info("User ({}) was updated".format(self.id))
 

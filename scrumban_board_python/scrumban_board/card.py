@@ -29,7 +29,7 @@ class Card:
     """
 
     @staticmethod
-    def _get_task(task):
+    def get_task(task):
         if isinstance(task, Task):
             return task
 
@@ -38,7 +38,7 @@ class Card:
             return task
 
     @staticmethod
-    def _get_users_login(users_login):
+    def get_users_login(users_login):
         if isinstance(users_login, deque):
             return users_login
 
@@ -49,7 +49,7 @@ class Card:
             return users_login
 
     @staticmethod
-    def _get_remind_list(reminds_list):
+    def get_remind_list(reminds_list):
         new_reminds_list = deque()
 
         if reminds_list is not None:
@@ -64,7 +64,7 @@ class Card:
         return new_reminds_list
 
     @staticmethod
-    def _get_deadline(deadline):
+    def get_deadline(deadline):
         if deadline is not None:
             return deadline
         else:
@@ -81,12 +81,12 @@ class Card:
         :param deadline: card deadline
         """
 
-        self.task = Card._get_task(task)
+        self.task = Card.get_task(task)
 
-        self.users_login = Card._get_users_login(users_login)
-        self.reminds_list = Card._get_remind_list(reminds_list)
+        self.users_login = Card.get_users_login(users_login)
+        self.reminds_list = Card.get_remind_list(reminds_list)
 
-        self.deadline = Card._get_deadline(deadline)
+        self.deadline = Card.get_deadline(deadline)
 
         self.id = self._get_id()
 
@@ -214,16 +214,16 @@ class Card:
         """
 
         if task is not None:
-            self.task = Card._get_task(task)
+            self.task = Card.get_task(task)
 
         if users_login is not None:
-            self.users_login = Card._get_users_login(users_login)
+            self.users_login = Card.get_users_login(users_login)
 
         if reminds_list is not None:
-            self.reminds_list = Card._get_remind_list(reminds_list)
+            self.reminds_list = Card.get_remind_list(reminds_list)
 
         if deadline is not None:
-            self.deadline = Card._get_deadline(deadline)
+            self.deadline = Card.get_deadline(deadline)
 
         logger.info("Card ({}) was updated".format(self.id))
 

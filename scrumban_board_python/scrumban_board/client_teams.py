@@ -19,7 +19,7 @@ class ClientTeams:
     client.client_teams.add_new_team(team)
     """
     @staticmethod
-    def _get_client_teams(teams):
+    def get_client_teams(teams):
         new_teams = deque()
 
         if teams is not None:
@@ -35,7 +35,7 @@ class ClientTeams:
 
         :param teams: Teams for the storage
         """
-        self.teams = ClientTeams._get_client_teams(teams)
+        self.teams = ClientTeams.get_client_teams(teams)
 
         logger.info("ClientTeams was created")
 
@@ -46,7 +46,7 @@ class ClientTeams:
         :param teams: new Teams for the storage
         :return:
         """
-        self.teams = ClientTeams._get_client_teams(teams)
+        self.teams = ClientTeams.get_client_teams(teams)
 
         logger.info("ClientTeams was updated")
 

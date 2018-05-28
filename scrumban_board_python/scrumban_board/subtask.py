@@ -35,7 +35,7 @@ class Subtask:
 
         self.completed = False
 
-        self.id = self._get_id()
+        self.id = self.get_id()
 
         logger.info("Subtask ({}) was created".format(self.id))
 
@@ -69,7 +69,7 @@ class Subtask:
 
         return output
 
-    def _get_id(self):
+    def get_id(self):
         """
         Getting subtask id with a help of sha1
 
