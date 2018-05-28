@@ -30,8 +30,26 @@ class Remind(object):
             return None
 
     @staticmethod
-    def _get_repeating_remind_relativedelta(repeating_remind_relativedelta=None):
-        if repeating_remind_relativedelta is not None:
+    def _get_repeating_remind_relativedelta(repeatable_time=None):
+        repeating_remind_relativedelta = None
+
+        if repeatable_time is not None:
+
+            repeatable_time = repeatable_time.split('=')
+            unit = repeatable_time[0]
+            number = repeatable_time[1]
+
+            if unit == 'years':
+                repeating_remind_relativedelta = relativedelta(years=int(number))
+            elif number == 'months':
+                repeating_remind_relativedelta = relativedelta(months=int(number))
+            elif number == 'days':
+                repeating_remind_relativedelta = relativedelta(days=int(number))
+            elif number == 'hours':
+                repeating_remind_relativedelta = relativedelta(hours=int(number))
+            elif number == 'minutes':
+                repeating_remind_relativedelta = relativedelta(minutes=int(number))
+
             is_repeatable = True
         else:
             is_repeatable = False
@@ -51,7 +69,7 @@ class Remind(object):
 
         elif isinstance(when_remind, str):
             try:
-                return datetime.strptime(when_remind, '%Y/%m/%d %H:%M')
+                return datetime.strptime(when_remind, '%Y/%m/%d-%H:%M')
 
             except ValueError:
                 try:
@@ -64,7 +82,7 @@ class Remind(object):
 
     def __init__(self, title: str, when_remind,
                  description: str = None, card_id: str = None,
-                 repeating_remind_relativedelta: relativedelta = None):
+                 repeatable_time: str = None):
         """
         Initialising of Remind
 
@@ -72,7 +90,7 @@ class Remind(object):
         :param when_remind: when remind
         :param description: remind description
         :param card_id: card id of remind
-        :param repeating_remind_relativedelta: if remind is periodical
+        :param repeatable_time: if remind is periodical
         """
 
         self.title = title
@@ -82,7 +100,7 @@ class Remind(object):
 
         self.when_remind = self._get_when_remind(when_remind)
         self.repeating_remind_relativedelta, self.is_repeatable = Remind._get_repeating_remind_relativedelta(
-            repeating_remind_relativedelta)
+            repeatable_time)
 
         self.id = self._get_id()
 
@@ -146,7 +164,7 @@ class Remind(object):
 
     def update_remind(self, title: str = None, description: str = None, card_id: str = None,
                       when_remind=None,
-                      repeating_remind_relativedelta: relativedelta = None):
+                      repeatable_time: str = None):
         """
         Updating of Remind
 
@@ -155,7 +173,7 @@ class Remind(object):
         :param when_remind: when remind
         :param description: remind description
         :param card_id: card id of remind
-        :param repeating_remind_relativedelta: if remind is periodical
+        :param repeatable_time: if remind is periodical
         :return:
         """
 
@@ -171,8 +189,8 @@ class Remind(object):
         if when_remind is not None:
             self.when_remind = Remind._get_when_remind(when_remind)
 
-        if repeating_remind_relativedelta is not None:
+        if repeatable_time is not None:
             self.repeating_remind_relativedelta, self.is_repeatable = Remind._get_repeating_remind_relativedelta(
-                repeating_remind_relativedelta)
+                repeatable_time)
 
         logger.info("Remind ({}) was updated".format(self.id))

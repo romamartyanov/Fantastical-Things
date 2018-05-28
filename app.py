@@ -1,3 +1,3 @@
-import console_handler
+import args_handler
 
-console_handler.Handler()
+args_handler.ArgsHandler()

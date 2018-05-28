@@ -13,6 +13,7 @@ from scrumban_board_python.scrumban_board.terminal_colors import Colors
 logging.config.fileConfig('logging.cfg')
 logger = logging.getLogger("ScrumbanBoard")
 
+
 class Board:
     """
     Board contains Cardlists with cards
@@ -39,6 +40,10 @@ class Board:
 
             elif isinstance(cardlists, deque):
                 for cardlist in cardlists:
+                    if isinstance(cardlist, str):
+                        new_cardlist = CardList(title=cardlist)
+                        new_cardlists.append(new_cardlist)
+
                     if isinstance(cardlist, CardList):
                         new_cardlists.append(cardlist)
 
