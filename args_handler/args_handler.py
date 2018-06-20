@@ -12,7 +12,7 @@ logger = logging.getLogger("ArgsHandler")
 
 class ArgsHandler:
     def __init__(self):
-        try:
+        # try:
 
             with open('client.json', 'r') as infile:
                 data = json.load(infile)
@@ -405,8 +405,8 @@ class ArgsHandler:
             with open('client.json', 'w') as outfile:
                 json.dump(data, outfile)
 
-        except Exception:
-            print("Something strange happened")
+        # except Exception:
+        #     print("Something strange happened")
 
     #####################
 
