@@ -1,0 +1,23 @@
+{% block footer_content %}
+    <head>
+        {% load staticfiles %}
+        <link rel="stylesheet" href="{% static 'fantastical_things/css/bootstrap-material-design.min.css' %}"
+              type="text/css"/>
+        <link rel="stylesheet" href="{% static "fantastical_things/css/sticky-footer-navbar.css" %}">
+    </head>
+
+    <div class="container">
+        <footer class="mastfoot mt-auto">
+            <div class="container-fluid" style='margin-left:15px'>
+                <p><a href="#" target="blank">Contact</a>
+                    | <a href="https://github.com/ImmortalLamp" target="blank">GitHub</a>
+                    | <a href="https://www.facebook.com/romamartyanov" target="blank">Facebook</a>
+                    | <a href="https://www.linkedin.com/in/romamartyanov/" target="blank">LinkedIn</a></p>
+            </div>
+
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+                    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+                    crossorigin="anonymous"></script>
+        </footer>
+    </div>
+{% endblock footer_content %}
