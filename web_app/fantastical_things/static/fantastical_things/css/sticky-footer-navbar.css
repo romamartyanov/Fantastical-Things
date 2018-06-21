@@ -4,6 +4,29 @@ html {
   position: relative;
   min-height: 100%;
 }
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.container {
+  max-width: 960px;
+}
+
+.pricing-header {
+  max-width: 700px;
+}
+
+.card-deck .card {
+  min-width: 220px;
+}
+
+.border-top { border-top: 1px solid #e5e5e5; }
+.border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
@@ -18,11 +41,6 @@ body {
   background-color: #f5f5f5;
 }
 
-
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
-
 body > .container {
   padding: 60px 15px 0;
 }
@@ -35,3 +53,5 @@ body > .container {
 code {
   font-size: 80%;
 }
+
+
