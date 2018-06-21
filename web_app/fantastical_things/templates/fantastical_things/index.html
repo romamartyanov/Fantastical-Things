@@ -13,20 +13,20 @@
 
     <link rel="stylesheet" href="{% static 'fantastical_things/css/bootstrap-material-design.min.css' %}"
           type="text/css"/>
-    <link rel="stylesheet" href="{% static "fantastical_things/css/sticky-footer-navbar.css" %}">
+    <link rel="stylesheet" href="{% static "fantastical_things/css/board_page.css" %}">
 
 </head>
 
-<body class="body">
+<body class="bg-light">
 
-<!-- Header block (with nav) -->
+<!-- Header template (with nav) -->
 <header>
     {% include "fantastical_things/header.html" %}
     {% block header_content %}
     {% endblock header_content %}
 </header>
 
-<!-- Left Nav block -->
+<!-- Left Nav template -->
 {#<nav class="col-md-2 d-none d-md-block bg-light sidebar">#}
 {#    <div class="sidebar-sticky">#}
 {#        {% include 'fantastical_things/nav.html' %}#}
@@ -36,7 +36,7 @@
 {#</nav>#}
 
 
-<!-- Main block -->
+<!-- Main template -->
 <main role="main" class="container">
 
     {% include 'fantastical_things/main.html' %}
@@ -44,7 +44,7 @@
     {% endblock main_content %}
 </main>
 
-<!-- Footer block -->
+<!-- Footer template -->
 <div class="container">
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
         {% include 'fantastical_things/footer.html' %}
