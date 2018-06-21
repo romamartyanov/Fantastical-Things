@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" class="mdl-js">
+
+<head>
+    <title>Fantastical Things</title>
+    <meta charset="utf-8"/>
+
+    {% load staticfiles %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+          integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'fantastical_things/css/bootstrap-material-design.min.css' %}"
+          type="text/css"/>
+    <link rel="stylesheet" href="{% static "fantastical_things/css/board_page.css" %}">
+
+</head>
+
+<body class="bg-light">
+
+<!-- Header template (with nav) -->
+<header>
+    {% include "fantastical_things/header.html" %}
+    {% block header_content %}
+    {% endblock header_content %}
+</header>
+
+<!-- Main template -->
+<main role="main" class="container">
+
+    {% include 'fantastical_things/main.html' %}
+    {% block main_content %}
+    {% endblock main_content %}
+</main>
+
+<!-- Footer template -->
+<div class="container">
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        {% include 'fantastical_things/footer.html' %}
+        {% block footer_content %}
+        {% endblock footer_content %}
+
+    </footer>
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+
+{#<script>window.jQuery ||#}
+{#document.write('<script src={% static "fantastical_things/js/jquery-3.2.1.slim.min.js"%}><\/script>')</script>#}
+{#<script src={% static "fantastical_things/js/popper.js" %}></script>#}
+{#<script src={% static "fantastical_things/js/bootstrap-material-design.min.js" %}></script>#}
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
+        integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
+        crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
+        integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
+        crossorigin="anonymous"></script>
+
+<script>$(document).ready(function () {
+    $('body').bootstrapMaterialDesign();
+});</script>
+
+</body>
+</html>

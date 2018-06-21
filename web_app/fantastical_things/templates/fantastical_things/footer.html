@@ -1,0 +1,23 @@
+{% block footer_content %}
+    <head>
+        {% load staticfiles %}
+        <link rel="stylesheet" href="{% static 'fantastical_things/css/bootstrap-material-design.min.css' %}"
+              type="text/css"/>
+        <link rel="stylesheet" href="{% static "fantastical_things/css/board_page.css" %}">
+    </head>
+
+    <!-- Footer content -->
+    <div class="row">
+        <div class="col-6 col-md">
+            <h5>About</h5>
+
+            <ul class="list-unstyled text-small">
+                <li><a href="https://github.com/ImmortalLamp/Fantastical-Things" target="blank">GitHub</a></li>
+                <li><a href="https://www.facebook.com/romamartyanov" target="blank">Facebook</a></li>
+                <li><a href="https://www.linkedin.com/in/romamartyanov/" target="blank">LinkedIn</a></li>
+            </ul>
+
+            <small class="d-block mb-3 text-muted">© 2018</small>
+        </div>
+    </div>
+{% endblock footer_content %}
