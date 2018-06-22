@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Sign In</title>
+    <title>Sign Up</title>
 
     {% load staticfiles %}
 
@@ -15,9 +15,9 @@
 
 <body class="bg-light">
 
-<form class="form-signin" method="POST" action="/login/">
+<form class="form-signin" method="POST" action="/registration/">
 
-    <h3 class="h3 mb-3 font-weight-normal text-white text-center">SIGN IN WITH LOGIN</h3>
+    <h3 class="h3 mb-3 font-weight-normal text-white text-center">SIGN UP</h3>
 
     {% csrf_token %}
 
@@ -30,15 +30,15 @@
            class="form-control text-white" placeholder="Login" required="" autofocus="">
 
     <label for="password" class="sr-only text-white">Password</label>
-    <input type="password" name="password" id="password" class="form-control mb-3" placeholder="Password"
+    <input type="password" name="password1" id="password1" class="form-control" placeholder="Password"
            required="">
 
+    <label for="password_repeat" class="sr-only text-white">Repeat Password</label>
+    <input type="password" name="password2" id="password2" class="form-control mb-3" placeholder="Repeat Password"
+           required="">
 
-    <button class="btn mb-3 btn-block btn-outline-light" type="submit">Sign in</button>
+    <button class="btn btn-block btn-outline-light" type="submit">Sign up</button>
 
-    <h5 class="h5 mb-3 font-weight-normal text-white text-center">OR</h5>
-
-    <a href="{% url 'registration' %}" class="btn btn-block btn-outline-light btn-link" role="button">Sign up</a>
 </form>
 
 
