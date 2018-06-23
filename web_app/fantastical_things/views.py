@@ -1,11 +1,9 @@
-from django.shortcuts import render
-
-from django.http import *
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, render
 from django.template.context_processors import csrf
 from django.contrib import auth
 
 from .user_creation_form import UserCreateForm
+from .models import *
 
 
 def login(request):
@@ -63,5 +61,36 @@ def index(request):
     return render(request, 'fantastical_things/index.html')
 
 
-def profile(request):
-    pass
+def all_boards(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
+    username = auth.get_user(request).username
+    boards = Board.objects.filter(user=request.user)
+
+    context = {
+        'boards': boards,
+    }
+
+    return render(request, 'fantastical_things/boards_list.html', context)
+
+
+def board(request, board_id=None):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
+    username = auth.get_user(request).username
+
+    tasks = Task.objects.filter(user=request.user)
+    cards = Card.objects.filter(user=request.user)
+    card_lists = CardList.objects.filter(user=request.user)
+    boards = Board.objects.filter(user=request.user)
+
+    context = {
+        'tasks': tasks,
+        'cards': cards,
+        'card_lists': card_lists,
+        'boards': boards,
+    }
+
+    return render(request, 'fantastical_things/board.html', context)
