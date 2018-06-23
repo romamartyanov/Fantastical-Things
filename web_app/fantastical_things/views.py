@@ -75,6 +75,41 @@ def all_boards(request):
     return render(request, 'fantastical_things/boards_list.html', context)
 
 
+# def create_view_board_context(request, board_id):
+#     board = Board.objects.get(user=request.user, id=board_id)
+#     card_lists = board.cardlist_set.all().filter(user=request.user)
+#
+#     context = {
+#         'board': board,
+#         'card_lists': [],
+#     }
+#
+#     for card_list in card_lists:
+#
+#         card_list_dict = {
+#             'card_list': card_list,
+#             'cards': []
+#         }
+#
+#         cards = card_list.card_set.all().filter(user=request.user)
+#
+#         for card in cards:
+#             card_dict = {
+#                 'card': card,
+#                 'tasks': []
+#             }
+#
+#             tasks = card.task_set.all().filter(user=request.user)
+#
+#             card_dict['tasks'] = tasks
+#
+#             card_list_dict['cards'].append(card_dict)
+#
+#         context['card_lists'].append(card_list_dict)
+#
+#     return context
+
+
 def board(request, board_id):
     if not request.user.is_authenticated:
         return redirect('/login/')
@@ -99,7 +134,6 @@ def board(request, board_id):
         cards = card_list.card_set.all().filter(user=request.user)
 
         for card in cards:
-
             card_dict = {
                 'card': card,
                 'tasks': []
@@ -113,4 +147,22 @@ def board(request, board_id):
 
         context['card_lists'].append(card_list_dict)
 
+    # context = create_view_board_context(request, board_id)
+
     return render(request, 'fantastical_things/board.html', context)
+
+
+def complete_task(request, board_id, task_id):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
+    task = Task.objects.get(user=request.user, id=task_id)
+
+    if task.status is True:
+        Task.objects.filter(user=request.user, id=task_id).update(status=False)
+
+    else:
+        Task.objects.filter(user=request.user, id=task_id).update(status=True)
+
+    return redirect('/board/'+board_id)
+

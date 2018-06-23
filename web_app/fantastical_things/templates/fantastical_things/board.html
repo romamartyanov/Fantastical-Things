@@ -54,55 +54,34 @@
                         <!-- Task template -->
 
                         <div class="media text-muted pt-3">
-                            {% if not task.status %}
+                            {% if task.status %}
 
-
-                                <a href="#" class="mr-1 btn btn-success btn-link"
+                                <a href="{% url 'complete_task' board_id=board.id task_id=task.id %}" class="mr-1 btn btn-success btn-link"
                                    role="button">
                                     <i class="rounded material-icons">done</i>
                                 </a>
 
-                                <div class="d-flex justify-content-between align-items-center w-100 border-bottom border-gray ">
-                                    <div class=" media-body pb-3 mb-0 small lh-125 ">
-                                        <strong class="text-gray-dark">{{ task.title }}</strong>
-                                        <span class="d-block">{{ task.description }}</span>
-
-                                    </div>
-
-                                    <div class="btn-group-sm text-right">
-                                        <button type="button" class="btn btn-sm btn-primary">Edit Task</button>
-                                    </div>
-
-
-                                </div>
-
                             {% else %}
 
-                                <a href="#" class="mr-1 btn btn-dark btn-link"
+                                <a href="{% url 'complete_task' board_id=board.id  task_id=task.id %}" class="mr-1 btn btn-dark btn-link"
                                    role="button">
                                     <i class=" rounded material-icons">panorama_fish_eye</i>
                                 </a>
+                            {% endif %}
 
-                                {#                                <button type="button" class="mr-2 btn btn-sm btn-dark">#}
-                                {##}
-                                {#                                </button>#}
-
-
-                                <div class="d-flex justify-content-between align-items-center w-100 border-bottom border-gray ">
-                                    <div class=" media-body pb-3 mb-0 small lh-125 ">
-                                        <strong class="text-gray-dark">{{ task.title }}</strong>
-                                        <span class="d-block">{{ task.description }}</span>
-
-                                    </div>
-
-                                    <div class="btn-group-sm text-right">
-                                        <button type="button" class="btn btn-sm btn-primary">Edit Task</button>
-                                    </div>
-
+                            <div class="d-flex justify-content-between align-items-center w-100 border-bottom border-gray ">
+                                <div class=" media-body pb-3 mb-0 small lh-125 ">
+                                    <strong class="text-gray-dark">{{ task.title }}</strong>
+                                    <span class="d-block">{{ task.description }}</span>
 
                                 </div>
 
-                            {% endif %}
+                                <div class="btn-group-sm text-right">
+                                    <button type="button" class="btn btn-sm btn-primary">Edit Task</button>
+                                </div>
+
+
+                            </div>
                         </div>
 
                     {% endfor %}

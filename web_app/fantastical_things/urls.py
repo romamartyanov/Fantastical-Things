@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^$', views.all_boards, name='index'),
     url(r'^board/(?P<board_id>\d+)/?$', views.board, name='board'),
 
-    # url(r'^complete_task/(?P<task_id>\d+)/?&', views.complete_task, name='complete_task'),
+    url(r'^board/(?P<board_id>\d+)/complete_task/(?P<task_id>\d+)/?$', views.complete_task, name='complete_task'),
     # url(r'^incomplete_task/(?P<task_id>\d+)/?&', views.incomplete_task, name='incomplete_task')
 
     # url(r'^add_board/?$', views.add_board, name='add_board'),
