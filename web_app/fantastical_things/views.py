@@ -75,22 +75,42 @@ def all_boards(request):
     return render(request, 'fantastical_things/boards_list.html', context)
 
 
-def board(request, board_id=None):
+def board(request, board_id):
     if not request.user.is_authenticated:
         return redirect('/login/')
 
-    username = auth.get_user(request).username
+    # username = auth.get_user(request).username
 
-    tasks = Task.objects.filter(user=request.user)
-    cards = Card.objects.filter(user=request.user)
-    card_lists = CardList.objects.filter(user=request.user)
-    boards = Board.objects.filter(user=request.user)
+    board = Board.objects.get(user=request.user, id=board_id)
+    card_lists = board.cardlist_set.all().filter(user=request.user)
 
     context = {
-        'tasks': tasks,
-        'cards': cards,
-        'card_lists': card_lists,
-        'boards': boards,
+        'board': board,
+        'card_lists': [],
     }
+
+    for card_list in card_lists:
+
+        card_list_dict = {
+            'card_list': card_list,
+            'cards': []
+        }
+
+        cards = card_list.card_set.all().filter(user=request.user)
+
+        for card in cards:
+
+            card_dict = {
+                'card': card,
+                'tasks': []
+            }
+
+            tasks = card.task_set.all().filter(user=request.user)
+
+            card_dict['tasks'] = tasks
+
+            card_list_dict['cards'].append(card_dict)
+
+        context['card_lists'].append(card_list_dict)
 
     return render(request, 'fantastical_things/board.html', context)

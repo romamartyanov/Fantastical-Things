@@ -8,7 +8,10 @@ urlpatterns = [
     url(r'^registration/?$', views.registration, name='registration'),
 
     url(r'^$', views.all_boards, name='index'),
-    url(r'^board/(?P<board_id>\w+)/?$', views.board, name='board'),
+    url(r'^board/(?P<board_id>\d+)/?$', views.board, name='board'),
+
+    # url(r'^complete_task/(?P<task_id>\d+)/?&', views.complete_task, name='complete_task'),
+    # url(r'^incomplete_task/(?P<task_id>\d+)/?&', views.incomplete_task, name='incomplete_task')
 
     # url(r'^add_board/?$', views.add_board, name='add_board'),
     # url(r'^add_cardlist/?$', views.add_cardlist, name='add_cardlist'),
@@ -21,5 +24,4 @@ urlpatterns = [
     # url(r'^edit_task/?$', views.edit_task, name='edit_task'),
 
     # url(r'^profile/?$', views.profile, name='profile'),
-
 ]

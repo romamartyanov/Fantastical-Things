@@ -9,13 +9,15 @@
 
         <div class="d-flex justify-content-between align-items-center w-100">
             <div class="lh-100">
-                <h2 class="mb-0 text-white lh-100">Board Title</h2>
-                <small>Board Description</small>
+                <h2 class="mb-0 text-white lh-100">All Available Boards</h2>
             </div>
 
             <div class="btn-group-sm text-right">
-                <button type="button" class="btn btn-sm btn-light">Add CardList</button>
-                <button type="button" class="btn btn-sm btn-light">Edit Board</button>
+
+                <a href="#" class="mr-1 btn btn-light btn-link"
+                   role="button">
+                    Add Board
+                </a>
             </div>
         </div>
     </div>
@@ -25,7 +27,7 @@
             <!-- Task template -->
 
             <div class="media text-muted pt-3">
-                <a href="#" class="mr-2 btn btn-success btn-link"
+                <a href="{% url 'board' board_id=board.id %}" class="mr-2 btn btn-primary btn-link"
                    role="button">
                     <i class="rounded material-icons">dashboard</i>
                 </a>
@@ -39,7 +41,10 @@
 
                     <div class="btn-group-sm text-right">
                         <button type="button" class="btn btn-sm btn-primary">Edit Board</button>
-                        <button type="button" class="btn btn-sm btn-primary">View Board</button>
+                        <a href="{% url 'board' board_id=board.id%}" class="mr-2 btn btn-primary btn-link"
+                           role="button">
+                            View Board
+                        </a>
                     </div>
 
 
