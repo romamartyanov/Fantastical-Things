@@ -2,15 +2,15 @@
 
 {% block main_content %}
     <form class="my-3 p-3 bg-white rounded box-shadow" method="POST"
-          action="{% url 'edit_cardlist' board_id=board_id cardlist_id=cardlist.id %}">
+          action="{% url 'add_task' board_id=board_id card_id=card_id %}">
 
         {% csrf_token %}
-        <h4 class="border-bottom border-gray pb-2 mb-0">Update CardList</h4>
+        <h4 class="border-bottom border-gray pb-2 mb-0">Add Task</h4>
 
         <div class="my-3 p-3 bg-white rounded box-shadow">
             <div class="media-body pb-3 mb-3 small lh-125 border-bottom border-gray">
                 <label for="title">Title</label>
-                <input type="text" value="{{ cardlist.title }}" required="required" name="title" id="title"
+                <input type="text" required="required" name="title" id="title"
                        class="form-control form-control-sm"/>
 
             </div>
@@ -18,7 +18,7 @@
             <div class="media-body pb-3 mb-3 small lh-125 border-bottom border-gray">
                 <label for="description">Description</label>
                 <textarea name="description" id="description"
-                          class="form-control form-control-sm">{{ cardlist.description }}</textarea>
+                          class="form-control form-control-sm"></textarea>
             </div>
         </div>
 
@@ -28,10 +28,8 @@
                role="button">Go Back</a>
 
             <div class="btn-group" role="group">
-                <a href="{% url 'delete_cardlist' board_id=board_id cardlist_id=cardlist.id %}"
-                   class=" mr-1 btn btn-danger btn-link"
-                   role="button">Delete</a>
-                <button type="submit" class=" mr-1 btn btn-primary">Update</button>
+
+                <button type="submit" class=" mr-1 btn btn-primary">Add</button>
             </div>
 
         </div>

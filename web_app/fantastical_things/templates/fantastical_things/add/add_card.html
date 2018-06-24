@@ -2,15 +2,15 @@
 
 {% block main_content %}
     <form class="my-3 p-3 bg-white rounded box-shadow" method="POST"
-          action="{% url 'edit_card' board_id=board_id card_id=card.id %}">
+          action="{% url 'add_card' board_id=board_id cardlist_id=cardlist_id %}">
 
         {% csrf_token %}
-        <h4 class="border-bottom border-gray pb-2 mb-0">Update Card</h4>
+        <h4 class="border-bottom border-gray pb-2 mb-0">Add Card</h4>
 
         <div class="my-3 p-3 bg-white rounded box-shadow">
             <div class="media-body pb-3 mb-3 small lh-125 border-bottom border-gray">
                 <label for="title">Title</label>
-                <input type="text" value="{{ card.title }}" required="required" name="title" id="title"
+                <input type="text" required="required" name="title" id="title"
                        class="form-control form-control-sm"/>
 
             </div>
@@ -22,10 +22,7 @@
                role="button">Go Back</a>
 
             <div class="btn-group" role="group">
-                <a href="{% url 'delete_card' board_id=board_id card_id=card.id %}"
-                   class=" mr-1 btn btn-danger btn-link"
-                   role="button">Delete</a>
-                <button type="submit" class=" mr-1 btn btn-primary">Update</button>
+                <button type="submit" class=" mr-1 btn btn-primary">Add</button>
             </div>
 
         </div>

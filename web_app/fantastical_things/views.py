@@ -260,3 +260,102 @@ def delete_task(request, board_id, task_id):
     Task.objects.filter(user=request.user, id=task_id).delete()
 
     return redirect('/board/' + board_id)
+
+
+def add_board(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
+    if request.POST:
+        context = {}
+        context.update(csrf(request))
+        new_board = Board.objects.create(title=request.POST['title'],
+                                         description=request.POST['description'],
+                                         user=request.user)
+
+        new_board.save()
+
+        # добавить проверку
+        return redirect('/')
+
+    return render(request, 'fantastical_things/add/add_board.html')
+
+
+def add_cardlist(request, board_id):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
+    if request.POST:
+        context = {}
+        context.update(csrf(request))
+        new_cardlist = CardList.objects.create(title=request.POST['title'],
+                                               description=request.POST['description'],
+                                               user=request.user)
+
+        board = Board.objects.get(user=request.user, id=board_id)
+        board.cardlist_set.add(new_cardlist)
+        board.save()
+        new_cardlist.save()
+
+        # добавить проверку
+        return redirect('/board/' + board_id)
+
+    context = {
+        'board_id': board_id,
+    }
+
+    return render(request, 'fantastical_things/add/add_cardlist.html', context)
+
+
+def add_card(request, board_id, cardlist_id):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
+    if request.POST:
+        context = {}
+        context.update(csrf(request))
+        new_card = Card.objects.create(title=request.POST['title'],
+                                       user=request.user)
+
+        cardlist = CardList.objects.get(user=request.user, id=cardlist_id)
+        cardlist.card_set.add(new_card)
+        cardlist.save()
+        new_card.save()
+
+        # добавить проверку
+        return redirect('/board/' + board_id)
+
+    context = {
+        'board_id': board_id,
+        'cardlist_id': cardlist_id
+    }
+
+    return render(request, 'fantastical_things/add/add_card.html', context)
+
+
+def add_task(request, board_id, card_id):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
+    if request.POST:
+        context = {}
+        context.update(csrf(request))
+        new_task = Task.objects.create(title=request.POST['title'],
+                                       description=request.POST['description'],
+                                       status=False,
+                                       user=request.user)
+
+        card = Card.objects.get(user=request.user, id=card_id)
+        card.task_set.add(new_task)
+        card.save()
+        new_task.save()
+
+        # добавить проверку
+        return redirect('/board/' + board_id)
+
+    context = {
+        'board_id': board_id,
+        'card_id': card_id
+    }
+
+    return render(request, 'fantastical_things/add/add_task.html', context)

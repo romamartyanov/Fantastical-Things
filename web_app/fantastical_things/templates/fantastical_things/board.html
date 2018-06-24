@@ -15,7 +15,11 @@
             </div>
 
             <div class="btn-group-sm text-right">
-                <button type="button" class="btn btn-sm btn-light">Add CardList</button>
+                <a href="{% url 'add_cardlist' board_id=board.id %}"
+                   class="mr-2 btn btn-light btn-link"
+                   role="button">
+                    Add CardList
+                </a>
 
                 <a href="{% url 'edit_board' board_id=board.id %}" class="mr-2 btn btn-light btn-link"
                    role="button">
@@ -37,7 +41,11 @@
                 </div>
 
                 <div class="btn-group-sm text-right">
-                    <button type="button" class="btn btn-sm btn-primary">Add Card</button>
+                    <a href="{% url 'add_card' board_id=board.id cardlist_id=card_list.card_list.id %}"
+                       class="mr-2 btn btn-primary btn-link"
+                       role="button">
+                        Add Card
+                    </a>
                     <a href="{% url 'edit_cardlist' board_id=board.id cardlist_id=card_list.card_list.id %}"
                        class="mr-2 btn btn-primary btn-link"
                        role="button">
@@ -53,8 +61,11 @@
                         <h6 class=" pb-2 mb-0">{{ card.card.title }}</h6>
 
                         <div class="btn-group-sm text-right">
-                            <button type="button" class="btn btn-sm btn-primary">Add Task</button>
-
+                            <a href="{% url 'add_task' board_id=board.id card_id=card.card.id %}"
+                               class="mr-2 btn btn-primary btn-link"
+                               role="button">
+                                Add Task
+                            </a>
                             <a href="{% url 'edit_card' board_id=board.id card_id=card.card.id %}"
                                class="mr-2 btn btn-primary btn-link"
                                role="button">
