@@ -40,8 +40,11 @@
                     </div>
 
                     <div class="btn-group-sm text-right">
-                        <button type="button" class="btn btn-sm btn-primary">Edit Board</button>
-                        <a href="{% url 'board' board_id=board.id%}" class="mr-2 btn btn-primary btn-link"
+                        <a href="{% url 'edit_board' board_id=board.id %}" class="mr-2 btn btn-primary btn-link"
+                           role="button">
+                            Edit Board
+                        </a>
+                        <a href="{% url 'board' board_id=board.id %}" class="mr-2 btn btn-primary btn-link"
                            role="button">
                             View Board
                         </a>

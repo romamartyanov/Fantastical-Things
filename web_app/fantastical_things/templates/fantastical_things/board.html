@@ -16,7 +16,11 @@
 
             <div class="btn-group-sm text-right">
                 <button type="button" class="btn btn-sm btn-light">Add CardList</button>
-                <button type="button" class="btn btn-sm btn-light">Edit Board</button>
+
+                <a href="{% url 'edit_board' board_id=board.id %}" class="mr-2 btn btn-light btn-link"
+                   role="button">
+                    Edit Board
+                </a>
             </div>
         </div>
     </div>
@@ -34,7 +38,11 @@
 
                 <div class="btn-group-sm text-right">
                     <button type="button" class="btn btn-sm btn-primary">Add Card</button>
-                    <button type="button" class="btn btn-sm btn-primary">Edit CardList</button>
+                    <a href="{% url 'edit_cardlist' board_id=board.id cardlist_id=card_list.card_list.id %}"
+                       class="mr-2 btn btn-primary btn-link"
+                       role="button">
+                        Edit CardList
+                    </a>
                 </div>
             </div>
 
@@ -46,7 +54,12 @@
 
                         <div class="btn-group-sm text-right">
                             <button type="button" class="btn btn-sm btn-primary">Add Task</button>
-                            <button type="button" class="btn btn-sm btn-primary">Edit Card</button>
+
+                            <a href="{% url 'edit_card' board_id=board.id card_id=card.card.id %}"
+                               class="mr-2 btn btn-primary btn-link"
+                               role="button">
+                                Edit Card
+                            </a>
                         </div>
                     </div>
 
@@ -56,14 +69,16 @@
                         <div class="media text-muted pt-3">
                             {% if task.status %}
 
-                                <a href="{% url 'complete_task' board_id=board.id task_id=task.id %}" class="mr-1 btn btn-success btn-link"
+                                <a href="{% url 'complete_task' board_id=board.id task_id=task.id %}"
+                                   class="mr-1 btn btn-success btn-link"
                                    role="button">
                                     <i class="rounded material-icons">done</i>
                                 </a>
 
                             {% else %}
 
-                                <a href="{% url 'complete_task' board_id=board.id  task_id=task.id %}" class="mr-1 btn btn-dark btn-link"
+                                <a href="{% url 'complete_task' board_id=board.id  task_id=task.id %}"
+                                   class="mr-1 btn btn-dark btn-link"
                                    role="button">
                                     <i class=" rounded material-icons">panorama_fish_eye</i>
                                 </a>
@@ -77,7 +92,11 @@
                                 </div>
 
                                 <div class="btn-group-sm text-right">
-                                    <button type="button" class="btn btn-sm btn-primary">Edit Task</button>
+                                    <a href="{% url 'edit_task' board_id=board.id task_id=task.id %}"
+                                       class="mr-2 btn btn-primary btn-link"
+                                       role="button">
+                                        Edit Task
+                                    </a>
                                 </div>
 
 
