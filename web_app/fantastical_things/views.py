@@ -187,14 +187,18 @@ def edit_card(request, board_id, card_id):
         context.update(csrf(request))
 
         Card.objects.filter(user=request.user, id=card_id).update(title=request.POST['title'])
+        Card.objects.filter(user=request.user, id=card_id).update(cardlist=request.POST['moving'])
 
         # добавить проверку
         return redirect('/board/' + board_id)
 
     card = Card.objects.get(user=request.user, id=card_id)
+    board = Board.objects.get(user=request.user, id=board_id)
+    cardlists = board.cardlist_set.all()
 
     context = {
         'board_id': board_id,
+        'cardlists': cardlists,
         'card': card,
     }
 
