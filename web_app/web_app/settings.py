@@ -24,9 +24,10 @@ SECRET_KEY = 'dx7xsq-mr#wb%-^6#y__cn8$i!t64x0*a3z-h-vq!wzeti61w3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# DEBUG = False
 
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'fantasticalthings.io']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'fantasticalthings.me']
+# ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -121,5 +122,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# LOGIN_REDIRECT_URL = ''

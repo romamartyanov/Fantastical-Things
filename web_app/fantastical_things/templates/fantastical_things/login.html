@@ -7,6 +7,7 @@
     <title>Sign In</title>
 
     {% load staticfiles %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'fantastical_things/img/favicon/favicon.ico' %}"/>
 
     <link rel="stylesheet" href="{% static 'fantastical_things/css/bootstrap-material-design.min.css' %}"
           type="text/css"/>
@@ -34,11 +35,11 @@
            required="">
 
 
-    <button class="btn mb-3 btn-block btn-outline-light" type="submit">Sign in</button>
+    <button class="btn mb-3 btn-block btn-outline-light" type="submit">Sign In</button>
 
     <h5 class="h5 mb-3 font-weight-normal text-white text-center">OR</h5>
 
-    <a href="{% url 'registration' %}" class="btn btn-block btn-outline-light btn-link" role="button">Sign up</a>
+    <a href="{% url 'registration' %}" class="btn btn-block btn-outline-light btn-link" role="button">Sign Up</a>
 </form>
 
 

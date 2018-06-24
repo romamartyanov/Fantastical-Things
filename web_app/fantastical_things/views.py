@@ -1,8 +1,9 @@
 from django.shortcuts import render_to_response, redirect, render
 from django.template.context_processors import csrf
 from django.contrib import auth
+from django.http.response import HttpResponseBadRequest
 
-from .user_creation_form import UserCreateForm
+from .forms import UserCreateForm
 from .models import *
 
 
@@ -11,8 +12,12 @@ def login(request):
     context.update(csrf(request))
 
     if request.POST:
-        username = request.POST.get('username', '')
-        password = request.POST.get('password', '')
+        try:
+            username = request.POST.get('username', '')
+            password = request.POST.get('password', '')
+
+        except(KeyError, ValueError, AttributeError):
+            return HttpResponseBadRequest()
 
         user = auth.authenticate(username=username, password=password)
 
@@ -38,18 +43,22 @@ def registration(request):
     context['form'] = UserCreateForm()
 
     if request.POST:
-        new_user_form = UserCreateForm(request.POST)
+        try:
+            new_user_form = UserCreateForm(request.POST)
 
-        if new_user_form.is_valid():
-            new_user_form.save()
-            new_user = auth.authenticate(username=new_user_form.cleaned_data['username'],
-                                         password=new_user_form.cleaned_data['password2'])
+            if new_user_form.is_valid():
+                new_user_form.save()
+                new_user = auth.authenticate(username=new_user_form.cleaned_data['username'],
+                                             password=new_user_form.cleaned_data['password2'])
 
-            auth.login(request, new_user)
-            return redirect('/')
+                auth.login(request, new_user)
+                return redirect('/')
 
-        else:
-            context['form'] = new_user_form
+            else:
+                context['form'] = new_user_form
+
+        except(KeyError, ValueError, AttributeError):
+            return HttpResponseBadRequest()
 
     return render_to_response('fantastical_things/registration.html', context)
 
@@ -136,13 +145,16 @@ def edit_board(request, board_id):
         return redirect('/login/')
 
     if request.POST:
-        context = {}
-        context.update(csrf(request))
+        try:
+            context = {}
+            context.update(csrf(request))
 
-        Board.objects.filter(user=request.user, id=board_id).update(title=request.POST['title'])
-        Board.objects.filter(user=request.user, id=board_id).update(description=request.POST['description'])
+            Board.objects.filter(user=request.user, id=board_id).update(title=request.POST['title'])
+            Board.objects.filter(user=request.user, id=board_id).update(description=request.POST['description'])
 
-        # добавить проверку
+        except(KeyError, ValueError, AttributeError):
+            return HttpResponseBadRequest()
+
         return redirect('/board/' + board_id)
 
     board = Board.objects.get(user=request.user, id=board_id)
@@ -159,13 +171,16 @@ def edit_cardlist(request, board_id, cardlist_id):
         return redirect('/login/')
 
     if request.POST:
-        context = {}
-        context.update(csrf(request))
+        try:
+            context = {}
+            context.update(csrf(request))
 
-        CardList.objects.filter(user=request.user, id=cardlist_id).update(title=request.POST['title'])
-        CardList.objects.filter(user=request.user, id=cardlist_id).update(description=request.POST['description'])
+            CardList.objects.filter(user=request.user, id=cardlist_id).update(title=request.POST['title'])
+            CardList.objects.filter(user=request.user, id=cardlist_id).update(description=request.POST['description'])
 
-        # добавить проверку
+        except(KeyError, ValueError, AttributeError):
+            return HttpResponseBadRequest()
+
         return redirect('/board/' + board_id)
 
     cardlist = CardList.objects.get(user=request.user, id=cardlist_id)
@@ -183,13 +198,16 @@ def edit_card(request, board_id, card_id):
         return redirect('/login/')
 
     if request.POST:
-        context = {}
-        context.update(csrf(request))
+        try:
+            context = {}
+            context.update(csrf(request))
 
-        Card.objects.filter(user=request.user, id=card_id).update(title=request.POST['title'])
-        Card.objects.filter(user=request.user, id=card_id).update(cardlist=request.POST['moving'])
+            Card.objects.filter(user=request.user, id=card_id).update(title=request.POST['title'])
+            Card.objects.filter(user=request.user, id=card_id).update(cardlist=request.POST['moving'])
 
-        # добавить проверку
+        except(KeyError, ValueError, AttributeError):
+            return HttpResponseBadRequest()
+
         return redirect('/board/' + board_id)
 
     card = Card.objects.get(user=request.user, id=card_id)
@@ -210,14 +228,17 @@ def edit_task(request, board_id, task_id):
         return redirect('/login/')
 
     if request.POST:
-        context = {}
-        context.update(csrf(request))
+        try:
+            context = {}
+            context.update(csrf(request))
 
-        Task.objects.filter(user=request.user, id=task_id).update(title=request.POST['title'])
-        Task.objects.filter(user=request.user, id=task_id).update(description=request.POST['description'])
-        Task.objects.filter(user=request.user, id=task_id).update(status=request.POST['status'])
+            Task.objects.filter(user=request.user, id=task_id).update(title=request.POST['title'])
+            Task.objects.filter(user=request.user, id=task_id).update(description=request.POST['description'])
+            Task.objects.filter(user=request.user, id=task_id).update(status=request.POST['status'])
 
-        # добавить проверку
+        except(KeyError, ValueError, AttributeError):
+            return HttpResponseBadRequest()
+
         return redirect('/board/' + board_id)
 
     task = Task.objects.get(user=request.user, id=task_id)
@@ -234,8 +255,11 @@ def delete_board(request, board_id):
     if not request.user.is_authenticated:
         return redirect('/login/')
 
-    Board.objects.filter(user=request.user, id=board_id).delete()
+    try:
+        Board.objects.filter(user=request.user, id=board_id).delete()
 
+    except(KeyError, ValueError, AttributeError):
+        return HttpResponseBadRequest()
     return redirect('/')
 
 
@@ -243,7 +267,11 @@ def delete_cardlist(request, board_id, cardlist_id):
     if not request.user.is_authenticated:
         return redirect('/login/')
 
-    CardList.objects.filter(user=request.user, id=cardlist_id).delete()
+    try:
+        CardList.objects.filter(user=request.user, id=cardlist_id).delete()
+
+    except(KeyError, ValueError, AttributeError):
+        return HttpResponseBadRequest()
 
     return redirect('/board/' + board_id)
 
@@ -252,8 +280,11 @@ def delete_card(request, board_id, card_id):
     if not request.user.is_authenticated:
         return redirect('/login/')
 
-    Card.objects.filter(user=request.user, id=card_id).delete()
+    try:
+        Card.objects.filter(user=request.user, id=card_id).delete()
 
+    except(KeyError, ValueError, AttributeError):
+        return HttpResponseBadRequest()
     return redirect('/board/' + board_id)
 
 
@@ -261,7 +292,11 @@ def delete_task(request, board_id, task_id):
     if not request.user.is_authenticated:
         return redirect('/login/')
 
-    Task.objects.filter(user=request.user, id=task_id).delete()
+    try:
+        Task.objects.filter(user=request.user, id=task_id).delete()
+
+    except(KeyError, ValueError, AttributeError):
+        return HttpResponseBadRequest()
 
     return redirect('/board/' + board_id)
 
@@ -271,15 +306,18 @@ def add_board(request):
         return redirect('/login/')
 
     if request.POST:
-        context = {}
-        context.update(csrf(request))
-        new_board = Board.objects.create(title=request.POST['title'],
-                                         description=request.POST['description'],
-                                         user=request.user)
+        try:
+            context = {}
+            context.update(csrf(request))
+            new_board = Board.objects.create(title=request.POST['title'],
+                                             description=request.POST['description'],
+                                             user=request.user)
 
-        new_board.save()
+            new_board.save()
 
-        # добавить проверку
+        except(KeyError, ValueError, AttributeError):
+            return HttpResponseBadRequest()
+
         return redirect('/')
 
     return render(request, 'fantastical_things/add/add_board.html')
@@ -290,18 +328,21 @@ def add_cardlist(request, board_id):
         return redirect('/login/')
 
     if request.POST:
-        context = {}
-        context.update(csrf(request))
-        new_cardlist = CardList.objects.create(title=request.POST['title'],
-                                               description=request.POST['description'],
-                                               user=request.user)
+        try:
+            context = {}
+            context.update(csrf(request))
+            new_cardlist = CardList.objects.create(title=request.POST['title'],
+                                                   description=request.POST['description'],
+                                                   user=request.user)
 
-        board = Board.objects.get(user=request.user, id=board_id)
-        board.cardlist_set.add(new_cardlist)
-        board.save()
-        new_cardlist.save()
+            board = Board.objects.get(user=request.user, id=board_id)
+            board.cardlist_set.add(new_cardlist)
+            board.save()
+            new_cardlist.save()
 
-        # добавить проверку
+        except(KeyError, ValueError, AttributeError):
+            return HttpResponseBadRequest()
+
         return redirect('/board/' + board_id)
 
     context = {
@@ -316,17 +357,20 @@ def add_card(request, board_id, cardlist_id):
         return redirect('/login/')
 
     if request.POST:
-        context = {}
-        context.update(csrf(request))
-        new_card = Card.objects.create(title=request.POST['title'],
-                                       user=request.user)
+        try:
+            context = {}
+            context.update(csrf(request))
+            new_card = Card.objects.create(title=request.POST['title'],
+                                           user=request.user)
 
-        cardlist = CardList.objects.get(user=request.user, id=cardlist_id)
-        cardlist.card_set.add(new_card)
-        cardlist.save()
-        new_card.save()
+            cardlist = CardList.objects.get(user=request.user, id=cardlist_id)
+            cardlist.card_set.add(new_card)
+            cardlist.save()
+            new_card.save()
 
-        # добавить проверку
+        except(KeyError, ValueError, AttributeError):
+            return HttpResponseBadRequest()
+
         return redirect('/board/' + board_id)
 
     context = {
@@ -342,19 +386,22 @@ def add_task(request, board_id, card_id):
         return redirect('/login/')
 
     if request.POST:
-        context = {}
-        context.update(csrf(request))
-        new_task = Task.objects.create(title=request.POST['title'],
-                                       description=request.POST['description'],
-                                       status=False,
-                                       user=request.user)
+        try:
+            context = {}
+            context.update(csrf(request))
+            new_task = Task.objects.create(title=request.POST['title'],
+                                           description=request.POST['description'],
+                                           status=False,
+                                           user=request.user)
 
-        card = Card.objects.get(user=request.user, id=card_id)
-        card.task_set.add(new_task)
-        card.save()
-        new_task.save()
+            card = Card.objects.get(user=request.user, id=card_id)
+            card.task_set.add(new_task)
+            card.save()
+            new_task.save()
 
-        # добавить проверку
+        except(KeyError, ValueError, AttributeError):
+            return HttpResponseBadRequest()
+
         return redirect('/board/' + board_id)
 
     context = {
