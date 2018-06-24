@@ -8,6 +8,8 @@
     {% load staticfiles %}
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="shortcut icon" type="image/png" href="{% static 'fantastical_things/img/favicon.ico' %}"/>
+
     <link rel="stylesheet"
           href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
           integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
@@ -29,8 +31,6 @@
 
 <!-- Main template -->
 <main role="main" class="container">
-
-    {% include 'fantastical_things/main.html' %}
     {% block main_content %}
     {% endblock main_content %}
 </main>

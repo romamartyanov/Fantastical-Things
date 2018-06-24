@@ -1,0 +1,52 @@
+{% extends 'fantastical_things/index.html' %}
+
+{% block main_content %}
+    <form class="my-3 p-3 bg-white rounded box-shadow" method="POST"
+          action="{% url 'edit_card' board_id=board_id card_id=card.id %}">
+
+        {% csrf_token %}
+        <h4 class="border-bottom border-gray pb-2 mb-0">Update Card</h4>
+
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <div class="media-body pb-3 mb-3 small lh-125 border-bottom border-gray">
+                <label for="title">Title</label>
+                <input type="text" value="{{ card.title }}" required="required" name="title" id="title"
+                       class="form-control form-control-sm"/>
+
+            </div>
+
+            <div class="media-body pb-3 mb-3  lh-125 border-bottom border-gray">
+                <label for="moving">Move To CardList</label>
+                <div class="input-group mb-3" >
+                    <select class="custom-select" name="moving" id="moving">
+                        {% for cardlist in cardlists %}
+
+                            {% if card.cardlist == cardlist %}
+                                <option value={{ cardlist.id }} selected="">{{ cardlist.title }}</option>
+                            {% else %}
+                                <option value={{ cardlist.id }}>{{ cardlist.title }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center w-100">
+
+            <a href="{% url 'board' board_id=board_id %}" class=" mr-1 btn btn-primary btn-link"
+               role="button">Go Back</a>
+
+            <div class="btn-group" role="group">
+                <a href="{% url 'delete_card' board_id=board_id card_id=card.id %}"
+                   class=" mr-1 btn btn-danger btn-link"
+                   role="button">Delete</a>
+                <button type="submit" class=" mr-1 btn btn-primary">Update</button>
+            </div>
+
+        </div>
+
+    </form>
+{% endblock main_content %}
