@@ -1,10 +1,30 @@
 {% extends 'fantastical_things/index.html' %}
 
 {% block main_content %}
-    <form class="my-3 p-3 bg-white rounded box-shadow" method="POST" action="{% url 'edit_board' board_id=board.id %}">
 
+    <form class="my-3 p-3 bg-white rounded box-shadow" method="POST"
+          action="{% url 'add_user_to_board' board_id=board.id %}">
         {% csrf_token %}
+
+
+        <h4 class="border-bottom border-gray pb-2 mb-0">Add User to the Board</h4>
+
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <div class="media-body pb-3 mb-3 small lh-125 border-bottom border-gray">
+                <label for="user_login">User Login</label>
+                <input type="text" required="required" name="user_login" id="user_login"
+                       class="form-control form-control-sm"/>
+
+            </div>
+
+            <button type="submit" class=" mr-1 btn btn-primary ">Add User</button>
+        </div>
+    </form>
+
+    <form class="my-3 p-3 bg-white rounded box-shadow" method="POST" action="{% url 'edit_board' board_id=board.id %}">
         <h4 class="border-bottom border-gray pb-2 mb-0">Updating</h4>
+        {% csrf_token %}
+
 
         <div class="my-3 p-3 bg-white rounded box-shadow">
             <div class="media-body pb-3 mb-3 small lh-125 border-bottom border-gray">
@@ -28,9 +48,13 @@
                role="button">Go Back</a>
 
             <div class="btn-group" role="group">
+                <a href="{% url 'quit_board' board_id=board.id %}"
+                   class=" mr-1 btn btn-warning btn-link"
+                   role="button">Quit Board</a>
+
                 <a href="{% url 'delete_board' board_id=board.id %}"
                    class=" mr-1 btn btn-danger btn-link"
-                   role="button">Delete</a>
+                   role="button">Delete Board</a>
                 <button type="submit" class=" mr-1 btn btn-primary">Update</button>
             </div>
 

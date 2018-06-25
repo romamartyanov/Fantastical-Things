@@ -28,5 +28,8 @@ urlpatterns = [
     url(r'^board/(?P<board_id>\d+)/delete_card/(?P<card_id>\d+)/?$', views.delete_card, name='delete_card'),
     url(r'^board/(?P<board_id>\d+)/delete_task/(?P<task_id>\d+)/?$', views.delete_task, name='delete_task'),
 
+    url(r'^board/(?P<board_id>\d+)/add_user/?$', views.add_user_to_board, name='add_user_to_board'),
+    url(r'^board/(?P<board_id>\d+)/quit_board/?$', views.quit_from_board, name='quit_board'),
+
     # url(r'^profile/?$', views.profile, name='profile'),
 ]
