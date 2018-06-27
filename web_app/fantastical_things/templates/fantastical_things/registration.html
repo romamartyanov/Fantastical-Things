@@ -16,9 +16,9 @@
 
 <body class="bg-light">
 
-<form class="form-signin" method="POST" action="/registration/">
+<form class="form-signin bg-white" method="POST" action="{% url 'registration' %}">
 
-    <h3 class="h3 mb-3 font-weight-normal text-white text-center">SIGN UP</h3>
+    <h3 class="h3 mb-3 font-weight-normal text-dark text-center">SIGN UP</h3>
 
     {% csrf_token %}
 
@@ -26,23 +26,29 @@
     {#        <input type="hidden" name="next" value="{{ next }}"/>#}
     {#    {% endif %}#}
 
-    <label for="username" class="sr-only text-white">Login</label>
+    <label for="username" class="sr-only text-dark">Login</label>
     <input type="text" id="username" name="username"
-           class="form-control text-white" placeholder="Login" required="" autofocus="">
+           class="form-control" placeholder="Login" required="" autofocus="">
 
-    <label for="password" class="sr-only text-white">Password</label>
+    <label for="password" class="sr-only text-dark">Password</label>
     <input type="password" name="password1" id="password1" class="form-control" placeholder="Password"
            required="">
 
-    <label for="password_repeat" class="sr-only text-white">Repeat Password</label>
+    <label for="password_repeat" class="sr-only text-dark">Repeat Password</label>
     <input type="password" name="password2" id="password2" class="form-control mb-3" placeholder="Repeat Password"
            required="">
 
-    <button class="btn btn-block btn-outline-light" type="submit">Sign Up</button>
+    {% for field in form %}
+        <div class="fieldWrapper lh-150">
+            <small class="text-warning">{{ field.errors }}</small>
+        </div>
+    {% endfor %}
 
-    <h5 class="h5 mb-3 font-weight-normal text-white text-center">OR</h5>
+    <button class="btn btn-block btn-outline-primary" type="submit">Sign Up</button>
 
-    <a href="{% url 'login' %}" class="btn btn-block btn-outline-light btn-link" role="button">Sign In</a>
+    <h5 class="h5 mb-3 font-weight-normal text-dark text-center">OR</h5>
+
+    <a href="{% url 'login' %}" class="btn btn-block btn-outline-primary btn-primary" role="button">Sign In</a>
 
 </form>
 

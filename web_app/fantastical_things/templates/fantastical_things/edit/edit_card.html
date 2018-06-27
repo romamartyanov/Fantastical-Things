@@ -1,6 +1,18 @@
 {% extends 'fantastical_things/index.html' %}
 
 {% block main_content %}
+    {% if form.errors %}
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h4 class="pb-2 mb-0">Errors</h4>
+
+            {% for field in form %}
+                <div class="fieldWrapper lh-150">
+                    <small class="text-warning">{{ field.errors }}</small>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <form class="my-3 p-3 bg-white rounded box-shadow" method="POST"
           action="{% url 'edit_card' board_id=board_id card_id=card.id %}">
 
@@ -19,46 +31,54 @@
 
         </div>
 
-{#        <div class="my-3 p-3 bg-white rounded box-shadow">#}
-{#            <h5>Deadline</h5>#}
-{#            <div class="media-body pb-3 mb-3 small lh-125 border-bottom border-gray">#}
-{#                <label for="deadline">Deadline</label>#}
-{#                <input type="date" value="{{ card.deadline }}" name="deadline" required="required" id="deadline"#}
-{#                       style="width: 250px;"#}
-{#                       class="form-control "/>#}
-{#            </div>#}
-{#        </div>#}
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h5>Deadline</h5>
+            <div class="media-body pb-3 mb-3 small lh-125 border-bottom border-gray">
+                <label for="deadline">Deadline</label>
+                <input type="date" value="{{ deadline }}" name="deadline" required="required" id="deadline"
+                       style="width: 250px;"
+                       class="form-control "/>
 
-{#        <div class="my-3 p-3 bg-white rounded box-shadow">#}
-{#            <div class="media-body pb-3 mb-3 small lh-125 border-bottom border-gray">#}
-{#                <h5>Repeat Every</h5>#}
-{#                <p>#}
-                    {#                    <label for="years">Years</label>#}
-{#                    <input type="text" name="years" id="years" placeholder="Years" value="{{ card.years }}"#}
-{#                           class="form-control "/>#}
-{##}
-                    {#                    <label for="months">Months</label>#}
-{#                    <input type="text" name="months" id="months" placeholder="Months" value="{{ card.month }}"#}
-{#                           class="form-control "/>#}
-{##}
-                    {#                    <label for="days">Days</label>#}
-{#                    <input type="text" name="days" id="days" placeholder="Days" value="{{ card.days }}"#}
-{#                           class="form-control "/>#}
-{##}
-                    {#                    <label for="hours">Hours</label>#}
-{#                    <input type="text" name="hours" id="hours" placeholder="Hours" value="{{ card.hours }}"#}
-{#                           class="form-control "/>#}
-{##}
-                    {#                    <label for="minutes">Minutes</label>#}
-{#                    <input type="text" name="minutes" id="minutes" placeholder="Minutes" value="{{ card.minutes }}"#}
-{#                           class="form-control "/>#}
-{##}
-                    {#                    <label for="seconds">Seconds</label>#}
-{#                    <input type="text" name="seconds" id="seconds" placeholder="Seconds" value="{{ card.seconds }}"#}
-{#                           class="form-control "/>#}
-{#                </p>#}
-{#            </div>#}
-{#        </div>#}
+                <label for="deadline_time">Deadline Time</label>
+                <span class="bmd-form-group">
+                    <input type="time" name="deadline_time" value="{{ deadline_time }}" required="required"
+                           id="deadline_time" style="width: 250px;"
+                           class="form-control"/></span>
+
+            </div>
+        </div>
+
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <div class="media-body pb-3 mb-3 small lh-125 border-bottom border-gray">
+                <h5>Repeat Every</h5>
+                <p>
+                    <label for="years">Years</label>
+                    <input type="text" name="years" id="years" placeholder="Years" value="{{ card.years }}"
+                           class="form-control "/>
+
+                    <label for="months">Months</label>
+                    <input type="text" name="months" id="months" placeholder="Months" value="{{ card.months }}"
+                           class="form-control "/>
+
+                    <label for="days">Days</label>
+                    <input type="text" name="days" id="days" placeholder="Days" value="{{ card.days }}"
+                           class="form-control "/>
+
+                    <label for="hours">Hours</label>
+                    <input type="text" name="hours" id="hours" placeholder="Hours" value="{{ card.hours }}"
+                           class="form-control "/>
+
+                    <label for="minutes">Minutes</label>
+                    <input type="text" name="minutes" id="minutes" placeholder="Minutes" value="{{ card.minutes }}"
+                           class="form-control "/>
+
+                    <label for="seconds">Seconds</label>
+                    <input type="text" name="seconds" id="seconds" placeholder="Seconds" value="{{ card.seconds }}"
+                           class="form-control "/>
+                </p>
+            </div>
+        </div>
+
         <div class="media-body pb-3 mb-3  lh-125 border-bottom border-gray">
             <label for="moving">Move To CardList</label>
             <div class="input-group mb-3">

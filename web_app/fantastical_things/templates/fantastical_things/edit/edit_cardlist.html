@@ -1,6 +1,18 @@
 {% extends 'fantastical_things/index.html' %}
 
 {% block main_content %}
+    {% if form.errors %}
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h4 class="pb-2 mb-0">Errors</h4>
+
+            {% for field in form %}
+                <div class="fieldWrapper lh-150">
+                    <small class="text-warning">{{ field.errors }}</small>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <form class="my-3 p-3 bg-white rounded box-shadow" method="POST"
           action="{% url 'edit_cardlist' board_id=board_id cardlist_id=cardlist.id %}">
 
@@ -27,14 +39,26 @@
             <a href="{% url 'board' board_id=board_id %}" class=" mr-1 btn btn-primary btn-link"
                role="button">Go Back</a>
 
-            <div class="btn-group" role="group">
-                <a href="{% url 'delete_cardlist' board_id=board_id cardlist_id=cardlist.id %}"
-                   class=" mr-1 btn btn-danger btn-link"
-                   role="button">Delete</a>
-                <button type="submit" class=" mr-1 btn btn-primary">Update</button>
-            </div>
+            {#            <div class="btn-group" role="group">#}
+            {#                <a href="{% url 'delete_cardlist' board_id=board_id cardlist_id=cardlist.id %}"#}
+            {#                   class=" mr-1 btn btn-danger btn-link"#}
+            {#                   role="button">Delete</a>#}
+            {#            </div>#}
+            <button type="submit" class=" mr-1 btn btn-primary">Update</button>
+
 
         </div>
 
     </form>
+
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <h4 class="border-bottom border-gray pb-2 mb-0">Danger Zone</h4>
+        <form method="POST" action="{% url 'delete_cardlist' board_id=board_id cardlist_id=cardlist.id %}">
+            {% csrf_token %}
+
+            <button class=" mr-1 btn btn-danger" type="submit">
+                Delete CardList
+            </button>
+        </form>
+    </div>
 {% endblock main_content %}

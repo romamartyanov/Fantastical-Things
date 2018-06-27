@@ -1,6 +1,4 @@
 from django.contrib import admin
-
-from django.contrib import admin
 from .models import Task, Card, CardList, Board
 
 admin.site.register(Task)
