@@ -64,7 +64,7 @@ def registration(request):
             else:
                 context['form'] = new_user_form
 
-        except(KeyError, ValueError, AttributeError):
+        except():
             return HttpResponseBadRequest()
 
     return render_to_response('fantastical_things/registration.html', context)
@@ -160,7 +160,7 @@ def edit_board(request, board_id):
                 context['form'] = form
                 return render(request, 'fantastical_things/edit/edit_board.html', context)
 
-        except(KeyError, ValueError, AttributeError):
+        except():
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=board_id)
@@ -195,7 +195,7 @@ def edit_cardlist(request, board_id, cardlist_id):
                 context['form'] = form
                 return render(request, 'fantastical_things/edit/edit_cardlist.html', context)
 
-        except(KeyError, ValueError, AttributeError):
+        except():
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=board_id)
@@ -271,7 +271,7 @@ def edit_card(request, board_id, card_id):
                 context['form'] = form
                 return render(request, 'fantastical_things/edit/edit_card.html', context)
 
-        except(KeyError, ValueError, AttributeError):
+        except():
             return HttpResponseBadRequest()
 
     return render(request, 'fantastical_things/edit/edit_card.html', context)
@@ -304,7 +304,7 @@ def edit_task(request, board_id, task_id):
                 context['form'] = form
                 return render(request, 'fantastical_things/edit/edit_task.html', context)
 
-        except(KeyError, ValueError, AttributeError):
+        except():
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=board_id)
@@ -317,7 +317,7 @@ def delete_board(request, board_id):
     try:
         Board.objects.filter(users=request.user, id=board_id).delete()
 
-    except(KeyError, ValueError, AttributeError):
+    except():
         return HttpResponseBadRequest()
     return redirect('index')
 
@@ -327,7 +327,7 @@ def delete_cardlist(request, board_id, cardlist_id):
     try:
         CardList.objects.filter(users=request.user, id=cardlist_id).delete()
 
-    except(KeyError, ValueError, AttributeError):
+    except():
         return HttpResponseBadRequest()
 
     return redirect('board', board_id=board_id)
@@ -338,7 +338,7 @@ def delete_card(request, board_id, card_id):
     try:
         Card.objects.filter(users=request.user, id=card_id).delete()
 
-    except(KeyError, ValueError, AttributeError):
+    except():
         return HttpResponseBadRequest()
     return redirect('board', board_id=board_id)
 
@@ -348,7 +348,7 @@ def delete_task(request, board_id, task_id):
     try:
         Task.objects.filter(users=request.user, id=task_id).delete()
 
-    except(KeyError, ValueError, AttributeError):
+    except():
         return HttpResponseBadRequest()
 
     return redirect('board', board_id=board_id)
@@ -393,7 +393,7 @@ def add_board(request):
                 }
                 return render(request, 'fantastical_things/add/add_board.html', context)
 
-        except(KeyError, ValueError, AttributeError):
+        except():
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=new_board.id)
@@ -429,7 +429,7 @@ def add_cardlist(request, board_id):
 
                 return render(request, 'fantastical_things/add/add_cardlist.html', context)
 
-        except(KeyError, ValueError, AttributeError):
+        except():
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=board_id)
@@ -445,65 +445,66 @@ def add_card(request, board_id, cardlist_id):
     }
 
     if request.POST:
-        # try:
-        form = CardForm(request.POST)
+        try:
+            form = CardForm(request.POST)
 
-        if form.is_valid():
+            if form.is_valid():
 
-            new_card = Card.objects.create(title=form.cleaned_data['title'],
-                                           user=request.user,
-                                           deadline=None)
+                new_card = Card.objects.create(title=form.cleaned_data['title'],
+                                               user=request.user,
+                                               deadline=None)
 
-            cardlist = get_object_or_404(klass=CardList, id=cardlist_id)
-            cardlist.card_set.add(new_card)
-            new_card.users.set(cardlist.users.all())
+                cardlist = get_object_or_404(klass=CardList, id=cardlist_id)
+                cardlist.card_set.add(new_card)
+                new_card.users.set(cardlist.users.all())
 
-            cardlist.save()
-            new_card.save()
+                cardlist.save()
+                new_card.save()
 
-            deadline_date = form.cleaned_data['deadline']
-            deadline_time = form.cleaned_data['deadline_time']
+                deadline_date = form.cleaned_data['deadline']
+                deadline_time = form.cleaned_data['deadline_time']
 
-            if deadline_date is not None and deadline_time is not None:
-                deadline = dateutil.parser.parse(timestr=(str(deadline_date) + " " + str(deadline_time)))
+                if deadline_date is not None and deadline_time is not None:
+                    deadline = dateutil.parser.parse(timestr=(str(deadline_date) + " " + str(deadline_time)))
 
-                if deadline < datetime.datetime.now() + datetime.timedelta(hours=3):
-                    context['error'] = 'Input correct date or time'
-                    return render(request, 'fantastical_things/add/add_card.html', context)
+                    if deadline < datetime.datetime.now() + datetime.timedelta(hours=3):
+                        context['error'] = 'Input correct date or time'
+                        return render(request, 'fantastical_things/add/add_card.html', context)
 
-                else:
-                    Card.objects.filter(users=request.user, id=new_card.id).update(
-                        deadline=deadline)
+                    else:
+                        Card.objects.filter(users=request.user, id=new_card.id).update(
+                            deadline=deadline)
 
-            new_card.years = form.cleaned_data['years'] if form.cleaned_data['years'] is not None else 0
-            new_card.months = form.cleaned_data['months'] if form.cleaned_data['months'] is not None else 0
-            new_card.days = form.cleaned_data['days'] if form.cleaned_data['days'] is not None else 0
-            new_card.hours = form.cleaned_data['hours'] if form.cleaned_data['hours'] is not None else 0
-            new_card.minutes = form.cleaned_data['minutes'] if form.cleaned_data['minutes'] is not None else 0
-            new_card.seconds = form.cleaned_data['seconds'] if form.cleaned_data['seconds'] is not None else 0
+                new_card.years = form.cleaned_data['years'] if form.cleaned_data['years'] is not None else 0
+                new_card.months = form.cleaned_data['months'] if form.cleaned_data['months'] is not None else 0
+                new_card.days = form.cleaned_data['days'] if form.cleaned_data['days'] is not None else 0
+                new_card.hours = form.cleaned_data['hours'] if form.cleaned_data['hours'] is not None else 0
+                new_card.minutes = form.cleaned_data['minutes'] if form.cleaned_data['minutes'] is not None else 0
+                new_card.seconds = form.cleaned_data['seconds'] if form.cleaned_data['seconds'] is not None else 0
 
-            if new_card.years != 0 or new_card.months != 0 or new_card.days != 0 or \
-                    new_card.hours != 0 or new_card.minutes != 0 or new_card.seconds != 0:
-                new_card.repeatable = True
+                if new_card.years != 0 or new_card.months != 0 or new_card.days != 0 or \
+                        new_card.hours != 0 or new_card.minutes != 0 or new_card.seconds != 0:
+                    new_card.repeatable = True
 
-            new_card.save()
+                new_card.save()
 
-            cardlist = CardList.objects.get(users=request.user, id=cardlist_id)
-            cardlist.card_set.add(new_card)
+                cardlist = CardList.objects.get(users=request.user, id=cardlist_id)
+                cardlist.card_set.add(new_card)
 
-            new_card.users.set(cardlist.users.all())
+                new_card.users.set(cardlist.users.all())
 
-            cardlist.save()
-            new_card.save()
+                cardlist.save()
+                new_card.save()
 
-            return redirect('board', board_id=board_id)
-        else:
-            context['form'] = form
+                return redirect('board', board_id=board_id)
+            else:
+                context['form'] = form
 
-            return render(request, 'fantastical_things/add/add_card.html', context)
-    #
-    # except(KeyError, ValueError, AttributeError):
-    #     return HttpResponseBadRequest()
+                return render(request, 'fantastical_things/add/add_card.html', context)
+
+        except:
+            return HttpResponseBadRequest()
+
     return render(request, 'fantastical_things/add/add_card.html', context)
 
 
@@ -540,7 +541,7 @@ def add_task(request, board_id, card_id):
 
                 return render(request, 'fantastical_things/add/add_task.html', context)
 
-        except(KeyError, ValueError, AttributeError):
+        except():
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=board_id)
@@ -579,7 +580,7 @@ def add_user_to_board(request, board_id):
 
                 return render(request, 'fantastical_things/edit/edit_board.html', context)
 
-        except(KeyError, ValueError, AttributeError):
+        except():
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=board.id)
@@ -598,5 +599,5 @@ def quit_from_board(request, board_id):
 
         return redirect('/')
 
-    except(KeyError, ValueError, AttributeError):
+    except():
         return HttpResponseBadRequest()
