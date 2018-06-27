@@ -1,6 +1,16 @@
 {% extends 'fantastical_things/index.html' %}
 
 {% block main_content %}
+    {% if error %}
+        <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h4 class="pb-2 mb-0">Errors</h4>
+
+            <div class="fieldWrapper lh-150">
+                <small class="text-warning">{{ error }}</small>
+            </div>
+        </div>
+    {% endif %}
+
     {% if form.errors %}
         <div class="my-3 p-3 bg-white rounded box-shadow">
             <h4 class="pb-2 mb-0">Errors</h4>

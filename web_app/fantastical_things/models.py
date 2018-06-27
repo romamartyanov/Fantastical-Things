@@ -36,12 +36,12 @@ class Card(models.Model):
     deadline = models.DateTimeField(default=None, null=True, blank=True)
 
     repeatable = models.BooleanField(default=False)
-    years = models.SmallIntegerField(default=None, blank=True, null=True)
-    months = models.SmallIntegerField(default=None, blank=True, null=True)
-    days = models.SmallIntegerField(default=None, blank=True, null=True)
-    hours = models.SmallIntegerField(default=None, blank=True, null=True)
-    minutes = models.SmallIntegerField(default=None, blank=True, null=True)
-    seconds = models.SmallIntegerField(default=None, blank=True, null=True)
+    years = models.SmallIntegerField(default=0, blank=True, null=True)
+    months = models.SmallIntegerField(default=0, blank=True, null=True)
+    days = models.SmallIntegerField(default=0, blank=True, null=True)
+    hours = models.SmallIntegerField(default=0, blank=True, null=True)
+    minutes = models.SmallIntegerField(default=0, blank=True, null=True)
+    seconds = models.SmallIntegerField(default=0, blank=True, null=True)
 
     cardlist = models.ForeignKey(CardList, on_delete=models.CASCADE, default=None, blank=True, null=True)
 

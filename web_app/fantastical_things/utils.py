@@ -27,14 +27,24 @@ def add_user_to_all_tasks(board, new_user):
 
 def update_cards(board):
     card_lists = board.cardlist_set.all()
+    overdue = None
+    to_do = None
 
-    try:
-        overdue_cardlist = board.cardlist_set.get(title='Overdue')
-        to_do = board.cardlist_set.get(title='To-Do')
+    # try:
+    for card_list in card_lists:
+        if card_list.title == 'Overdue':
+            overdue = card_list
+        elif card_list.title == 'To-Do':
+            to_do = card_list
 
-    except CardList.DoesNotExist:
-
+    if overdue is None or to_do is None:
         return
+
+        # overdue_cardlist = board.cardlist_set.get(title='Overdue')
+        # to_do = board.cardlist_set.get(title='To-Do')
+
+    # except CardList.DoesNotExist:
+    #     return
 
     for card_list in card_lists:
         cards = card_list.card_set.all()
@@ -44,7 +54,7 @@ def update_cards(board):
                 deadline = card.deadline
                 deadline = deadline.replace(tzinfo=None)
 
-                if deadline < datetime.datetime.now():
+                if deadline < datetime.datetime.now() + datetime.timedelta(hours=3):
                     if card.repeatable:
                         time_delta = relativedelta(years=+int(card.years),
                                                    months=+int(card.months),
@@ -53,7 +63,7 @@ def update_cards(board):
                                                    minutes=+int(card.minutes),
                                                    seconds=+int(card.seconds))
 
-                        new_deadline = deadline + time_delta + datetime.timedelta(hours=3)
+                        new_deadline = deadline + time_delta
                         while new_deadline < datetime.datetime.now() + datetime.timedelta(hours=3):
                             new_deadline = new_deadline + time_delta
 
@@ -61,4 +71,4 @@ def update_cards(board):
                         Card.objects.filter(id=card.id).update(cardlist=to_do)
 
                     else:
-                        Card.objects.filter(id=card.id).update(cardlist=overdue_cardlist)
+                        Card.objects.filter(id=card.id).update(cardlist=overdue)

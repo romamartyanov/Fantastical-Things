@@ -12,7 +12,6 @@ from django.contrib.auth.models import User
 
 import datetime
 import dateutil.parser
-from dateutil.relativedelta import *
 
 
 def login(request):
@@ -206,93 +205,74 @@ def edit_cardlist(request, board_id, cardlist_id):
 
 @login_required(login_url='login')
 def edit_card(request, board_id, card_id):
-    if request.POST:
-        try:
-            context = {}
-            context.update(csrf(request))
-
-            Card.objects.filter(users=request.user, id=card_id).update(title=request.POST['title'])
-            Card.objects.filter(users=request.user, id=card_id).update(cardlist=request.POST['moving'])
-
-            deadline = dateutil.parser.parse(request.POST['deadline'] + ' ' + request.POST['deadline_time'])
-            if deadline < datetime.datetime.now():
-                return HttpResponseBadRequest()
-
-            else:
-                Card.objects.filter(users=request.user, id=card_id).update(
-                    deadline=deadline + datetime.timedelta(hours=3))
-
-            years = 0
-            months = 0
-            days = 0
-            hours = 0
-            minutes = 0
-            seconds = 0
-
-            if request.POST['years'] != '':
-                years += int(request.POST['years'])
-                years = 0 if years < 0 else years
-
-            if request.POST['months'] != '':
-                months += int(request.POST['months'])
-                months = 0 if months < 0 else months
-
-            if request.POST['days'] != '':
-                days += int(request.POST['days'])
-                days = 0 if days < 0 else days
-
-            if request.POST['hours'] != '':
-                hours += int(request.POST['hours'])
-                hours = 0 if hours < 0 else hours
-
-            if request.POST['minutes'] != '':
-                minutes += int(request.POST['minutes'])
-                minutes = 0 if minutes < 0 else minutes
-
-            if request.POST['seconds'] != '':
-                seconds += int(request.POST['seconds'])
-                seconds = 0 if seconds < 0 else seconds
-
-            time_delta = relativedelta(years=+years,
-                                       months=+months,
-                                       days=+days,
-                                       hours=+hours,
-                                       minutes=+minutes,
-                                       seconds=+seconds)
-
-            if years != 0 or months != 0 or days != 0 or hours != 0 or minutes != 0 or seconds != 0:
-                Card.objects.filter(users=request.user, id=card_id).update(repeatable=True)
-
-                Card.objects.filter(users=request.user, id=card_id).update(years=years)
-                Card.objects.filter(users=request.user, id=card_id).update(years=years)
-                Card.objects.filter(users=request.user, id=card_id).update(months=months)
-                Card.objects.filter(users=request.user, id=card_id).update(days=days)
-                Card.objects.filter(users=request.user, id=card_id).update(hours=hours)
-                Card.objects.filter(users=request.user, id=card_id).update(minutes=minutes)
-                Card.objects.filter(users=request.user, id=card_id).update(seconds=seconds)
-
-            else:
-                Card.objects.filter(users=request.user, id=card_id).update(repeatable=False)
-
-        except(KeyError, ValueError, AttributeError):
-            return HttpResponseBadRequest()
-
-        return redirect('board', board_id=board_id)
-
-    card = Card.objects.get(users=request.user, id=card_id)
-    board = Board.objects.get(users=request.user, id=board_id)
+    # card = Card.objects.filter(users=request.user, id=card_id).first()
+    # board = Board.objects.filter(users=request.user, id=board_id).first()
+    card = get_object_or_404(klass=Card, users=request.user, id=card_id)
+    board = get_object_or_404(klass=Board, users=request.user, id=board_id)
     cardlists = board.cardlist_set.all()
 
     context = {
-        'board_id': board_id,
-        'cardlists': cardlists,
+        'board_id': board.id,
         'card': card,
-        'deadline': datetime.datetime.strftime(card.deadline, '%Y-%m-%d'),
-        'deadline_time': datetime.datetime.strftime(card.deadline, '%H:%M'),
-        # 'now':timezone.datetime.now()
+        'cardlists': cardlists
     }
 
-    update_cards(board)
+    if card.deadline is not None:
+        context['deadline'] = datetime.datetime.strftime(card.deadline, '%Y-%m-%d')
+        context['deadline_time'] = datetime.datetime.strftime(card.deadline, '%H:%M')
+
+    if request.POST:
+        try:
+            form = CardForm(request.POST)
+
+            if form.is_valid():
+                Card.objects.filter(users=request.user, id=card_id).update(title=form.cleaned_data['title'])
+                cardlist = get_object_or_404(klass=CardList, id=form.cleaned_data['moving'])
+                Card.objects.filter(users=request.user, id=card_id).update(cardlist=form.cleaned_data['moving'])
+
+                deadline_date = form.cleaned_data['deadline']
+                deadline_time = form.cleaned_data['deadline_time']
+
+                if deadline_date is not None and deadline_time is not None:
+                    deadline = dateutil.parser.parse(timestr=(str(deadline_date) + " " + str(deadline_time)))
+                    if deadline < datetime.datetime.now() + datetime.timedelta(hours=3):
+                        context['error'] = 'Input correct date or time'
+                        return render(request, 'fantastical_things/edit/edit_card.html', context)
+
+                    else:
+                        Card.objects.filter(users=request.user, id=card_id).update(
+                            deadline=deadline)
+
+                years = form.cleaned_data['years']
+                months = form.cleaned_data['months']
+                days = form.cleaned_data['days']
+                hours = form.cleaned_data['hours']
+                minutes = form.cleaned_data['minutes']
+                seconds = form.cleaned_data['seconds']
+
+                if years != 0 or months != 0 or days != 0 or hours != 0 or minutes != 0 or seconds != 0:
+                    card.repeatable = True
+
+                    card.years = years
+                    card.months = months
+                    card.days = days
+                    card.hours = hours
+                    card.minutes = minutes
+                    card.seconds = seconds
+
+                    card.save()
+
+                else:
+                    Card.objects.filter(users=request.user, id=card_id).update(repeatable=False)
+
+                return redirect('board', board_id=board.id)
+
+            else:
+                context['form'] = form
+                return render(request, 'fantastical_things/edit/edit_card.html', context)
+
+        except(KeyError, ValueError, AttributeError):
+            return HttpResponseBadRequest()
 
     return render(request, 'fantastical_things/edit/edit_card.html', context)
 
@@ -459,74 +439,54 @@ def add_cardlist(request, board_id):
 
 @login_required(login_url='login')
 def add_card(request, board_id, cardlist_id):
+    context = {
+        'board_id': board_id,
+        'cardlist_id': cardlist_id
+    }
+
     if request.POST:
         # try:
-        context = {}
-        context.update(csrf(request))
-        new_card = Card.objects.create(title=request.POST['title'],
-                                       user=request.user,
-                                       deadline=None)
-        cardlist = CardList.objects.get(users=request.user, id=cardlist_id)
-        cardlist.card_set.add(new_card)
+        form = CardForm(request.POST)
 
-        new_card.users.set(cardlist.users.all())
+        if form.is_valid():
 
-        cardlist.save()
-        new_card.save()
+            new_card = Card.objects.create(title=form.cleaned_data['title'],
+                                           user=request.user,
+                                           deadline=None)
 
-        if request.POST['deadline'] != '' and request.POST['deadline_time'] != '':
-            deadline = dateutil.parser.parse(request.POST['deadline'] + ' ' + request.POST['deadline_time'])
-            if deadline < datetime.datetime.now():
-                return HttpResponseBadRequest()
+            cardlist = get_object_or_404(klass=CardList, id=cardlist_id)
+            cardlist.card_set.add(new_card)
+            new_card.users.set(cardlist.users.all())
 
-            else:
-                new_card.deadline = deadline + datetime.timedelta(hours=3)
-                new_card.save()
+            cardlist.save()
+            new_card.save()
 
-            years = 0
-            months = 0
-            days = 0
-            hours = 0
-            minutes = 0
-            seconds = 0
+            deadline_date = form.cleaned_data['deadline']
+            deadline_time = form.cleaned_data['deadline_time']
 
-            if request.POST['years'] != '':
-                years += int(request.POST['years'])
-                years = 0 if years < 0 else years
+            if deadline_date is not None and deadline_time is not None:
+                deadline = dateutil.parser.parse(timestr=(str(deadline_date) + " " + str(deadline_time)))
 
-            if request.POST['months'] != '':
-                months += int(request.POST['months'])
-                months = 0 if months < 0 else months
+                if deadline < datetime.datetime.now() + datetime.timedelta(hours=3):
+                    context['error'] = 'Input correct date or time'
+                    return render(request, 'fantastical_things/add/add_card.html', context)
 
-            if request.POST['days'] != '':
-                days += int(request.POST['days'])
-                days = 0 if days < 0 else days
+                else:
+                    Card.objects.filter(users=request.user, id=new_card.id).update(
+                        deadline=deadline)
 
-            if request.POST['hours'] != '':
-                hours += int(request.POST['hours'])
-                hours = 0 if hours < 0 else hours
+            new_card.years = form.cleaned_data['years'] if form.cleaned_data['years'] is not None else 0
+            new_card.months = form.cleaned_data['months'] if form.cleaned_data['months'] is not None else 0
+            new_card.days = form.cleaned_data['days'] if form.cleaned_data['days'] is not None else 0
+            new_card.hours = form.cleaned_data['hours'] if form.cleaned_data['hours'] is not None else 0
+            new_card.minutes = form.cleaned_data['minutes'] if form.cleaned_data['minutes'] is not None else 0
+            new_card.seconds = form.cleaned_data['seconds'] if form.cleaned_data['seconds'] is not None else 0
 
-            if request.POST['minutes'] != '':
-                minutes += int(request.POST['minutes'])
-                minutes = 0 if minutes < 0 else minutes
-
-            if request.POST['seconds'] != '':
-                seconds += int(request.POST['seconds'])
-                seconds = 0 if seconds < 0 else seconds
-
-            if years != 0 or months != 0 or days != 0 or hours != 0 or minutes != 0 or seconds != 0:
+            if new_card.years != 0 or new_card.months != 0 or new_card.days != 0 or \
+                    new_card.hours != 0 or new_card.minutes != 0 or new_card.seconds != 0:
                 new_card.repeatable = True
 
-                new_card.years = years
-                new_card.years = years
-                new_card.months = months
-                new_card.days = days
-                new_card.hours = hours
-                new_card.minutes = minutes
-                new_card.seconds = seconds
-
-            else:
-                new_card.repeatable = False
+            new_card.save()
 
             cardlist = CardList.objects.get(users=request.user, id=cardlist_id)
             cardlist.card_set.add(new_card)
@@ -535,17 +495,15 @@ def add_card(request, board_id, cardlist_id):
 
             cardlist.save()
             new_card.save()
-        #
-        # except(KeyError, ValueError, AttributeError):
-        #     return HttpResponseBadRequest()
 
-        return redirect('board', board_id=board_id)
+            return redirect('board', board_id=board_id)
+        else:
+            context['form'] = form
 
-    context = {
-        'board_id': board_id,
-        'cardlist_id': cardlist_id
-    }
-
+            return render(request, 'fantastical_things/add/add_card.html', context)
+    #
+    # except(KeyError, ValueError, AttributeError):
+    #     return HttpResponseBadRequest()
     return render(request, 'fantastical_things/add/add_card.html', context)
 
 
