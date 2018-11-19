@@ -5,13 +5,24 @@ from django.http.response import HttpResponseBadRequest
 from .utils import *
 from .forms import *
 from .models import *
+from fantastical_things.queries import select_queries, update_queries, delete_queries, insert_queries
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import connection
+import re
 
 import datetime
 import dateutil.parser
+
+
+def get_sql():
+    for i, query in enumerate(connection.queries):
+        sql = re.split(r'(SELECT|FROM|WHERE|GROUP BY|ORDER BY|INNER JOIN|LIMIT)', query['sql'])
+        if not sql[0]: sql = sql[1:]
+        sql = [(' ' if i % 2 else '') + x for i, x in enumerate(sql)]
+        print('\n### {} ({} seconds)\n\n{};\n'.format(i, query['time'], '\n'.join(sql)))
 
 
 def login(request):
@@ -72,7 +83,8 @@ def registration(request):
 
 @login_required(login_url='login')
 def all_boards(request):
-    boards = Board.objects.filter(users=request.user)
+    # boards = Board.objects.filter(users=request.user)
+    boards = Board.objects.raw(select_queries.all_user_boards.format(user_id=request.user.id))
 
     context = {
         'boards': boards,
@@ -85,11 +97,14 @@ def all_boards(request):
 def board(request, board_id):
     board = get_object_or_404(Board, users=request.user, id=board_id)
     # board = Board.objects.filter(users=request.user, id=board_id).first()
+    # card_lists = board.cardlist_set.filter(users=request.user)
+    card_lists = board.cardlist_set.raw(
+        select_queries.all_card_lists_on_board.format(board_id=board_id, user_id=request.user.id))
 
-    card_lists = board.cardlist_set.filter(users=request.user)
-    board_users = board.users.all()
+    board_users = board.users.raw(select_queries.all_boards_users.format(board_id=board_id))
 
-    update_cards(board)
+    # ###
+    # update_cards(board)
 
     context = {
         'board': board,
@@ -104,18 +119,19 @@ def board(request, board_id):
             'cards': []
         }
 
-        cards = card_list.card_set.all().filter(users=request.user)
-
+        # cards = card_list.card_set.all().filter(users=request.user)
+        cards = card_list.card_set.raw(select_queries.all_cards_in_cardlist.format(cardlist_id=card_list.id,
+                                                                                   user_id=request.user.id))
         for card in cards:
             card_dict = {
                 'card': card,
                 'tasks': []
             }
 
-            tasks = card.task_set.all().filter(users=request.user)
-
+            # tasks = card.task_set.all().filter(users=request.user)
+            tasks = card.task_set.raw(select_queries.all_tasks_in_card.format(card_id=card.id,
+                                                                              user_id=request.user.id))
             card_dict['tasks'] = tasks
-
             card_list_dict['cards'].append(card_dict)
 
         context['card_lists'].append(card_list_dict)
@@ -127,12 +143,17 @@ def board(request, board_id):
 def complete_task(request, board_id, task_id):
     task = get_object_or_404(klass=Task, users=request.user, id=task_id)
     # task = Card.objects.filter(users=request.user, id=task_id).first()
-
-    if task.status is True:
-        Task.objects.filter(users=request.user, id=task_id).update(status=False)
-
-    else:
-        Task.objects.filter(users=request.user, id=task_id).update(status=True)
+    with connection.cursor() as cursor:
+        if task.status is True:
+            # Task.objects.filter(users=request.user, id=task_id).update(status=False)
+            cursor.execute(update_queries.set_task_status.format(status=False,
+                                                                 task_id=task_id,
+                                                                 user_id=request.user.id))
+        else:
+            # Task.objects.filter(users=request.user, id=task_id).update(status=True)
+            cursor.execute(update_queries.set_task_status.format(status=True,
+                                                                 task_id=task_id,
+                                                                 user_id=request.user.id))
 
     return redirect('board', board_id=board_id)
 
@@ -151,10 +172,17 @@ def edit_board(request, board_id):
             form = BoardCardlistForm(request.POST)
 
             if form.is_valid():
-                Board.objects.filter(users=request.user, id=board_id).update(
-                    title=form.cleaned_data['title'])
-                Board.objects.filter(users=request.user, id=board_id).update(
-                    description=form.cleaned_data['description'])
+                # Board.objects.filter(users=request.user, id=board_id).update(
+                #     title=form.cleaned_data['title'])
+                # Board.objects.filter(users=request.user, id=board_id).update(
+                #     description=form.cleaned_data['description'])
+
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        update_queries.set_board_info.format(new_description=form.cleaned_data['description'],
+                                                             new_title=form.cleaned_data['title'],
+                                                             board_id=board_id,
+                                                             user_id=request.user.id))
 
             else:
                 context['form'] = form
@@ -164,7 +192,6 @@ def edit_board(request, board_id):
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=board_id)
-
     return render(request, 'fantastical_things/edit/edit_board.html', context)
 
 
@@ -172,7 +199,7 @@ def edit_board(request, board_id):
 def edit_cardlist(request, board_id, cardlist_id):
     board = get_object_or_404(Board, users=request.user, id=board_id)
     cardlist = get_object_or_404(CardList, users=request.user, id=cardlist_id)
-    #
+
     # board = Board.objects.filter(users=request.user, id=board_id).first()
     # cardlist = Card.objects.filter(users=request.user, id=cardlist_id).first()
 
@@ -186,10 +213,17 @@ def edit_cardlist(request, board_id, cardlist_id):
             form = BoardCardlistForm(request.POST)
 
             if form.is_valid():
-                CardList.objects.filter(users=request.user, id=cardlist_id).update(
-                    title=form.cleaned_data['title'])
-                CardList.objects.filter(users=request.user, id=cardlist_id).update(
-                    description=form.cleaned_data['description'])
+                # CardList.objects.filter(users=request.user, id=cardlist_id).update(
+                #     title=form.cleaned_data['title'])
+                # CardList.objects.filter(users=request.user, id=cardlist_id).update(
+                #     description=form.cleaned_data['description'])
+
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        update_queries.set_cardlist_info.format(new_title=form.cleaned_data['title'],
+                                                                new_description=form.cleaned_data['description'],
+                                                                cardlist_id=cardlist_id,
+                                                                user_id=request.user.id))
 
             else:
                 context['form'] = form
@@ -199,7 +233,6 @@ def edit_cardlist(request, board_id, cardlist_id):
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=board_id)
-
     return render(request, 'fantastical_things/edit/edit_cardlist.html', context)
 
 
@@ -207,14 +240,18 @@ def edit_cardlist(request, board_id, cardlist_id):
 def edit_card(request, board_id, card_id):
     # card = Card.objects.filter(users=request.user, id=card_id).first()
     # board = Board.objects.filter(users=request.user, id=board_id).first()
+
     card = get_object_or_404(klass=Card, users=request.user, id=card_id)
     board = get_object_or_404(klass=Board, users=request.user, id=board_id)
-    cardlists = board.cardlist_set.all()
+    # cardlists = board.cardlist_set.all()
+
+    card_lists = board.cardlist_set.raw(
+        select_queries.all_card_lists_on_board.format(board_id=board_id, user_id=request.user.id))
 
     context = {
         'board_id': board.id,
         'card': card,
-        'cardlists': cardlists
+        'cardlists': card_lists
     }
 
     if card.deadline is not None:
@@ -226,9 +263,18 @@ def edit_card(request, board_id, card_id):
             form = CardForm(request.POST)
 
             if form.is_valid():
-                Card.objects.filter(users=request.user, id=card_id).update(title=form.cleaned_data['title'])
+                # Card.objects.filter(users=request.user, id=card_id).update(title=form.cleaned_data['title'])
+                with connection.cursor() as cursor:
+                    cursor.execute(update_queries.set_card_title_info.format(card_title=form.cleaned_data['title'],
+                                                                             card_id=card_id,
+                                                                             user_id=request.user.id))
+
                 cardlist = get_object_or_404(klass=CardList, id=form.cleaned_data['moving'])
-                Card.objects.filter(users=request.user, id=card_id).update(cardlist=form.cleaned_data['moving'])
+                # Card.objects.filter(users=request.user, id=card_id).update(cardlist=form.cleaned_data['moving'])
+                with connection.cursor() as cursor:
+                    cursor.execute(update_queries.set_card_cardlist.format(cardlist_id=form.cleaned_data['moving'],
+                                                                           card_id=card_id,
+                                                                           user_id=request.user.id))
 
                 deadline_date = form.cleaned_data['deadline']
                 deadline_time = form.cleaned_data['deadline_time']
@@ -240,8 +286,13 @@ def edit_card(request, board_id, card_id):
                         return render(request, 'fantastical_things/edit/edit_card.html', context)
 
                     else:
-                        Card.objects.filter(users=request.user, id=card_id).update(
-                            deadline=deadline)
+                        # Card.objects.filter(users=request.user, id=card_id).update(
+                        #     deadline=deadline)
+                        with connection.cursor() as cursor:
+                            cursor.execute(
+                                update_queries.set_card_deadline.format(deadline=deadline,
+                                                                        card_id=card_id,
+                                                                        user_id=request.user.id))
 
                 years = form.cleaned_data['years']
                 months = form.cleaned_data['months']
@@ -251,19 +302,48 @@ def edit_card(request, board_id, card_id):
                 seconds = form.cleaned_data['seconds']
 
                 if years != 0 or months != 0 or days != 0 or hours != 0 or minutes != 0 or seconds != 0:
-                    card.repeatable = True
+                    # Card.objects.filter(users=request.user, id=card_id).update(repeatable=True,
+                    #                                                            years=years,
+                    #                                                            months=months,
+                    #                                                            days=days,
+                    #                                                            hours=hours,
+                    #                                                            minutes=minutes,
+                    #                                                            seconds=seconds)
 
-                    card.years = years
-                    card.months = months
-                    card.days = days
-                    card.hours = hours
-                    card.minutes = minutes
-                    card.seconds = seconds
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            update_queries.set_repeatable_card.format(repeatable=True,
+                                                                      years=years,
+                                                                      months=months,
+                                                                      days=days,
+                                                                      hours=hours,
+                                                                      minutes=minutes,
+                                                                      seconds=seconds,
 
-                    card.save()
+                                                                      card_id=card_id,
+                                                                      user_id=request.user.id))
 
                 else:
-                    Card.objects.filter(users=request.user, id=card_id).update(repeatable=False)
+                    # Card.objects.filter(users=request.user, id=card_id).update(repeatable=False,
+                    #                                                            years=years,
+                    #                                                            months=months,
+                    #                                                            days=days,
+                    #                                                            hours=hours,
+                    #                                                            minutes=minutes,
+                    #                                                            seconds=seconds)
+
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            update_queries.set_repeatable_card.format(repeatable=False,
+                                                                      years=years,
+                                                                      months=months,
+                                                                      days=days,
+                                                                      hours=hours,
+                                                                      minutes=minutes,
+                                                                      seconds=seconds,
+
+                                                                      card_id=card_id,
+                                                                      user_id=request.user.id))
 
                 return redirect('board', board_id=board.id)
 
@@ -273,7 +353,6 @@ def edit_card(request, board_id, card_id):
 
         except():
             return HttpResponseBadRequest()
-
     return render(request, 'fantastical_things/edit/edit_card.html', context)
 
 
@@ -281,6 +360,7 @@ def edit_card(request, board_id, card_id):
 def edit_task(request, board_id, task_id):
     board = get_object_or_404(Board, users=request.user, id=board_id)
     task = get_object_or_404(Task, users=request.user, id=task_id)
+
     # board = Board.objects.filter(users=request.user, id=board_id).first()
     # task = Card.objects.filter(users=request.user, id=task_id).first()
 
@@ -294,11 +374,19 @@ def edit_task(request, board_id, task_id):
             form = TaskForm(request.POST)
 
             if form.is_valid():
-                Task.objects.filter(users=request.user, id=task_id).update(
-                    title=form.cleaned_data['title'])
-                Task.objects.filter(users=request.user, id=task_id).update(
-                    description=form.cleaned_data['description'])
-                Task.objects.filter(users=request.user, id=task_id).update(status=form.cleaned_data['status'])
+                # Task.objects.filter(users=request.user, id=task_id).update(
+                #     title=form.cleaned_data['title'])
+                # Task.objects.filter(users=request.user, id=task_id).update(
+                #     description=form.cleaned_data['description'])
+                # Task.objects.filter(users=request.user, id=task_id).update(status=form.cleaned_data['status'])
+
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        update_queries.set_task_info.format(new_title=form.cleaned_data['title'],
+                                                            new_description=form.cleaned_data['description'],
+                                                            new_status=form.cleaned_data['status'],
+                                                            task_id=task_id,
+                                                            user_id=request.user.id))
 
             else:
                 context['form'] = form
@@ -316,6 +404,10 @@ def edit_task(request, board_id, task_id):
 def delete_board(request, board_id):
     try:
         Board.objects.filter(users=request.user, id=board_id).delete()
+
+        # with connection.cursor() as cursor:
+        #     cursor.execute(
+        #         delete_queries.delete_board.format(board_id=board_id))
 
     except():
         return HttpResponseBadRequest()
@@ -340,13 +432,17 @@ def delete_card(request, board_id, card_id):
 
     except():
         return HttpResponseBadRequest()
+
     return redirect('board', board_id=board_id)
 
 
 @login_required(login_url='login')
 def delete_task(request, board_id, task_id):
     try:
-        Task.objects.filter(users=request.user, id=task_id).delete()
+        # Task.objects.filter(users=request.user, id=task_id).delete()
+        with connection.cursor() as cursor:
+            cursor.execute(
+                delete_queries.delete_task.format(task_id=task_id))
 
     except():
         return HttpResponseBadRequest()
@@ -366,14 +462,10 @@ def add_board(request):
                                                  user=request.user)
                 new_board.users.add(request.user)
 
-                to_do_cardlist = CardList.objects.create(title='To-Do',
-                                                         user=request.user)
-                doing_cardlist = CardList.objects.create(title='Doing',
-                                                         user=request.user)
-                done_cardlist = CardList.objects.create(title='Done',
-                                                        user=request.user)
-                overdue_cardlist = CardList.objects.create(title='Overdue',
-                                                           user=request.user)
+                to_do_cardlist = CardList.objects.create(title='To-Do', user=request.user)
+                doing_cardlist = CardList.objects.create(title='Doing', user=request.user)
+                done_cardlist = CardList.objects.create(title='Done', user=request.user)
+                overdue_cardlist = CardList.objects.create(title='Overdue', user=request.user)
 
                 new_board.cardlist_set.add(to_do_cardlist)
                 new_board.cardlist_set.add(doing_cardlist)
@@ -397,7 +489,6 @@ def add_board(request):
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=new_board.id)
-
     return render(request, 'fantastical_things/add/add_board.html')
 
 
@@ -433,7 +524,6 @@ def add_cardlist(request, board_id):
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=board_id)
-
     return render(request, 'fantastical_things/add/add_cardlist.html', context)
 
 
@@ -495,6 +585,7 @@ def add_card(request, board_id, cardlist_id):
 
                 cardlist.save()
                 new_card.save()
+                # get_sql()
 
                 return redirect('board', board_id=board_id)
             else:
@@ -504,7 +595,6 @@ def add_card(request, board_id, cardlist_id):
 
         except:
             return HttpResponseBadRequest()
-
     return render(request, 'fantastical_things/add/add_card.html', context)
 
 
@@ -533,8 +623,22 @@ def add_task(request, board_id, card_id):
                 card.task_set.add(new_task)
                 new_task.users.set(card.users.all())
 
-                card.save()
-                new_task.save()
+                get_sql()
+
+                # with connection.cursor() as cursor:
+                #
+                #     task_id = cursor.execute(
+                #         insert_queries.add_task_start.format(user_id=request.user.id,
+                #                                              title=form.cleaned_data['title'],
+                #                                              description=form.cleaned_data['description'],
+                #                                              status=form.cleaned_data['status'],
+                #                                              begin_time=datetime.datetime.now(),
+                #                                              card_id=card_id))
+                #
+                #     print(task_id)
+                #     cursor.execute(
+                #         insert_queries.add_task_end.format(task_id=task_id,
+                #                                            card_id=card_id))
 
             else:
                 context['form'] = form
@@ -545,7 +649,6 @@ def add_task(request, board_id, card_id):
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=board_id)
-
     return render(request, 'fantastical_things/add/add_task.html', context)
 
 
@@ -584,7 +687,6 @@ def add_user_to_board(request, board_id):
             return HttpResponseBadRequest()
 
         return redirect('board', board_id=board.id)
-
     return render(request, 'fantastical_things/edit/edit_board.html', context)
 
 
@@ -594,8 +696,12 @@ def quit_from_board(request, board_id):
         if request.POST:
             board = get_object_or_404(klass=Board, users=request.user, id=board_id)
 
-            board.users.remove(request.user)
-            board.save()
+            # board.users.remove(request.user)
+            # board.save()
+
+            with connection.cursor() as cursor:
+                cursor.execute(delete_queries.quit_board.format(board_id=board_id,
+                                                                user_id=request.user.id))
 
         return redirect('/')
 

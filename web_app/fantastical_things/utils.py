@@ -1,4 +1,5 @@
 from .models import *
+from fantastical_things.queries import select_queries
 
 import datetime
 import dateutil.parser
@@ -26,7 +27,9 @@ def add_user_to_all_tasks(board, new_user):
 
 
 def update_cards(board):
-    card_lists = board.cardlist_set.all()
+    # card_lists = board.cardlist_set.all()
+    card_lists = board.cardlist_set.raw(select_queries.all_card_lists_on_updating.format(board_id=board.id))
+
     overdue = None
     to_do = None
 
@@ -48,6 +51,7 @@ def update_cards(board):
 
     for card_list in card_lists:
         cards = card_list.card_set.all()
+        cards = card_list.card_set.raw(select_queries.all_cards_on_updating.format(cardlist_id=card_list.id))
 
         for card in cards:
             if card.deadline is not None:
@@ -67,8 +71,11 @@ def update_cards(board):
                         while new_deadline < datetime.datetime.now() + datetime.timedelta(hours=3):
                             new_deadline = new_deadline + time_delta
 
-                        Card.objects.filter(id=card.id).update(deadline=new_deadline)
-                        Card.objects.filter(id=card.id).update(cardlist=to_do)
+                        q = Card.objects.filter(id=card.id).update(deadline=new_deadline)
+                        print(q.query)
+                        q = Card.objects.filter(id=card.id).update(cardlist=to_do)
+                        print(q.query)
 
                     else:
-                        Card.objects.filter(id=card.id).update(cardlist=overdue)
+                        q = Card.objects.filter(id=card.id).update(cardlist=overdue)
+                        print(q.query)

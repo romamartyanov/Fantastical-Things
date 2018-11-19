@@ -2,129 +2,129 @@
 
 {% block main_content %}
 
-    <!-- Board template -->
+<!-- Board template -->
 
-    <!-- Board Title and Description -->
-    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-secondary rounded box-shadow">
-        <i class="mr-3 rounded material-icons">dashboard</i>
+<!-- Board Title and Description -->
+<div class="d-flex align-items-center p-2 my-2 text-white-50 bg-secondary rounded box-shadow">
+    <i class="mr-3 rounded material-icons">dashboard</i>
 
-        <div class="d-flex justify-content-between align-items-center w-100">
-            <div class="lh-100">
-                <h2 class="mb-0 text-white lh-100">{{ board.title }}</h2>
-                <h6 class="mb-0 lh-150">{{ board.description }}</h6>
+    <div class="d-flex justify-content-between align-items-center w-100">
+        <div class="lh-100">
+            <h2 class="mb-0 text-white lh-100">{{ board.title }}</h2>
+            <h6 class="mb-0 lh-150">{{ board.description }}</h6>
 
-                <h6 class="mb-0 text-white lh-150">Users:</h6>
+            <h6 class="mb-0 text-white lh-150">Users:</h6>
 
-                {% for user in board_users %}
-                    <h6 class="mb-0 lh-100">{{ user }}</h6>
-                {% endfor %}
-            </div>
-
-            <div class="btn-group-sm text-right">
-                <a href="{% url 'add_cardlist' board_id=board.id %}"
-                   class="mr-2 btn btn-light btn-link"
-                   role="button">
-                    Add CardList
-                </a>
-
-                <a href="{% url 'edit_board' board_id=board.id %}" class="mr-2 btn btn-light btn-link"
-                   role="button">
-                    Edit Board
-                </a>
-            </div>
-        </div>
-    </div>
-
-    {% for card_list in card_lists %}
-        <!-- CardList template -->
-        <div class="my-3 p-3 bg-white rounded box-shadow">
-
-            <!-- CardList Title and Description -->
-            <div class="d-flex justify-content-between align-items-center w-100">
-                <div class="lh-100">
-                    <h4>{{ card_list.card_list.title }}</h4>
-                    <p class="lead small">{{ card_list.card_list.description }}</p>
-                </div>
-
-                <div class="btn-group-sm text-right">
-                    <a href="{% url 'add_card' board_id=board.id cardlist_id=card_list.card_list.id %}"
-                       class="mr-2 btn btn-primary btn-link"
-                       role="button">
-                        Add Card
-                    </a>
-                    <a href="{% url 'edit_cardlist' board_id=board.id cardlist_id=card_list.card_list.id %}"
-                       class="mr-2 btn btn-primary btn-link"
-                       role="button">
-                        Edit CardList
-                    </a>
-                </div>
-            </div>
-
-            {% for card in card_list.cards %}
-                <!-- Card template -->
-                <div class="my-3 p-3 bg-white rounded box-shadow">
-                    <div class="d-flex justify-content-between align-items-center w-100 border-bottom border-gray">
-                        <h6 class=" pb-2 mb-0">{{ card.card.title }}</h6>
-
-                        <div class="btn-group-sm text-right">
-                            <a href="{% url 'add_task' board_id=board.id card_id=card.card.id %}"
-                               class="mr-2 btn btn-primary btn-link"
-                               role="button">
-                                Add Task
-                            </a>
-                            <a href="{% url 'edit_card' board_id=board.id card_id=card.card.id %}"
-                               class="mr-2 btn btn-primary btn-link"
-                               role="button">
-                                Edit Card
-                            </a>
-                        </div>
-                    </div>
-
-                    {% for task in card.tasks %}
-                        <!-- Task template -->
-
-                        <div class="media text-muted pt-3">
-                            {% if task.status %}
-
-                                <a href="{% url 'complete_task' board_id=board.id task_id=task.id %}"
-                                   class="mr-1 btn btn-success btn-link"
-                                   role="button">
-                                    <i class="rounded material-icons">done</i>
-                                </a>
-
-                            {% else %}
-
-                                <a href="{% url 'complete_task' board_id=board.id  task_id=task.id %}"
-                                   class="mr-1 btn btn-dark btn-link"
-                                   role="button">
-                                    <i class=" rounded material-icons">panorama_fish_eye</i>
-                                </a>
-                            {% endif %}
-
-                            <div class="d-flex justify-content-between align-items-center w-100 border-bottom border-gray ">
-                                <div class=" media-body pb-3 mb-0 small lh-125 ">
-                                    <strong class="text-gray-dark">{{ task.title }}</strong>
-                                    <span class="d-block">{{ task.description }}</span>
-
-                                </div>
-
-                                <div class="btn-group-sm text-right">
-                                    <a href="{% url 'edit_task' board_id=board.id task_id=task.id %}"
-                                       class="mr-2 btn btn-primary btn-link"
-                                       role="button">
-                                        Edit Task
-                                    </a>
-                                </div>
-
-
-                            </div>
-                        </div>
-
-                    {% endfor %}
-                </div>
-
+            {% for user in board_users %}
+            <h6 class="mb-0 lh-100">{{ user }}</h6>
             {% endfor %}
         </div>
 
+        <div class="btn-group-sm text-right">
+            <a href="{% url 'add_cardlist' board_id=board.id %}"
+               class="mr-2 btn btn-light btn-link"
+               role="button">
+                Add CardList
+            </a>
+
+            <a href="{% url 'edit_board' board_id=board.id %}" class="mr-2 btn btn-light btn-link"
+               role="button">
+                Edit Board
+            </a>
+        </div>
+    </div>
+</div>
+
+{% for card_list in card_lists %}
+<!-- CardList template -->
+<div class="my-3 p-3 bg-white rounded box-shadow">
+
+    <!-- CardList Title and Description -->
+    <div class="d-flex justify-content-between align-items-center w-100">
+        <div class="lh-100">
+            <h4>{{ card_list.card_list.title }}</h4>
+            <p class="lead small">{{ card_list.card_list.description }}</p>
+        </div>
+
+        <div class="btn-group-sm text-right">
+            <a href="{% url 'add_card' board_id=board.id cardlist_id=card_list.card_list.id %}"
+               class="mr-2 btn btn-primary btn-link"
+               role="button">
+                Add Card
+            </a>
+            <a href="{% url 'edit_cardlist' board_id=board.id cardlist_id=card_list.card_list.id %}"
+               class="mr-2 btn btn-primary btn-link"
+               role="button">
+                Edit CardList
+            </a>
+        </div>
+    </div>
+
+    {% for card in card_list.cards %}
+    <!-- Card template -->
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div class="d-flex justify-content-between align-items-center w-100 border-bottom border-gray">
+            <h6 class=" pb-2 mb-0">{{ card.card.title }}</h6>
+
+            <div class="btn-group-sm text-right">
+                <a href="{% url 'add_task' board_id=board.id card_id=card.card.id %}"
+                   class="mr-2 btn btn-primary btn-link"
+                   role="button">
+                    Add Task
+                </a>
+                <a href="{% url 'edit_card' board_id=board.id card_id=card.card.id %}"
+                   class="mr-2 btn btn-primary btn-link"
+                   role="button">
+                    Edit Card
+                </a>
+            </div>
+        </div>
+
+        {% for task in card.tasks %}
+        <!-- Task template -->
+
+        <div class="media text-muted pt-3">
+            {% if task.status %}
+
+            <a href="{% url 'complete_task' board_id=board.id task_id=task.id %}"
+               class="mr-1 btn btn-success btn-link"
+               role="button">
+                <i class="rounded material-icons">done</i>
+            </a>
+
+            {% else %}
+
+            <a href="{% url 'complete_task' board_id=board.id  task_id=task.id %}"
+               class="mr-1 btn btn-dark btn-link"
+               role="button">
+                <i class=" rounded material-icons">panorama_fish_eye</i>
+            </a>
+            {% endif %}
+
+            <div class="d-flex justify-content-between align-items-center w-100 border-bottom border-gray ">
+                <div class=" media-body pb-3 mb-0 small lh-125 ">
+                    <strong class="text-gray-dark">{{ task.title }}</strong>
+                    <span class="d-block">{{ task.description }}</span>
+
+                </div>
+
+                <div class="btn-group-sm text-right">
+                    <a href="{% url 'edit_task' board_id=board.id task_id=task.id %}"
+                       class="mr-2 btn btn-primary btn-link"
+                       role="button">
+                        Edit Task
+                    </a>
+                </div>
+
+
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+
     {% endfor %}
+</div>
+
+{% endfor %}
 {% endblock main_content %}
